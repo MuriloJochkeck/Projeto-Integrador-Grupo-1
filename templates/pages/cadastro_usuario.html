@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="static/login.css">
+</head>
+<body>
+    <div class="container">
+    <div class="card">
+      <h1>Cadastrar</h1>
+      <p>Informe seus dados abaixo para cria-la.</p>
+
+      <form id="loginForm">
+        <input class="form-input" type="text" name="Nome_usuario" placeholder="Nome completo" required>
+        <div class="form-row">
+          <input type="text" name="telefone" class="form-input" placeholder="Telefone" />
+          <input type="text" name="cpf" class="form-input" placeholder="CPF" />
+        </div>
+        <input class="form-input" type="email" name="Email_usuario" placeholder="Email" required>
+        <div class="form-row">
+          <input class="form-input" type="password" name="senha" placeholder="Senha" />
+          <input class="form-input" type="password" name="confirmar_senha" placeholder="Confirmar senha" />
+        </div>
+        <button class="btn" type="submit">Criar conta</button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="./js/login.js"></script>
+</body>
+</html>
