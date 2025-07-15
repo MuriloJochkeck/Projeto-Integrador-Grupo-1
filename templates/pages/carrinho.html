@@ -4,15 +4,31 @@
   <meta charset="UTF-8">
   <title>Meu Carrinho</title>
   <link rel="stylesheet" href="./static/carrinho.css">
-  <link rel="stylesheet" href="static/header.css">
+  <link rel="stylesheet" href="./static/header.css">
 </head>
 <body>
+  <header class="top-header">
+      <div class="logo">
+          <img src="../media/login/logo.png" alt="Logo" />
+      </div>
+  
+      <div class="search-bar">
+          <input type="text" placeholder="Buscar..." />
+          <span class="search-icon">&#128269;</span> 
+      </div>
+  
+      <div class="icons"> 
+          <a href="login_usuario.html">
+              <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
+          </a>
+      </div>
+  </header>
   <div class="cart-container">
     <div class="cart-section">
       <div class="cart-title">Meu carrinho</div>
       <div class="product-list">
         <div class="product-item">
-          <img class="product-image" src=" img que precisar  " alt="Trator pequeno" /> <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
+          <img class="product-image" src=" img que precisar  " alt="Trator pequeno" /> <!--  fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
           <div class="product-info">
             <div class="product-name">nome da maquina</div>
           </div>
@@ -20,7 +36,7 @@
             <div class="quantity-buttons">
               <button class="quantity-button">-</button>
               <span class="quantity-value">1</span>
-              <button class="quantity-button">+</button>
+              <button class="quantity-button">+</button>    <!-- falta bota pra funfa mas e "só"  -->
             </div>
             <span class="quantity-label">Horas</span>
           </div>
