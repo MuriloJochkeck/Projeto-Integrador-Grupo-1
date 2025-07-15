@@ -10,11 +10,9 @@ document.getElementById('form-endereco').addEventListener('submit', function(e) 
         alert('Por favor, preencha todos os campos.');
         return;
     }
-    // Aqui você pode adicionar o envio dos dados ou navegação
     alert('Endereço salvo com sucesso!');
 });
 
 document.getElementById('voltar').addEventListener('click', function() {
-    // Simulação de navegação
     alert('Voltando para a etapa anterior...');
 }); 
