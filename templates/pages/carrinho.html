@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Carrinho</title>
+  <link rel="stylesheet" href="./static/carrinho.css">
+</head>
+<body>
+  <div class="cart-container">
+    <div class="cart-section">
+      <div class="cart-title">Meu carrinho</div>
+      <div class="product-list">
+        <div class="product-item">
+          <img class="product-image" src=" img que precisar  " alt="Trator pequeno" /> <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
+          <div class="product-info">
+            <div class="product-name">nome da maquina</div>
+          </div>
+          <div class="quantity-control">
+            <div class="quantity-buttons">
+              <button class="quantity-button">-</button>
+              <span class="quantity-value">1</span>
+              <button class="quantity-button">+</button>
+            </div>
+            <span class="quantity-label">Horas</span>
+          </div>
+          <div class="product-price">
+            1x R$ "valor que precisar depois eu mudo pra puxar o valor"<br />
+            Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o valor"</span>
+          </div>
+        </div>
+        <div class="product-item">
+          <img class="product-image" src="foto que precisar" alt="Ensiladeira" />    <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
+          <div class="product-info">
+            <div class="product-name">nome da maquina</div>
+          </div>
+          <div class="quantity-control">
+            <div class="quantity-buttons">
+              <button class="quantity-button">-</button>
+              <span class="quantity-value">1</span>
+              <button class="quantity-button">+</button>
+            </div>
+            <span class="quantity-label">Horas</span>
+          </div>
+          <div class="product-price">
+            1x R$ "valor que precisar depois eu mudo pra puxar o valor"<br /><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+            Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o valor"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="summary-section">
+      <div class="summary-title">Resumo</div>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+      </div>
+      <div class="summary-row bold">
+        <span>Total</span>
+        <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor das maquina(s) somada(s) que o usuario selecionou -->
+      </div>
+      <input class="coupon-input" placeholder="Cupom de desconto" />
+      <button class="finish-button">Finalizar Pedido</button>
+    </div>
+  </div>
+   <script src="./static/carrinho.js"></script>
+</body>
+</html> 
