@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endereço</title>
+    <link rel="stylesheet" href="static/endereco.css">
+</head>
+<body>
+    <div class="container">
+      <div class="card">
+        <h1>Endereço</h1>
+        <p>Informe os dados do endereço para finalizar o pedido</p>
+        <form id="form-endereco">
+          <div class="form-row">
+            <input class="form-input" type="text" id="cep" name="cep" placeholder="CEP" required>
+            <input class="form-input" type="text" id="numero" name="numero" placeholder="Número" required>
+          </div>
+          <div class="form-row">
+            <input class="form-input" type="text" id="uf" name="uf" placeholder="UF" required>
+            <input class="form-input" type="text" id="cidade" name="cidade" placeholder="Cidade" required>
+          </div>
+          <input class="form-input" type="text" id="rua" name="rua" placeholder="Rua" required>
+          <div class="form-row">
+            <button class="btn" type="button" id="voltar">Voltar</button>
+            <button class="btn" type="submit" id="avancar">Avançar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="js/endereco.js"></script>
+</body>
+</html>
