@@ -1,0 +1,175 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f6f6f6;
+  padding: 20px;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+
+.produto {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-width: 700px;
+}
+
+.imagens {
+  display: flex;
+  gap: 10px;
+}
+
+.miniaturas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.miniaturas img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.imagem-principal img {
+  width: 280px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.detalhes {
+  flex: 1;
+}
+
+.detalhes h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.preco {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.botoes {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.botoes button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.alugar {
+  background-color: #a2d8b4;
+}
+
+.carrinho {
+  background-color: #d3e1df;
+}
+
+.locado {
+  font-size: 14px;
+}
+
+.locado a {
+  color: #1e88e5;
+  text-decoration: none;
+}
+
+
+.avaliacao-geral {
+  width: 280px;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  align-self: flex-start;
+}
+
+.nota {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.nota .numero {
+  font-size: 32px;
+  font-weight: bold;
+  display: inline;
+  margin-right: 5px;
+}
+
+.estrelas {
+  color: gold;
+  font-size: 18px;
+}
+
+.filtros {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.descricao {
+  margin-top: 10px;
+  padding: 15px;
+  border: 2px solid #8b65d5;
+  background: #fdfdff;
+}
+
+
+.titulo-avaliacoes {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.avaliacoes {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #e7f3e7;
+  padding: 10px;
+  border-radius: 10px;
+  width: 150px;
+  text-align: center;
+}
+
+
+.deixe-sua {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.deixe-sua button {
+  background-color: #d3e1df;
+  padding: 10px 25px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+}
