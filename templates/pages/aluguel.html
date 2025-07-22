@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colheitadeira John Deere S790</title>
+  <link rel="stylesheet" href="static/style.css" />
 </head>
 
-<body>
+<body class="pagina-colheitadeira">
   <header class="top-header">
     <div class="logo">
       <img src="../media/login/logo.png" alt="Logo" />
@@ -20,21 +20,25 @@
     </div>
 
     <div class="icons">
-      <img src="../media/login/carrinho.png" alt="Carrinho">
-      <a href="./pages/login_usuario.html">
+      <a href="carrinho.html">
+        <img src="../media/login/carrinho.png" alt="Carrinho">
+      </a>
+      <a href="login_usuario.html">
         <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png"
           alt="Entrar">
       </a>
     </div>
   </header>
 
-  <div class="container">
-    <div class="top-section">
+
+  <main class="container-aluguel">
+    <section class="top-section">
       <div class="produto">
+        <!-- Coluna esquerda: Miniaturas + Imagem principal -->
         <div class="imagens">
           <div class="miniaturas">
             <img src="../media/trator/colheitadera2.jpg" alt="Miniatura 1" />
-            <img src="../media/trator/colheitadera2.jpg" alt="Miniatura 2" />
+            <img src="../media/trator/colheitadeira-massey-ferguson-9895-2.webp" alt="Miniatura 2" />
             <img src="../media/trator/colheitadera2.jpg" alt="Miniatura 3" />
             <img src="../media/trator/colheitadera2.jpg" alt="Miniatura 4" />
           </div>
@@ -42,9 +46,14 @@
             <img src="../media/trator/colheitadera2.jpg" alt="Colheitadeira principal" />
           </div>
         </div>
+
+
         <div class="detalhes">
-          <h1>Colheitadeira John Deere S790</h1>
-          <p class="preco">R$ 4.490,90 <span>Valor / Diário</span><br><small>em 12x R$374,24</small></p>
+          <h1>Colheitadeira <br> John Deere <strong>S790</strong></h1>
+          <p class="preco">
+            R$ 4.490,90 <span>Valor / Diário</span><br />
+            <small>em 12x R$374,24</small>
+          </p>
           <div class="botoes">
             <button class="alugar">Alugar agora</button>
             <button class="carrinho">Adicionar ao carrinho</button>
@@ -52,19 +61,19 @@
           <p class="locado">Locado por <a href="#">Murilo Jochkeck</a></p>
         </div>
       </div>
+    </section>
 
 
-    </div>
+    <section class="descricao-avaliacao">
+      <div class="descricao">
+        <p><strong>Descrição:</strong> Colheitadeira de alto desempenho, ideal para grandes áreas agrícolas. Equipada
+          com motor John Deere PowerTech™ de 625 cv, graneleiro com capacidade para até 14.100 litros e sistema de
+          separação rotativo de 3,5 m, garante alta eficiência e baixa perda, mesmo em culturas de alta umidade.<br>
+          Produtividade de até 75 toneladas/hora, com consumo médio de 1,2 a 1,6 L por tonelada colhida. Conta com
+          tecnologias AutoTrac™, HarvestSmart™, JDLink™ e CommandCenter™. Plataforma Draper de até 45 pés.</p>
+      </div>
 
-    <div class="descricao">
-      <p><strong>Descrição:</strong> Colheitadeira de alto desempenho, ideal para grandes áreas agrícolas. Equipada com
-        motor John Deere PowerTech™ de 625 cv, graneleiro com capacidade para até 14.100 litros e sistema de separação
-        rotativo de 3,5 m, garante alta eficiência e baixa perda, mesmo em culturas de alta umidade.<br>
-        Produtividade de até 75 toneladas/hora, com consumo médio de 1,2 a 1,6 L por tonelada colhida. Conta com
-        tecnologias AutoTrac™, HarvestSmart™, JDLink™ e CommandCenter™. Plataforma Draper de até 45 pés.</p>
-    </div>
-
-    <div class="avaliacao-geral">
+      <div class="avaliacao-geral">
         <div class="nota">
           <span class="numero">5</span> de 5
           <div class="estrelas">★★★★★</div>
@@ -78,50 +87,54 @@
           <button>1 Estrela</button>
         </div>
       </div>
+    </section>
+
 
     <h2 class="titulo-avaliacoes">Avaliações</h2>
-    <div class="avaliacoes">
-      <div class="card">
-        <p><strong>Carlinhos</strong></p>
+    <section class="avaliacoes">
+      <div class="card-avaliacoes">
+        <p><span class="icon"></span> Carlinhos</p>
         <div class="estrelas">★★★★★</div>
       </div>
-      <div class="card">
-        <p><strong>Carlinhos 2</strong></p>
+      <div class="card-avaliacoes">
+        <p><span class="icon"></span> Carlinhos 2</p>
         <div class="estrelas">★★★★★</div>
       </div>
-      <div class="card">
-        <p><strong>Carlinhos 3</strong></p>
+      <div class="card-avaliacoes">
+        <p><span class="icon"></span> Carlinhos 3</p>
         <div class="estrelas">★★★★★</div>
       </div>
-    </div>
+    </section>
+
 
     <div class="deixe-sua">
       <button>Deixe aqui você também sua avaliação!</button>
     </div>
-  </div>
+  </main>
+
 
   <footer class="custom-footer">
     <div class="footer-content">
-        <div class="footer-logo">
-            <img src="../media/login/logo.png" alt="Logo" />
+      <div class="footer-logo">
+        <img src="../media/login/logo.png" alt="Logo" />
+      </div>
+      <div class="footer-info">
+        <div class="footer-contact">
+          <strong>Informações de contato:</strong><br />
+          (49) 99999-9999<br />
+          <a href="mailto:Example@gmail.com">Example@gmail.com</a>
         </div>
-        <div class="footer-info">
-            <div class="footer-contact">
-                <strong>Informações de contato:</strong><br>
-                (49) 99999-9999<br>
-                <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-            </div>
-        </div>
-        <div class="footer-buttons">
-            <button class="footer-btn">Fale conosco</button>
-            <button class="footer-btn">Sobre nós</button>
-        </div>
+      </div>
+      <div class="footer-buttons">
+        <button class="footer-btn">Fale conosco</button>
+        <button class="footer-btn">Sobre nós</button>
+      </div>
     </div>
-    <hr class="footer-divider">
+    <hr class="footer-divider" />
     <div class="footer-copy">
-        Copyright © 2025 – Todos os direitos estão reservados
+      Copyright © 2025 – Todos os direitos estão reservados
     </div>
-</footer>
+  </footer>
 </body>
 
 </html>
