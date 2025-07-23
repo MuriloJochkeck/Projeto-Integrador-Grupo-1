@@ -727,6 +727,8 @@ body {
 } 
 
 
+
+/* ---------------------------------*/
 /* ====== PÁGINA DO ALUGUEL ====== */
 
 .container-aluguel {
@@ -754,25 +756,23 @@ body {
   gap: 20px;
 }
 
-.miniaturas {
+.miniaturas img {
+  width: 70px;
+  height: 70px;
+  border: 2px solid black;
+  border-radius: 4px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 10px;  
 }
 
-.miniaturas img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .imagem-principal img {
-  width: 400px;
-  height: auto;
+  width: 500px;
+  height: 100;
   border-radius: 8px;
+  max-width: 500px;
+  border: 2px solid black;
 }
 
 .detalhes {
@@ -801,6 +801,8 @@ body {
   color: #555;
 }
 
+
+
 .botoes {
   display: flex;
   gap: 20px;
@@ -808,17 +810,28 @@ body {
 }
 
 .botoes button {
-  background: #6fa36f;
-  border: none;
+  background: rgba(97, 110, 103, 0.2);
+  border: 2px solid black;
   color: #fff;
-  padding: 12px 20px;
-  border-radius: 20px;
+  padding: 12px 30px;  
+  border-radius: 30px; 
   cursor: pointer;
   font-size: 16px;
+  min-width: 200px;    
+  text-align: center;  
+}
+
+
+.botoes .carrinho {
+  color: blue;
+}
+
+.botoes .alugar {
+  color: #305230;
 }
 
 .botoes button:hover {
-  background: #5b8c5b;
+  background: #bbb
 }
 
 .locado {
@@ -831,17 +844,15 @@ body {
   color: #3b6cb7;
 }
 
-.descricao {
+.avaliacao-geral {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 20px; 
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  line-height: 1.6;
-}
-
-.avaliacao-geral {
-  display: flex;
-  gap: 40px;
-  align-items: center;
+  text-align: center;
 }
 
 .nota {
@@ -856,21 +867,23 @@ body {
 
 .nota .estrelas {
   color: #f5a623;
-  font-size: 24px;
+  font-size: 30px;
 }
 
 .filtros {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
   gap: 10px;
-}
+  justify-items: center; 
+}s
 
 .filtros button {
   background: #ddd;
   border: none;
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 10px 20px; 
+  border-radius: 8px;
   cursor: pointer;
+  min-width: 120px; 
 }
 
 .filtros button:hover {
@@ -878,52 +891,93 @@ body {
 }
 
 .titulo-avaliacoes {
-  font-size: 24px;
+  text-align: center;
+  font-size: 28px;
+  color: #000;
+  margin-bottom: 40px;
+}
+
+.bloco-avaliacoes {
+  background-color: #6fa36f;
+  padding: 60px 40px;
   margin: 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
 }
 
 .avaliacoes {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  gap: 30px;
   flex-wrap: wrap;
-  background-color: #6fa36f ;
 }
 
-.cardacoe-avaliacoes {
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  flex: 1 1 250px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  background-color: ;
+.card-avaliacoes {
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 30px;     
+  width: 250px;               
+  height: 150px;            
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 20px;              
+  transition: transform 0.2s ease;
 }
 
-.cardacoe-avaliacoes .estrelas {
-  color: #f5a623;
-  font-size: 20px;
+
+.card-avaliacoes:hover {
+  transform: scale(1.03);
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.usuario img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+
+.card-avaliacoes .estrelas {
+  font-size: 30px;
+  color:  #f5a623;
 }
 
 .deixe-sua {
   text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 .deixe-sua button {
-  background: #6fa36f;
+  background: white;
   border: none;
-  color: black;
   padding: 12px 24px;
   border-radius: 20px;
   cursor: pointer;
   font-size: 16px;
+  transition: 0.3s;
+  color: #000;
 }
 
 .deixe-sua button:hover {
-  background: rgb(110, 103, 103);
+  background: #ccc;
 }
 
+
+
 /* ======== CORREÇÃO DO CONTAINER ======== */
-
-
 
 
 .top-section {
@@ -946,15 +1000,6 @@ body {
   gap: 10px;
 }
 
-.imagem-principal img {
-  max-width: 400px;
-  border: 2px solid black; 
-}
-
-.detalhes {
-  max-width: 400px;
-}
-
 .descricao-avaliacao {
   display: flex;
   justify-content: space-between;
@@ -966,7 +1011,10 @@ body {
   flex: 2;
   background: #fff;
   padding: 20px;
+  margin-top: 70px;
+  margin-left: 80px;
   border-radius: 8px;
+  line-height: 1.6;
 }
 
 .avaliacao-geral {
@@ -977,11 +1025,6 @@ body {
   text-align: center;
 }
 
-.titulo-avaliacoes {
-  text-align: center;
-  margin-top: 60px;
-}
-
 .avaliacoes {
   display: flex;
   justify-content: center;
@@ -989,15 +1032,4 @@ body {
   margin: 40px 0;
 }
 
-.deixe-sua {
-  text-align: center;
-  margin-bottom: 40px;
-}
 
-.deixe-sua button {
-  background: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-}
