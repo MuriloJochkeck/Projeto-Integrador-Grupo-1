@@ -5,49 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endereço</title>
     <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/header.css">
 </head>
 <body>
     <header class="top-header">
         <div class="logo">
             <img src="../media/login/logo.png" alt="Logo" />
         </div>
-    
         <div class="search-bar">
             <input type="text" placeholder="Buscar..." />
-            <span class="search-icon">&#128269;</span> 
+            <span class="search-icon">&#128269;</span>
         </div>
-    
         <div class="icons">
-          <a href="carrinho.html">
-            <img src="../media/login/carrinho.png" alt="Carrinho">
-          </a>  
+            <a href="carrinho.html">
+                <img src="../media/login/carrinho.png" alt="Carrinho">
+            </a>
             <a href="login_usuario.html">
                 <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
             </a>
         </div>
     </header>
     <div class="container">
-      <div class="card">
-        <h1>Endereço</h1>
-        <p>Informe os dados do endereço para finalizar o pedido</p>
-        <form id="form-endereco">
-          <div class="form-row">
-            <input class="form-input" type="number" id="cep" name="cep" placeholder="CEP" required min="0" inputmode="numeric" pattern="[0-9]*">
-            <input class="form-input" type="text" id="rua" name="rua" placeholder="Rua" required>
-          </div>
-          <div class="form-row">
-            <input class="form-input" type="number" id="numero" name="numero" placeholder="Número" required min="0" inputmode="numeric" pattern="[0-9]*">
-            <input class="form-input" type="text" id="cidade" name="cidade" placeholder="Cidade" required>
-          </div>
-          <input class="form-input" type="text" id="uf" name="uf" placeholder="UF" required>
-          <div class="form-row">
-            <button class="btn" type="button" id="voltar">Voltar</button>
-            <button class="btn" type="submit" id="avancar">Avançar</button>
-          </div>
-        </form>
-      </div>
+        <div class="card">
+            <h1>Endereço</h1>
+            <form id="form-endereco">
+                <div class="form-row">
+                    <input class="form-input" type="text" id="cep" name="cep" placeholder="CEP" required>
+                    <input class="form-input" type="text" id="numero" name="numero" placeholder="Número" required>
+                </div>
+                <div class="form-row">
+                    <input class="form-input" type="text" id="uf" name="uf" placeholder="UF" required>
+                    <input class="form-input" type="text" id="cidade" name="cidade" placeholder="Cidade" required>
+                </div>
+                <input class="form-input" type="text" id="rua" name="rua" placeholder="Rua" required>
+                <div class="form-row">
+                    <button class="btn" type="button" id="voltar">Voltar</button>
+                    <button class="btn" type="submit" id="avancar">Avançar</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <script src="js/endereco.js"></script>
+    <footer class="custom-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="../media/login/logo.png" alt="Logo" />
+            </div>
+            <div class="footer-info">
+                <div class="footer-contact">
+                    <strong>Informações de contato:</strong><br>
+                    (49) 99999-9999<br>
+                    <a href="mailto:Example@gmail.com">Example@gmail.com</a>
+                </div>
+            </div>
+            <div class="footer-buttons">
+                <button class="footer-btn">Fale conosco</button>
+                <button class="footer-btn">Sobre nós</button>
+            </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="footer-copy">
+            Copyright © 2025 – Todos os direitos estão reservados
+        </div>
+    </footer>
 </body>
 </html>

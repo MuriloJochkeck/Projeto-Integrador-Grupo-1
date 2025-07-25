@@ -1,44 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastrar Máquinas</title>
-  <link rel="stylesheet" href="static/style.css"/>
-</head>
-<body>
-  <header class="top-header">
-    <div class="logo">
-      <img src="../media/login/logo.png" alt="Logo" />
-    </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Buscar..." />
-      <span class="search-icon">&#128269;</span>
-    </div>
-    <div class="icons">
-      <a href="carrinho.html">
-        <img src="../media/login/carrinho.png" alt="Carrinho">
-      </a>
-    </div>
-  </header>
-  <div class="container">
-    <div class="form-container">
-      <h1>Cadastrar Máquinas</h1>
-      <form>
-        <input type="text" name="cep" placeholder="CEP" required />
-        
-        <div class="row">
-          <input type="text" name="uf" placeholder="UF" required />
-          <input type="text" name="numero" placeholder="Número" required />
-        </div>
-        
-        <input type="text" name="cidade" placeholder="Cidade" required />
-        <input type="text" name="rua" placeholder="Rua" required />
-        <input type="text" name="referencia" placeholder="Referência" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar Máquinas</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <header class="top-header">
+      <div class="logo">
+        <img src="../media/login/logo.png" alt="Logo" />
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar..." />
+        <span class="search-icon">&#128269;</span>
+      </div>
+      <div class="icons">
+        <a href="carrinho.html">
+          <img src="../media/login/carrinho.png" alt="Carrinho" />
+        </a>
+      </div>
+    </header>
+    <div class="container">
+      <div class="form-container">
+        <h1>Cadastrar Máquinas</h1>
+        <form>
+          <input type="text" name="cep" placeholder="CEP" required />
 
-        <button type="submit">Avançar</button>
-      </form>
+          <div class="row">
+            <input type="text" name="uf" placeholder="UF" required />
+            <input type="text" name="numero" placeholder="Número" required />
+          </div>
+
+          <input type="text" name="cidade" placeholder="Cidade" required />
+          <input type="text" name="rua" placeholder="Rua" required />
+          <input type="text" name="referencia" placeholder="Referência" />
+
+          <button type="submit">Avançar</button>
+        </form>
+      </div>
     </div>
-  </div>
-</body>
+    <footer class="custom-footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <img src="../media/login/logo.png" alt="Logo" />
+        </div>
+        <div class="footer-info">
+          <div class="footer-contact">
+            <strong>Informações de contato:</strong><br />
+            (49) 99999-9999<br />
+            <a href="mailto:Example@gmail.com">Example@gmail.com</a>
+          </div>
+        </div>
+        <div class="footer-buttons">
+          <button class="footer-btn">Fale conosco</button>
+          <button class="footer-btn">Sobre nós</button>
+        </div>
+      </div>
+      <hr class="footer-divider" />
+      <div class="footer-copy">
+        Copyright © 2025 – Todos os direitos estão reservados
+      </div>
+    </footer>
+  </body>
 </html>
