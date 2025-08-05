@@ -250,11 +250,13 @@ body {
 .quantity-buttons {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  height: 32px;
 }
+
 .quantity-button {
-  background: none;
-  border: none;
+  background-color: #f7f7f7;
   font-size: 1.5rem;
   color: #d32f2f;
   cursor: pointer;
@@ -266,18 +268,22 @@ body {
   justify-content: center;
   transition: background 0.2s;
   position: relative;
+  padding: 0;
+  line-height: 1;
+  margin: 0;
 }
-.quantity-button:hover {
-  background: #ffeaea;
-}
+
 .quantity-value {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 4px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 32px;
+  min-width: 20px;
+  text-align: center;
+  line-height: 1;
 }
 .quantity-label {
   font-size: 0.8rem;
@@ -319,7 +325,7 @@ body {
   font-weight: 700;
 }
 .coupon-input {
-  width: 100%;
+  width: 300px;
   padding: 8px 12px;
   border-radius: 20px;
   border: 1px solid #aaa;
