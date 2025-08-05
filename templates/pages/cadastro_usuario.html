@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="top-header">
     <div class="logo">
-        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+        <img src="../media/login/logo.png" alt="Logo" />
     </div>
 
     <div class="search-bar">
@@ -18,8 +18,8 @@
     </div>
 
     <div class="icons">
-      <a href="{{ url_for('carrinho') }}">
-        <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
+      <a href="carrinho.html">
+        <img src="../media/login/carrinho.png" alt="Carrinho">
       </a>  
     </div>
   </header>
@@ -47,11 +47,11 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+  <script src="./js/login.js"></script>
   <footer class="custom-footer">
       <div class="footer-content">
           <div class="footer-logo">
-              <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+              <img src="../media/login/logo.png" alt="Logo" />
           </div>
           <div class="footer-info">
               <div class="footer-contact">
