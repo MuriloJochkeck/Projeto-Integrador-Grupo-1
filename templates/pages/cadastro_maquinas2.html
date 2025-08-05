@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquinas</title>
-  <link rel="stylesheet" href="static/style.css" />
+  <link rel="stylesheet" href="../../static/css/style.css" />
 </head>
 <body>
   <header class="top-header">
@@ -23,7 +23,7 @@
   </header>
   <div class="container">
     <div class="form-container">
-      <h1>Cadastrar Máquinas</h1>
+      <h1>Cadastrar Máquinas II</h1>
       <form>
         <input type="text" name="modelo" placeholder="Modelo máquina" required />
         <input type="text" name="equipamento" placeholder="Equipamento" required />
@@ -38,7 +38,7 @@
         <label class="imagem-label">Anexar imagens</label>
         <div class="upload-box">
           <p>Clique aqui para inserir as imagens</p>
-          <img src="pastaUpload.png" alt="Ícone de pasta" />
+          <img src="pasta.png" alt="Ícone de pasta" />
           <input type="file" name="imagens" accept="image/*" multiple />
         </div>
 
@@ -46,8 +46,9 @@
         <textarea name="descricao" rows="4" placeholder="Condição, capacidade, consumo..."></textarea>
 
         <div class="botoes">
-          <button type="button" class="voltar">Voltar</button>
+          <button type="button" onclick="voltarParaCadastroI()">Voltar</button>
           <button type="submit" class="avancar">Avançar</button>
+           
         </div>
       </form>
     </div>
