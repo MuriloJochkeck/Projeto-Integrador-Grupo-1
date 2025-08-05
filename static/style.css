@@ -1033,3 +1033,28 @@ body {
 }
 
 
+/* Pop-up oculto */
+.popup-avaliacao {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-align: center;
+}
+
+
+.popup-avaliacao .estrelas span {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+
+.popup-avaliacao .estrelas span.ativo {
+  color: gold;
+}
