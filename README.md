@@ -1,8 +1,8 @@
 # Projeto-Integrador-Grupo-1
 Repositório para utilização do desenvolvimento do site do Projeto Integrador II - 2025, produzido pelo grupo 1.
 
-### Objetivos
-O objetivo do nosso site é fazer com que os usuários que não possuem implementos agricolas, possam alugar para usar em suas lavouras. 
+## Objetivos
+O objetivo do nosso site é fazer com que os usuários que não possuem implementos agrícolas, possam alugar as máquinas para utilizar em suas lavouras. 
 
 ### Linguagens
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
@@ -28,13 +28,13 @@ O objetivo do nosso site é fazer com que os usuários que não possuem implemen
 <br>
 
 
-# **Como utilizar**
+## **Como utilizar**
 
-## **1** Dependências
+### **1** Dependências
 Instale as dependências necessárias.
 
 
-## **2** Acessando
+### **2** Acessando
 Após ter instalado todas as depêndencias, na pasta do projeto se redirecione até o arquivo *app.py* e execute.
 
 ### **2.1** 
@@ -43,6 +43,6 @@ Após isso, acesse o *link* gerado no terminal. Pronto, agora é possível nagev
 <br><br>
 
 ## **Funcionalidades**
-O app ainda esta em desenvolvimento, por isso, as funcionalidades ainda não estão presentes, sendo apenas sendo possível navegar pelo site.
+O app ainda esta em desenvolvimento, por isso, as funcionalidades ainda não estão presentes, sendo apenas possível navegar pelo site.
 
 
