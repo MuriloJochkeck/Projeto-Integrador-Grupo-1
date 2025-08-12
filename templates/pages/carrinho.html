@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <title>Meu Carrinho</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="../../static/style.css">
 </head>
-
 <body>
   <header class="top-header">
-    <div class="logo">
-      <a href="/">
-        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-      </a>
-    </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Buscar..." />
-      <span class="search-icon">&#128269;</span>
-    </div>
-    <div class="icons">
-      <a href="{{ url_for('carrinho') }}">
-        <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
-      </a>
-      <a href="{{ url_for('login') }}">
-        <img class="user-icon"
-          src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}"
-          alt="Entrar">
-      </a>
-    </div>
-  </header>
+      <div class="logo">
+          <img src="../../static/media/login/logo.png" alt="Logo" />
+      </div>
   
+      <div class="search-bar">
+          <input type="text" placeholder="Buscar..." />
+          <span class="search-icon">&#128269;</span> 
+      </div>
+  
+      <div class="icons"> 
+          <a href="{{ url_for('login') }}">
+              <img class="user-icon" src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
+          </a>
+      </div>
+  </header>
   <div class="main-content-carrinho">
     <div class="cart-container">
       <div class="cart-section">
@@ -37,8 +30,7 @@
           <div class="cart-title">Meu carrinho</div>
           <div class="product-list">
             <div class="product-item">
-              <img class="product-image" src=" img que precisar  " alt="Trator pequeno" />
-              <!--  fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
+              <img class="product-image" src=" img que precisar  " alt="Trator pequeno" /> <!--  fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
               <div class="product-info">
                 <div class="product-name">nome da maquina</div>
               </div>
@@ -56,8 +48,7 @@
               </div>
             </div>
             <div class="product-item">
-              <img class="product-image" src="foto que precisar" alt="Ensiladeira" />
-              <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
+              <img class="product-image" src="foto que precisar" alt="Ensiladeira" />    <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
               <div class="product-info">
                 <div class="product-name">nome da maquina</div>
               </div>
@@ -70,10 +61,8 @@
                 <span class="quantity-label">Horas</span>
               </div>
               <div class="product-price">
-                1x R$ "valor que precisar depois eu mudo pra puxar o
-                valor"<br /><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
-                Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o
-                  valor"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+                1x R$ "valor que precisar depois eu mudo pra puxar o valor"<br /><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+                Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o valor"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
               </div>
             </div>
           </div>
@@ -83,42 +72,39 @@
         <div class="summary-title">Resumo</div>
         <div class="summary-row">
           <span>Subtotal</span>
-          <span>R$ "valor que
-            precisar"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+          <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
         </div>
         <div class="summary-row bold">
           <span>Total</span>
-          <span>R$ "valor que
-            precisar"</span><!--    fazer uma funcao em que puxa o valor das maquina(s) somada(s) que o usuario selecionou -->
+          <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor das maquina(s) somada(s) que o usuario selecionou -->
         </div>
         <input class="coupon-input" placeholder="Cupom de desconto" />
         <button class="finish-button">Finalizar Pedido</button>
       </div>
     </div>
   </div>
-  <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
-  <footer class="custom-footer">
+   <script src="./static/carrinho.js"></script>
+   <footer class="custom-footer">
     <div class="footer-content">
-      <div class="footer-logo">
-        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-      </div>
-      <div class="footer-info">
-        <div class="footer-contact">
-          <strong>Informações de contato:</strong><br>
-          (49) 99999-9999<br>
-          <a href="mailto:Example@gmail.com">Example@gmail.com</a>
+        <div class="footer-logo">
+            <img src="../media/login/logo.png" alt="Logo" />
         </div>
-      </div>
-      <div class="footer-buttons">
-        <button class="footer-btn">Fale conosco</button>
-        <button class="footer-btn">Sobre nós</button>
-      </div>
+        <div class="footer-info">
+            <div class="footer-contact">
+                <strong>Informações de contato:</strong><br>
+                (49) 99999-9999<br>
+                <a href="mailto:Example@gmail.com">Example@gmail.com</a>
+            </div>
+        </div>
+        <div class="footer-buttons">
+            <button class="footer-btn">Fale conosco</button>
+            <button class="footer-btn">Sobre nós</button>
+        </div>
     </div>
     <hr class="footer-divider">
     <div class="footer-copy">
-      Copyright © 2025 – Todos os direitos estão reservados
+        Copyright © 2025 – Todos os direitos estão reservados
     </div>
   </footer>
 </body>
-
-</html>
+</html> 

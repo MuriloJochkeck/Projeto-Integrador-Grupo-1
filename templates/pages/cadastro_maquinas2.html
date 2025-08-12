@@ -4,27 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Máquinas</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="static/style.css" />
 </head>
 <body>
   <header class="top-header">
     <div class="logo">
-        <a href="/">
-            <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-        </a>
+      <img src="../media/login/logo.png" alt="Logo" />
     </div>
-
     <div class="search-bar">
-        <input type="text" placeholder="Buscar..." />
-        <span class="search-icon">&#128269;</span> 
+      <input type="text" placeholder="Buscar..." />
+      <span class="search-icon">&#128269;</span>
     </div>
-
     <div class="icons">
-        <a href="{{ url_for('carrinho') }}"><img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho"></a>
-        <a href="{{ url_for('login') }}"> <img src="{{ url_for('static', filename='media/login/pessoa.png')}}"></a>
+      <a href="{{ url_for('carrinho') }}">
+        <img src="../media/login/carrinho.png" alt="Carrinho">
+      </a>
     </div>
-</header>
-
+  </header>
   <div class="container">
     <div class="form-container">
       <h1>Cadastrar Máquinas</h1>
@@ -42,7 +38,7 @@
         <label class="imagem-label">Anexar imagens</label>
         <div class="upload-box">
           <p>Clique aqui para inserir as imagens</p>
-          <img src="{{ url_for('static', filename='media/login/pastaUpload.png') }}" alt="Ícone de pasta" />
+          <img src="pastaUpload.png" alt="Ícone de pasta" />
           <input type="file" name="imagens" accept="image/*" multiple />
         </div>
 
@@ -51,7 +47,7 @@
 
         <div class="botoes">
           <button type="button" class="voltar">Voltar</button>
-          <button type="submit" class="avancar">Avançar</button>    
+          <button type="submit" class="avancar">Avançar</button>
         </div>
       </form>
     </div>
@@ -59,7 +55,7 @@
   <footer class="custom-footer">
     <div class="footer-content">
         <div class="footer-logo">
-            <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+            <img src="../media/login/logo.png" alt="Logo" />
         </div>
         <div class="footer-info">
             <div class="footer-contact">

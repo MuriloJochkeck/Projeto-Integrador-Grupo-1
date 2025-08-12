@@ -38,5 +38,7 @@ def cadastro_maquinas2():
     return render_template('pages/cadastro_maquinas2.html')
 
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)

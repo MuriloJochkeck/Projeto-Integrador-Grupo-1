@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
 <body>
   <header class="top-header">
     <div class="logo">
-        <a href="/">
-            <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-        </a>
+        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
     </div>
 
     <div class="search-bar">
@@ -20,7 +18,7 @@
     </div>
 
     <div class="icons">
-      <a href="/carrinho">
+      <a href="{{ url_for('carrinho') }}">
         <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
       </a>  
     </div>
