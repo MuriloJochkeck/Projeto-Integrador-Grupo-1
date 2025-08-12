@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Agendamentos Máquinas</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header class="top-header">
@@ -17,15 +17,16 @@
         </div>
 
         <div class="icons">
-            <img src="./static/media/login/carrinho.png" alt="Carrinho">
-            <a href="./pages/login_usuario.html">
-                <img class="user-icon" src="media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
-            </a>
+            <a href="{{ url_for('carrinho') }}"><img src="./static/media/login/carrinho.png" alt="Carrinho"></a>
+            <a href="{{ url_for('login') }}">Login</a>
         </div>
     </header>
 
     <div>
-        
+        <a href="{{ url_for('cadastro') }}">Cadastro</a>
+        <a href="{{ url_for('aluguel') }}">Aluguel</a>
+        <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
+        <a href="{{ url_for('endereço_user') }}">Endereço</a>
     </div>
 
     <footer>
