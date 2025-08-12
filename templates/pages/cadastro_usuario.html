@@ -30,18 +30,18 @@
       <h1>Cadastrar</h1>
       <p>Informe seus dados abaixo para cria-la.</p>
 
-      <form id="loginForm">
-        <input class="form-input" type="text" name="Nome_usuario" placeholder="Nome completo" required>
+      <form id="cadastroForm">
+        <input class="form-input" type="text" name="nome_user" placeholder="Nome completo" required>
         <div class="form-row">
-          <input type="text" name="telefone" class="form-input" placeholder="Telefone" />
-          <input type="text" name="cpf" class="form-input" placeholder="CPF" />
+          <input type="text" name="telefone_user" class="form-input" placeholder="Telefone" required />
+          <input type="text" name="cpf" class="form-input" placeholder="CPF" required />
         </div>
         <div class="form-row">
-          <input class="form-input" type="email" name="Email_usuario" placeholder="Email" required>
+          <input class="form-input" type="email" name="email" placeholder="Email" required>
         </div>
         <div class="form-row">
-          <input class="form-input" type="password" name="senha" placeholder="Senha" />
-          <input class="form-input" type="password" name="confirmar_senha" placeholder="Confirmar senha" />
+          <input class="form-input" type="password" name="senha" placeholder="Senha" required />
+          <input class="form-input" type="password" name="confirmar_senha" placeholder="Confirmar senha" required />
         </div>
         <button class="btn" type="submit">Criar conta</button>
       </form>
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/cadastro.js') }}"></script>
   <footer class="custom-footer">
       <div class="footer-content">
           <div class="footer-logo">
@@ -72,5 +72,7 @@
           Copyright © 2025 – Todos os direitos estão reservados
       </div>
   </footer>
+
+  
 </body>
 </html>

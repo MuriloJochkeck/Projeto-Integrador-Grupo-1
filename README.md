@@ -44,5 +44,3 @@ Após isso, acesse o *link* gerado no terminal. Pronto, agora é possível nagev
 
 ## **Funcionalidades**
 O app ainda esta em desenvolvimento, por isso, as funcionalidades ainda não estão presentes, sendo apenas possível navegar pelo site.
-
-
