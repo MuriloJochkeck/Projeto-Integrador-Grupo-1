@@ -1032,4 +1032,87 @@ body {
   margin: 40px 0;
 }
 
+/* ====== footer.css ====== */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+footer {
+  background-color: #d3d3d3;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  max-width: 33.33%;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+;
+}
+
+.footer-logo img {
+  height: 50px;
+}
+
+.footer-info {
+  text-align: center;
+}
+
+.footer-info p {
+  margin: 5px 0;
+}
+
+.footer-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.btn {
+  background-color: #5e985e;
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: #497a49;
+}
+
+hr {
+  margin: 20px auto 10px;
+  border: 0;
+  height: 2px;
+  width: 90%;
+  background-color: #bbb;
+}
+
+footer p.copyright {
+  font-size: 14px;
+  color: #161616;
+  text-align: center;
+}
+
+.linha {
+  border: none;
+  height: 1px;
+  background-color: #bcbcbc; 
+  width: 90%;
+  margin: 20px auto;
+}
