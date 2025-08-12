@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endereço</title>
-    <link rel="stylesheet" href="../../static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header class="top-header">
         <div class="logo">
-            <img src="../media/login/logo.png" alt="Logo" />
+            <a href="/">
+                <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+            </a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Buscar..." />
@@ -17,10 +19,10 @@
         </div>
         <div class="icons">
             <a href="{{ url_for('carrinho') }}">
-                <img src="../media/login/carrinho.png" alt="Carrinho">
+                <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
             </a>
             <a href="{{ url_for('login') }}">
-                <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
+                <img class="user-icon" src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}" alt="Entrar">
             </a>
         </div>
     </header>
@@ -46,9 +48,9 @@
     </div>
     <footer class="custom-footer">
         <div class="footer-content">
-            <div class="footer-logo">
-                <img src="../media/login/logo.png" alt="Logo" />
-            </div>
+                    <div class="footer-logo">
+            <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+        </div>
             <div class="footer-info">
                 <div class="footer-contact">
                     <strong>Informações de contato:</strong><br>

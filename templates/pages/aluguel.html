@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Colheitadeira John Deere S790</title>
-  <link rel="stylesheet" href="../../static/style.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
+
 
 <body class="pagina-colheitadeira">
   <header class="top-header">
     <div class="logo">
-      <img src="../../static/media/login/logo.png" alt="Logo" />
+             <a href="/">
+         <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+       </a>
     </div>
+
 
     <div class="search-bar">
       <input type="text" placeholder="Buscar..." />
       <span class="search-icon">&#128269;</span>
     </div>
 
+
     <div class="icons">
-      <a href="carrinho.html">
-        <img src="../../static/media/login/carrinho.png" alt="Carrinho">
-      </a>
-      <a href="login_usuario.html">
-        <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png"
-          alt="Entrar">
-      </a>
+             <a href="/carrinho">
+         <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
+       </a>
+             <a href="/login">
+         <img class="user-icon"
+           src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}" alt="Entrar">
+       </a>
     </div>
   </header>
-
 
   <main class="container-aluguel">
     <section class="top-section">
       <div class="produto">
-        <!-- Coluna esquerda: Miniaturas + Imagem principal -->
         <div class="imagens">
           <div class="miniaturas">
-            <img src="../../static/media/trator/A2S.jpg" alt="Miniatura 1" />
-            <img src="../../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp" alt="Miniatura 2" />
-            <img src="../../static/media/trator/Captura de tela 2025-06-20 235637.png" alt="Miniatura 3" />
-            <img src="../../static/media/trator/colheitdera1.jpg" alt="Miniatura 4" />
+            <img src="{{ url_for('static', filename='media/trator/') }}colheitadera2.jpg" alt="Miniatura 1" />
+            <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="Miniatura 2" />
+            <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="Miniatura 3" />
+            <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="Miniatura 4" />
           </div>
           <div class="imagem-principal">
-            <img src="../../static/media/trator/colheitadera2.jpg" alt="Colheitadeira principal" />
+            <img src="{{ url_for('static', filename='media/trator/') }}colheitadera2.jpg" alt="Colheitadeira principal" />
           </div>
         </div>
 
@@ -54,10 +58,12 @@
             R$ 4.490,90 <span>Valor / Diário</span><br />
             <small>em 12x R$374,24</small>
           </p>
+
           <div class="botoes">
             <button class="alugar">Alugar agora</button>
             <button class="carrinho">Adicionar ao carrinho</button>
           </div>
+
           <p class="locado">Locado por <a href="#">Murilo Jochkeck</a></p>
         </div>
       </div>
@@ -93,50 +99,66 @@
 
     <section class="bloco-avaliacoes">
       <h2 class="titulo-avaliacoes">Avaliações</h2>
-    
+
+
       <div class="avaliacoes">
         <div class="card-avaliacoes">
           <div class="usuario">
-            <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Usuário" class="icone-usuario" />
+            <img src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}"
+              alt="Usuário" class="icone-usuario" />
             <span><strong>Carlinhos</strong></span>
           </div>
           <div class="estrelas">★★★★★</div>
         </div>
-    
+
+
         <div class="card-avaliacoes">
           <div class="usuario">
-            <img src="../../staic/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Usuário" class="icone-usuario" />
+            <img src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}"
+              alt="Usuário" class="icone-usuario" />
             <span><strong>Carlinhos 2</strong></span>
           </div>
           <div class="estrelas">★★★★★</div>
         </div>
-    
+
+
         <div class="card-avaliacoes">
           <div class="usuario">
-            <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Usuário" class="icone-usuario" />
+            <img src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}"
+              alt="Usuário" class="icone-usuario" />
             <span><strong>Carlinhos 3</strong></span>
           </div>
           <div class="estrelas">★★★★★</div>
         </div>
       </div>
-    
+
+
       <div class="deixe-sua">
         <button>Deixe aqui você também sua avaliação!</button>
       </div>
 
+
+      <div class="popup-avaliacao" id="popupAvaliacao">
+        <h2>Selecione a quantidade de estrelas:</h2>
+        <div class="estrelas" id="estrelas">
+          <span data-value="1">★</span>
+          <span data-value="2">★</span>
+          <span data-value="3">★</span>
+          <span data-value="4">★</span>
+          <span data-value="5">★</span>
+        </div>
+        <button id="enviarAvaliacao">Enviar Avaliação</button>
+      </div>
+
     </section>
-    
-
-
-
-
   </main>
 
+  <script src="{{ url_for('static', filename='js/aluguel.js') }}"></script>
 
   <footer class="custom-footer">
     <div class="footer-content">
       <div class="footer-logo">
-        <img src="../media/login/logo.png" alt="Logo" />
+        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
       </div>
       <div class="footer-info">
         <div class="footer-contact">

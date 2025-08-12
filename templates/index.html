@@ -8,7 +8,9 @@
 <body>
     <header class="top-header">
         <div class="logo">
-            <img src="media/login/logo.png" alt="Logo" />
+            <a href="/">
+                <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+            </a>
         </div>
 
         <div class="search-bar">
@@ -17,8 +19,8 @@
         </div>
 
         <div class="icons">
-            <a href="{{ url_for('carrinho') }}"><img src="./static/media/login/carrinho.png" alt="Carrinho"></a>
-            <a href="{{ url_for('login') }}">Login</a>
+                                     <a href="/carrinho"><img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho"></a>
+       <a href="/login"><img src="{{ url_for('static', filename='media/login/pessoa.png') }}" alt=""></a>
         </div>
     </header>
 
@@ -29,8 +31,259 @@
         <a href="{{ url_for('endereço_user') }}">Endereço</a>
     </div>
 
-    <footer>
-    </footer>
+
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2>Colheitadeiras</h2>
+            <a href="#">ver mais</a>
+        </div>
+        <div class="carousel">
+            <button class="prev">&#10094;</button>
+            <div class="carousel-track">
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+            </div>
+            <button class="next">&#10095;</button>
+        </div>
+    </section>
+
+<!----------------------------------------------------------------------->
+
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2>Tratores</h2>
+            <a href="#">ver mais</a>
+        </div>
+        <div class="carousel">
+            <button class="prev">&#10094;</button>
+            <div class="carousel-track">
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+            </div>
+            <button class="next">&#10095;</button>
+        </div>
+    </section>
+
+<!----------------------------------------------------------------------->
+
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2>Promoções</h2>
+            <a href="#">ver mais</a>
+        </div>
+        <div class="carousel">
+            <button class="prev">&#10094;</button>
+            <div class="carousel-track">
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                    </a>
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                    </a>
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                </div>
+                <div class="card-inicial">
+                    <a href="/aluguel">
+                        <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                    </a>    
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                </div>
+            </div>
+            <button class="next">&#10095;</button>
+        </div>
+    </section>
+    
+<!----------------------------------------------------------------------->
+
+<section class="carousel-section">
+    <div class="section-header">
+        <h2>Mais Procurados</h2>
+        <a href="#">ver mais</a>
+    </div>
+    <div class="carousel">
+        <button class="prev">&#10094;</button>
+        <div class="carousel-track">
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                </a>
+                    <p class="price">R$4.900,00<span>/dia</span></p>
+                    <p class="desc">VALTRA BC7500</p>
+            </div>
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                </a>
+                    <p class="price">R$6.300,00<span>/dia</span></p>
+                    <p class="desc">CR5 NEW HOLLAND</p>
+            </div>
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                </a>    
+                    <p class="price">R$3.500,00<span>/dia</span></p>
+                    <p class="desc">SLC 6200</p>
+            </div>
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}A2S.jpg" alt="VALTRA BC7500">
+                </a>
+                    <p class="price">R$4.900,00<span>/dia</span></p>
+                    <p class="desc">VALTRA BC7500</p>
+            </div>
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                </a>
+                    <p class="price">R$6.300,00<span>/dia</span></p>
+                    <p class="desc">CR5 NEW HOLLAND</p>
+            </div>
+            <div class="card-inicial">
+                <a href="/aluguel">
+                    <img src="{{ url_for('static', filename='media/trator/') }}colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                </a>    
+                    <p class="price">R$3.500,00<span>/dia</span></p>
+                    <p class="desc">SLC 6200</p>
+            </div>
+        </div>
+        <button class="next">&#10095;</button>
+    </div>
+</section>
+<!----------------------------------------------------------------------->
+
+
+    <script src="{{ url_for('static', filename='js/inicial.js') }}"></script>
+
+    <footer class="custom-footer">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+          </div>
+          <div class="footer-info">
+            <div class="footer-contact">
+              <strong>Informações de contato:</strong><br />
+              (49) 99999-9999<br />
+              <a href="mailto:Example@gmail.com">Example@gmail.com</a>
+            </div>
+          </div>
+          <div class="footer-buttons">
+            <button class="footer-btn">Fale conosco</button>
+            <button class="footer-btn">Sobre nós</button>
+          </div>
+        </div>
+        <hr class="footer-divider" />
+        <div class="footer-copy">
+          Copyright © 2025 – Todos os direitos estão reservados
+        </div>
+      </footer>
 
 </body>
 </html>
