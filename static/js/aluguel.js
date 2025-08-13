@@ -34,7 +34,7 @@ function renderizarAvaliacao(usuario, nota, index) {
 
     novaAvaliacao.innerHTML = `
     <div class="usuario">
-      <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" />
+      <img src="/static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" />
       <span><strong>${usuario}</strong></span>
     </div>
     <div class="estrelas">${'★'.repeat(nota)}${'☆'.repeat(5 - nota)}</div>
@@ -130,11 +130,12 @@ carregarAvaliacoesSalvas();
 
 //mandar para carrinho
 const btnAdicionarCarrinho = document.querySelector('.botoes .carrinho');
+const btnAlugar = document.querySelector('.botoes .alugar');
 
 btnAdicionarCarrinho.addEventListener('click', () => {
     const produto = {
         nome: 'Colheitadeira John Deere S790',
-        imagem: '../../static/media/trator/colheitadera2.jpg',
+        imagem: '/static/media/trator/colheitadera2.jpg',
         preco: 4490.90,
         quantidade: 1
     };
@@ -149,4 +150,20 @@ btnAdicionarCarrinho.addEventListener('click', () => {
 
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
     alert('Produto adicionado ao carrinho!');
+});
+
+// Funcionalidade para o botão "Alugar agora"
+btnAlugar.addEventListener('click', () => {
+    const produto = {
+        nome: 'Colheitadeira John Deere S790',
+        imagem: '/static/media/trator/colheitadera2.jpg',
+        preco: 4490.90,
+        quantidade: 1
+    };
+
+    // Salva o produto no localStorage para a página de finalização
+    localStorage.setItem('produtoAluguel', JSON.stringify(produto));
+    
+    // Redireciona para a página de finalização do pedido
+    window.location.href = '/finaliza_pedido';
 });
