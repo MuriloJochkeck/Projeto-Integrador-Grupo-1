@@ -12,10 +12,7 @@
         <div class="logo">
           <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
         </div>
-        <div class="search-bar">
-          <input type="text" placeholder="Buscar..." />
-          <span class="search-icon">&#128269;</span>
-        </div>
+      
         <div class="icons">
           <a href="{{ url_for('carrinho') }}">
             <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho" />
@@ -88,27 +85,8 @@
       </div>
     </div>
 
-    <footer class="custom-footer">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-        </div>
-        <div class="footer-info">
-          <div class="footer-contact">
-            <strong>Informações de contato:</strong><br />
-            (49) 99999-9999<br />
-            <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-          </div>
-        </div>
-        <div class="footer-buttons">
-          <button class="footer-btn">Fale conosco</button>
-          <button class="footer-btn">Sobre nós</button>
-        </div>
-      </div>
-      <hr class="footer-divider" />
-      <div class="footer-copy">
-        Copyright © 2025 – Todos os direitos estão reservados
-      </div>
-    </footer>
+    {% block footer %}
+    {% include 'pages/footer.html' %}
+    {% endblock %}
   </body>
 </html>

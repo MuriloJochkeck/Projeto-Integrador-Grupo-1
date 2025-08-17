@@ -27,7 +27,7 @@ def aluguel():
 
 @app.route('/endereço_user')
 def endereço_user():
-    return render_template('pages/endereço_usuario.html')
+    return render_template('pages/endereco_usuario.html')
 
 @app.route('/cadastro_maquinas')
 def cadastro_maquinas():

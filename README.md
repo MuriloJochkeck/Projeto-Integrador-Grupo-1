@@ -30,8 +30,9 @@ O objetivo do nosso site é fazer com que os usuários que não possuem implemen
 
 ## **Como utilizar**
 
-### **1** Dependências
-Instale as dependências necessárias.
+
+### **1** Depêndencias
+Em seu terminal, digite o comando "pip install flask". Certifique-se de ter o python instalado em sua máquina.
 
 
 ### **2** Acessando
