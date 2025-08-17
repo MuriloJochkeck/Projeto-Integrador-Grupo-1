@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: 0 auto; 
   top: 0;
   left: 0;
   width: 100vw;
@@ -559,6 +559,7 @@ body {
   background: #ffb300;
 }
 
+
 /* ====== cadastro_maquinas.css ====== */
 .form-container {
   background-color: #f3f3f3;
@@ -643,7 +644,7 @@ button:hover,
 .aluguel-opcoes button {
   padding: 8px 20px;
   background-color: #719c67;
-  color: white;
+  color: black;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -690,7 +691,7 @@ button.avancar {
   flex: 1;
   padding: 10px;
   background-color: #719c67;
-  color: white;
+  color: black;
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -702,23 +703,31 @@ button.voltar:hover,
 button.avancar:hover,
 .aluguel-opcoes button:hover {
   background-color: #5a8454;
-}
+} 
 
 /* ====== maquinas2.css ====== */
-.form-container {
-  background-color: #f3f3f3;
-  padding: 40px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 40px auto;
-}
 
 h1 {
   text-align: center;
   margin-bottom: 25px;
 }
+
+#preview-imagens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+#preview-imagens img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 
 input[type="text"],
 textarea {
@@ -743,22 +752,6 @@ textarea {
   text-align: center;
 }
 
-.aluguel-opcoes {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.aluguel-opcoes button {
-  padding: 8px 20px;
-  background-color: #719c67;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .upload-box {
   width: 100%;
   border: 1px solid #000;
@@ -800,7 +793,7 @@ button.avancar {
   flex: 1;
   padding: 10px;
   background-color: #719c67;
-  color: white;
+  color: black;
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -808,11 +801,28 @@ button.avancar {
   margin: 0 5px;
 }
 
-button.voltar:hover,
-button.avancar:hover,
-.aluguel-opcoes button:hover {
-  background-color: #5a8454;
+
+.botao-dia, .botao-hora {
+  padding: 10px 15px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  transition: 0.3s;
 }
+
+.botao-dia:hover, .botao-hora:hover {
+  background-color: #ddd;
+}
+
+.botao-dia.selecionado, .botao-hora.selecionado {
+  background-color: #4CAF50;   
+  color: white;
+  border: 2px solid #2e7d32;
+  font-weight: bold;
+}
+
 
 /* ====== HEADER ====== */
 body {
