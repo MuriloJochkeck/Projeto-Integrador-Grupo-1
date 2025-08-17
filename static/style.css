@@ -1003,7 +1003,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin: 80px 20px 20px 20px;
+  padding: 0;
 }
 
 
@@ -1471,4 +1472,693 @@ s .filtros button {
 
 .btn-confirmar:hover {
   background-color: #5a8a4f;
+}
+
+/* ====== RESPONSIVIDADE PARA CADASTRO DE USUÁRIO ====== */
+@media (max-width: 768px) {
+  .container {
+    margin-top: 80px;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px 20px;
+    margin: 0 auto;
+  }
+
+  .card h1 {
+    font-size: 1.8em;
+    margin: 12px 0 6px 0;
+  }
+
+  .card p {
+    font-size: 1em;
+    margin-bottom: 16px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .form-row .form-input {
+    margin-bottom: 0;
+  }
+
+  .form-input {
+    padding: 10px 12px;
+    font-size: 16px; /* Evita zoom no iOS */
+    margin-bottom: 8px;
+    -webkit-appearance: none; /* Remove estilos padrão do iOS */
+    border-radius: 5px;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #77a56f;
+    box-shadow: 0 0 0 2px rgba(119, 165, 111, 0.2);
+  }
+
+  .btn {
+    padding: 14px 0;
+    font-size: 1.1em;
+    margin-top: 16px;
+    -webkit-appearance: none; /* Remove estilos padrão do iOS */
+    -webkit-tap-highlight-color: transparent; /* Remove highlight no tap */
+  }
+
+  .top-header {
+    padding: 8px 16px;
+  }
+
+  .logo img {
+    height: 50px;
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-top: 70px;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .card {
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .card h1 {
+    font-size: 1.6em;
+    margin: 10px 0 5px 0;
+  }
+
+  .card p {
+    font-size: 0.95em;
+    margin-bottom: 14px;
+  }
+
+  .form-input {
+    padding: 12px 14px;
+    font-size: 16px;
+    margin-bottom: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .btn {
+    padding: 16px 0;
+    font-size: 1.1em;
+    margin-top: 20px;
+    border-radius: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .top-header {
+    padding: 6px 12px;
+  }
+
+  .logo img {
+    height: 45px;
+    margin-left: 15px;
+  }
+
+  .custom-footer {
+    font-size: 0.9em;
+  }
+
+  .footer-content {
+    padding: 12px 15px 0 15px;
+    gap: 15px;
+  }
+
+  .footer-logo img {
+    height: 40px;
+  }
+
+  .footer-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    min-width: 120px;
+    min-height: 40px; /* Garante área de toque adequada */
+  }
+
+  .footer-copy {
+    font-size: 0.9em;
+    padding: 6px 0 8px 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    margin-top: 65px;
+    padding: 10px;
+  }
+
+  .card {
+    padding: 18px 14px;
+  }
+
+  .card h1 {
+    font-size: 1.5em;
+  }
+
+  .card p {
+    font-size: 0.9em;
+  }
+
+  .form-input {
+    padding: 10px 12px;
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .btn {
+    padding: 14px 0;
+    font-size: 1em;
+    min-height: 44px;
+  }
+
+  .logo img {
+    height: 40px;
+    margin-left: 10px;
+  }
+
+  .footer-content {
+    padding: 10px 12px 0 12px;
+  }
+
+  .footer-btn {
+    padding: 8px 16px;
+    font-size: 0.85em;
+    min-width: 100px;
+    min-height: 40px;
+  }
+}
+
+/* Melhorias específicas para dispositivos móveis */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover {
+    background: #7ca97c; /* Remove efeito hover em dispositivos touch */
+  }
+  
+  .footer-btn:hover {
+    background: #6fa36f; /* Remove efeito hover em dispositivos touch */
+  }
+  
+  .form-input:focus {
+    border-color: #77a56f;
+    box-shadow: 0 0 0 2px rgba(119, 165, 111, 0.2);
+  }
+}
+
+/* Melhorias para orientação landscape em dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+  .container {
+    margin-top: 60px;
+    min-height: calc(100vh - 120px);
+  }
+  
+  .card {
+    max-width: 500px;
+    padding: 20px 24px;
+  }
+  
+  .form-row {
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .form-row .form-input {
+    flex: 1;
+  }
+}
+
+/* Melhorias de acessibilidade para dispositivos móveis */
+@media (max-width: 768px) {
+  .form-input:focus {
+    outline: none;
+    border-color: #77a56f;
+    box-shadow: 0 0 0 3px rgba(119, 165, 111, 0.3);
+  }
+  
+  .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(119, 165, 111, 0.3);
+  }
+  
+  .footer-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(119, 165, 111, 0.3);
+  }
+}
+
+/* Prevenção de zoom em dispositivos móveis */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"] {
+    font-size: 16px !important;
+  }
+}
+
+/* ====== RESPONSIVIDADE PARA PÁGINA DO CARRINHO ====== */
+@media (max-width: 768px) {
+  .main-content-carrinho {
+    margin: 80px 20px 20px 20px;
+    padding: 0;
+  }
+
+  .cart-container {
+    flex-direction: column;
+    gap: 20px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .cart-section {
+    flex: none;
+    min-width: auto;
+    width: 100%;
+    padding: 24px 20px;
+  }
+
+  .summary-section {
+    flex: none;
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
+    order: 2; /* Resumo fica abaixo do carrinho */
+  }
+
+  .cart-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .cart-title::before {
+    width: 28px;
+    height: 28px;
+  }
+
+  .product-list {
+    gap: 24px;
+  }
+
+  .product-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+    text-align: center;
+  }
+
+  .product-image {
+    width: 100px;
+    height: 100px;
+    align-self: center;
+  }
+
+  .product-info {
+    flex: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .product-name {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .quantity-control {
+    align-self: center;
+    min-width: 80px;
+  }
+
+  .quantity-buttons {
+    gap: 12px;
+  }
+
+  .quantity-button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .quantity-value {
+    font-size: 1.1rem;
+    height: 36px;
+  }
+
+  .product-price {
+    min-width: auto;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  .summary-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .summary-row {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .coupon-input {
+    max-width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .finish-button {
+    font-size: 1.2rem;
+    padding: 18px 0;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content-carrinho {
+    margin: 70px 15px 15px 15px;
+    padding: 0;
+  }
+
+  .cart-section {
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .summary-section {
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+
+  .cart-title {
+    font-size: 1.6rem;
+    margin-bottom: 18px;
+  }
+
+  .cart-title::before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .product-list {
+    gap: 20px;
+  }
+
+  .product-item {
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+
+  .product-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .product-name {
+    font-size: 1.1rem;
+  }
+
+  .quantity-control {
+    min-width: 70px;
+  }
+
+  .quantity-button {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+
+  .quantity-value {
+    font-size: 1rem;
+    height: 32px;
+  }
+
+  .product-price {
+    font-size: 1rem;
+  }
+
+  .summary-title {
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+  }
+
+  .summary-row {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+
+  .coupon-input {
+    padding: 10px 14px;
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .finish-button {
+    font-size: 1.1rem;
+    padding: 16px 0;
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .main-content-carrinho {
+    margin: 65px 10px 10px 10px;
+    padding: 0;
+  }
+
+  .cart-section {
+    padding: 18px 14px;
+  }
+
+  .summary-section {
+    padding: 18px 14px;
+  }
+
+  .cart-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .cart-title::before {
+    width: 22px;
+    height: 22px;
+  }
+
+  .product-list {
+    gap: 18px;
+  }
+
+  .product-item {
+    gap: 10px;
+    padding-bottom: 14px;
+  }
+
+  .product-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .product-name {
+    font-size: 1rem;
+  }
+
+  .quantity-control {
+    min-width: 65px;
+  }
+
+  .quantity-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+  }
+
+  .quantity-value {
+    font-size: 0.95rem;
+    height: 30px;
+  }
+
+  .product-price {
+    font-size: 0.95rem;
+  }
+
+  .summary-title {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+
+  .summary-row {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  .coupon-input {
+    padding: 8px 12px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .finish-button {
+    font-size: 1rem;
+    padding: 14px 0;
+    margin-top: 12px;
+  }
+}
+
+/* Melhorias para orientação landscape em dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+  .main-content-carrinho {
+    margin: 60px 20px 15px 20px;
+  }
+
+  .cart-container {
+    gap: 15px;
+  }
+
+  .cart-section {
+    padding: 20px 18px;
+  }
+
+  .summary-section {
+    padding: 20px 18px;
+  }
+}
+
+/* Melhorias de acessibilidade para dispositivos móveis */
+@media (max-width: 768px) {
+  .quantity-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.3);
+  }
+
+  .finish-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.3);
+  }
+
+  .coupon-input:focus {
+    outline: none;
+    border-color: #77a56f;
+    box-shadow: 0 0 0 2px rgba(119, 165, 111, 0.2);
+  }
+}
+
+/* Prevenção de zoom em dispositivos móveis para inputs do carrinho */
+@media (max-width: 768px) {
+  .coupon-input {
+    font-size: 16px !important;
+  }
+}
+
+/* Melhorias adicionais para dispositivos móveis */
+@media (max-width: 768px) {
+  /* Melhorar botões de remoção em mobile */
+  .remove-item {
+    min-height: 44px !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    border-radius: 6px !important;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 200px;
+    align-self: center;
+  }
+
+  /* Melhorar espaçamento dos itens */
+  .product-item {
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 8px;
+  }
+
+  /* Melhorar visualização dos preços */
+  .product-price {
+    background: #f8f8f8;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+
+  /* Melhorar botão finalizar */
+  .finish-button {
+    min-height: 50px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* Melhorar input do cupom */
+  .coupon-input {
+    border: 2px solid #ddd;
+    transition: border-color 0.3s ease;
+  }
+
+  .coupon-input:focus {
+    border-color: #77a56f;
+  }
+}
+
+/* Melhorias para dispositivos muito pequenos */
+@media (max-width: 360px) {
+  .remove-item {
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+    min-height: 40px !important;
+  }
+
+  .product-price {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .finish-button {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Melhorias para orientação landscape em dispositivos pequenos */
+@media (max-width: 480px) and (orientation: landscape) {
+  .main-content-carrinho {
+    margin: 60px 15px 10px 15px;
+  }
+
+  .cart-container {
+    gap: 15px;
+  }
+
+  .product-item {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 12px;
+  }
+
+  .product-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .product-info {
+    text-align: left;
+    flex: 1;
+  }
+
+  .quantity-control {
+    align-self: center;
+  }
+
+  .product-price {
+    text-align: right;
+    min-width: 120px;
+  }
 }
