@@ -5,9 +5,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const track = carousel.querySelector(".carousel-track");
         const prevBtn = carousel.querySelector(".prev");
         const nextBtn = carousel.querySelector(".next");
-        const card = carousel.querySelector(".card-inicial");
+        const cards = carousel.querySelectorAll(".card-inicial");
 
-        let scrollAmount = card.offsetWidth * 3; 
+        let scrollAmount = cards[0].offsetWidth * 3.2;
+
+        setTimeout(() => {
+            scrollAmount = cards[0].offsetWidth * 3.2;
+        }, 50);
 
         nextBtn.addEventListener("click", () => {
             track.scrollBy({ left: scrollAmount, behavior: "smooth" });
@@ -18,9 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         window.addEventListener("resize", () => {
-            scrollAmount = card.offsetWidth * 3;
+            scrollAmount = cards[0].offsetWidth * 3.2;
         });
     });
 });
-
-
