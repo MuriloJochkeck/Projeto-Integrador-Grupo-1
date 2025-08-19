@@ -31,6 +31,9 @@
             </div>
             <h2>Já tem uma conta?</h2>
             <p>Informe seus dados abaixo para acessá-la.</p>
+            {% if error %}
+            <p style="color: red; margin-top: 8px;">{{ error }}</p>
+            {% endif %}
             <form id="loginForm" method="post" action="/login">
                 <input class="form-input" type="text" name="usuario" placeholder="Email/Telefone" required>
                 <input class="form-input" type="password" name="senha" placeholder="Senha" required>
@@ -69,5 +72,6 @@
             Copyright © 2025 – Todos os direitos estão reservados
         </div>
     </footer>
+    <script src="/static/js/login.js"></script>
 </body>
 </html>

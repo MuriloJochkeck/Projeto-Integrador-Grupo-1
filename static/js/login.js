@@ -79,11 +79,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      alert("Login enviado!");
+      const ehEmail = validarEmail(usuario);
+      const ehTelefone = validarTelefone(usuario);
+
+      if (!ehEmail && !ehTelefone) {
+        alert("Informe um email ou telefone válido.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!validarSenha(senha)) {
+        alert("Senha deve ter ao menos 6 caracteres.");
+        e.preventDefault();
+        return;
+      }
     }
   });
 
   function validarEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validarTelefone(valor) {
+    const somenteDigitos = valor.replace(/\D/g, "");
+    return /^\d{10,11}$/.test(somenteDigitos);
+  }
+
+  function validarSenha(s) {
+    return typeof s === 'string' && s.length >= 6;
   }
 });
