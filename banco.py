@@ -147,6 +147,55 @@ class banco:
         except Exception as e:
             print(f" Erro ao listar: {e}")
             return []
+
+    def obter_usuario_por_email_ou_telefone(self, identificador):
+        """Obtém um usuário pelo email OU telefone (somente dígitos)."""
+        try:
+            cursor = self.connection.cursor()
+            # Normaliza telefone para somente dígitos
+            import re
+            telefone_digits = re.sub(r"\D", "", identificador)
+
+            cursor.execute(
+                """
+                SELECT id, nome, email, cpf, telefone, senha
+                FROM usuarios
+                WHERE email = %s OR REPLACE(REPLACE(REPLACE(telefone, '(', ''), ')', ''), '-', '') = %s
+                LIMIT 1
+                """,
+                (identificador, telefone_digits)
+            )
+            row = cursor.fetchone()
+            cursor.close()
+            if not row:
+                return None
+            return {
+                'id': row[0],
+                'nome': row[1],
+                'email': row[2],
+                'cpf': row[3],
+                'telefone': row[4],
+                'senha_hash': row[5],
+            }
+        except Exception as e:
+            print(f" Erro ao buscar usuário: {e}")
+            return None
+
+    def autenticar_usuario(self, identificador, senha_em_texto):
+        """Valida credenciais. Retorna dict do usuário (sem a senha) se ok; senão, None."""
+        try:
+            usuario = self.obter_usuario_por_email_ou_telefone(identificador)
+            if not usuario:
+                return None
+            senha_hash = self.hash_senha(senha_em_texto)
+            if senha_hash != usuario.get('senha_hash'):
+                return None
+            # Remove hash antes de retornar
+            usuario_limpo = {k: v for k, v in usuario.items() if k != 'senha_hash'}
+            return usuario_limpo
+        except Exception as e:
+            print(f" Erro ao autenticar: {e}")
+            return None
     
     def fechar(self):
         """Fecha a conexão"""

@@ -7,7 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const gap = window.innerWidth <= 480 ? 10 : 15; // gap menor em telas muito pequenas
         
         if (isMobile) {
-            // Em mobile, mostra 2 cards por vez
+            // Em telas muito pequenas, rola 1 card por vez
+            if (window.innerWidth <= 480) {
+                return cardWidth + gap;
+            }
+            // Em mobile até 768px, rola 2 cards por vez
             return (cardWidth * 2) + gap;
         } else {
             // Em desktop, mostra 3 cards por vez
