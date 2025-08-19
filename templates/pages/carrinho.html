@@ -2,30 +2,27 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#77a56f">
   <title>Meu Carrinho</title>
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="top-header">
       <div class="logo">
-          <img src="../media/login/logo.png" alt="Logo" />
-      </div>
-  
-      <div class="search-bar">
-          <input type="text" placeholder="Buscar..." />
-          <span class="search-icon">&#128269;</span> 
+          <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
       </div>
   
       <div class="icons"> 
-          <a href="login_usuario.html">
-              <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
+          <a href="{{ url_for('login') }}">
+              <img class="user-icon" src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}" alt="Entrar">
           </a>
       </div>
   </header>
   <div class="main-content-carrinho">
     <div class="cart-container">
       <div class="cart-section">
-        <div class="summary-section cart-card">
+        <div class="cart-card">
           <div class="cart-title">Meu carrinho</div>
           <div class="product-list">
             <div class="product-item">
@@ -82,28 +79,11 @@
       </div>
     </div>
   </div>
-   <script src="./static/carrinho.js"></script>
-   <footer class="custom-footer">
-    <div class="footer-content">
-        <div class="footer-logo">
-            <img src="../media/login/logo.png" alt="Logo" />
-        </div>
-        <div class="footer-info">
-            <div class="footer-contact">
-                <strong>Informações de contato:</strong><br>
-                (49) 99999-9999<br>
-                <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-            </div>
-        </div>
-        <div class="footer-buttons">
-            <button class="footer-btn">Fale conosco</button>
-            <button class="footer-btn">Sobre nós</button>
-        </div>
-    </div>
-    <hr class="footer-divider">
-    <div class="footer-copy">
-        Copyright © 2025 – Todos os direitos estão reservados
-    </div>
-  </footer>
+   <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
+   
+
+  {% block footer %}
+  {% include 'pages/footer.html' %}
+  {% endblock %}
 </body>
 </html> 

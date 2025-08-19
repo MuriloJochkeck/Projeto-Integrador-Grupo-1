@@ -2,73 +2,116 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#77a56f">
   <title>Cadastro</title>
-  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="top-header">
     <div class="logo">
-        <img src="../media/login/logo.png" alt="Logo" />
-    </div>
-
-    <div class="search-bar">
-        <input type="text" placeholder="Buscar..." />
-        <span class="search-icon">&#128269;</span> 
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo">
+      </a>
     </div>
 
     <div class="icons">
-      <a href="carrinho.html">
-        <img src="../media/login/carrinho.png" alt="Carrinho">
+      <a href="{{ url_for('carrinho') }}">
+        <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
       </a>  
     </div>
   </header>
-    <div class="container">
+
+  <div class="container">
     <div class="card">
       <h1>Cadastrar</h1>
-      <p>Informe seus dados abaixo para cria-la.</p>
+      <p>Informe seus dados abaixo para criar sua conta.</p>
 
-      <form id="loginForm">
-        <input class="form-input" type="text" name="Nome_usuario" placeholder="Nome completo" required>
+      <form id="cadastroForm">
+        <!-- Nome só letras -->
+        <input class="form-input" type="text" name="nome_user" placeholder="Nome completo" 
+               pattern="^[A-Za-zÀ-ÿ\s]+$" title="Use apenas letras" required>
+
         <div class="form-row">
-          <input type="text" name="telefone" class="form-input" placeholder="Telefone" />
-          <input type="text" name="cpf" class="form-input" placeholder="CPF" />
+          <!-- Telefone só números -->
+          <input type="text" name="telefone_user" class="form-input" placeholder="Telefone (apenas números)" 
+                 pattern="^\d{10,11}$" title="Digite apenas números (10 ou 11 dígitos)" required>
+
+          <!-- CPF só números -->
+          <input type="text" name="cpf" class="form-input" placeholder="CPF" 
+                 pattern="^\d{11}$" title="Digite apenas números (11 dígitos)" required>
         </div>
+
         <div class="form-row">
-          <input class="form-input" type="email" name="Email_usuario" placeholder="Email" required>
+          <!-- Email -->
+          <input class="form-input" type="email" name="email" placeholder="Email" required>
         </div>
+
         <div class="form-row">
-          <input class="form-input" type="password" name="senha" placeholder="Senha" />
-          <input class="form-input" type="password" name="confirmar_senha" placeholder="Confirmar senha" />
+          <!-- Senha -->
+          <input class="form-input" type="password" name="senha" placeholder="Senha" minlength="6" required>
+          <input class="form-input" type="password" name="confirmar_senha" placeholder="Confirmar senha" minlength="6" required>
         </div>
+
         <button class="btn" type="submit">Criar conta</button>
       </form>
-
     </div>
   </div>
 
-  <script src="./js/login.js"></script>
-  <footer class="custom-footer">
-      <div class="footer-content">
-          <div class="footer-logo">
-              <img src="../media/login/logo.png" alt="Logo" />
-          </div>
-          <div class="footer-info">
-              <div class="footer-contact">
-                  <strong>Informações de contato:</strong><br>
-                  (49) 99999-9999<br>
-                  <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-              </div>
-          </div>
-          <div class="footer-buttons">
-              <button class="footer-btn">Fale conosco</button>
-              <button class="footer-btn">Sobre nós</button>
-          </div>
-      </div>
-      <hr class="footer-divider">
-      <div class="footer-copy">
-          Copyright © 2025 – Todos os direitos estão reservados
-      </div>
-  </footer>
+  <script>
+    document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // Evita envio imediato
+
+      const nome = this.nome_user.value.trim();
+      const telefone = this.telefone_user.value.trim();
+      const cpf = this.cpf.value.trim();
+      const email = this.email.value.trim();
+      const senha = this.senha.value;
+      const confirmarSenha = this.confirmar_senha.value;
+
+      // Valida nome
+      if (!/^[A-Za-zÀ-ÿ\s]+$/.test(nome)) {
+        alert("O nome deve conter apenas letras.");
+        return;
+      }
+
+      // Valida telefone
+      if (!/^\d{10,11}$/.test(telefone)) {
+        alert("O telefone deve conter apenas números (10 ou 11 dígitos).");
+        return;
+      }
+
+      // Valida CPF
+      if (!/^\d{11}$/.test(cpf)) {
+        alert("O CPF deve conter 11 números.");
+        return;
+      }
+
+      // Valida email
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("Digite um email válido.");
+        return;
+      }
+
+      // Valida senha
+      if (senha.length < 6) {
+        alert("A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      if (senha !== confirmarSenha) {
+        alert("As senhas não coincidem.");
+        return;
+      }
+
+      // Se tudo ok, pode enviar (exemplo: submit no backend)
+      alert("Cadastro realizado com sucesso!");
+      this.submit();
+    });
+  </script>
+
+  {% block footer %}
+  {% include 'pages/footer.html' %}
+  {% endblock %}
 </body>
 </html>
