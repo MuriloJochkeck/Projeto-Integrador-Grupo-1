@@ -319,7 +319,7 @@ body {
   scroll-behavior: smooth;
   gap: 15px;
   align-items: flex-start;
-  padding: 5px 0;
+  padding: 15px 0;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -528,7 +528,7 @@ body {
   border: none;
   font-size: 30px;
   cursor: pointer;
-  height: 30%;
+  height: 3%;
   width: 30%;
   color: #000;
 }
