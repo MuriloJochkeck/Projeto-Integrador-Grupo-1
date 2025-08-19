@@ -1,8 +1,12 @@
-from flask import Flask, render_template   
-
+from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
+from banco import banco, inicializar_banco
 
 app = Flask(__name__)
+CORS(app)
 
+# Inicializar banco
+inicializar_banco()
 
 # Rotas básicas
 @app.route('/')
@@ -41,6 +45,52 @@ def cadastro_maquinas2():
 def finaliza_pedido():
     return render_template('pages/finaliza_pedido.html')
 
+# API: Cadastro de usuário
+@app.route('/api/cadastro', methods=['POST'])
+def api_cadastro():
+    try:
+        dados = request.get_json(silent=True) or {}
+        
+        # Validar campos obrigatórios
+        campos_obrigatorios = ['nome_user', 'telefone_user', 'cpf', 'email', 'senha']
+        for campo in campos_obrigatorios:
+            if not dados.get(campo):
+                return jsonify({'success': False, 'message': f'Campo {campo} é obrigatório'}), 400
+        
+        # Cadastrar usuário usando o banco PostgreSQL
+        resultado = banco.cadastrar_usuario(
+            nome=dados['nome_user'],
+            telefone=dados['telefone_user'],
+            cpf=dados['cpf'],
+            email=dados['email'],
+            senha=dados['senha']
+        )
+        
+        if resultado == "Sucesso":
+            return jsonify({
+                'success': True, 
+                'message': 'Usuário cadastrado com sucesso!'
+            }), 201
+        else:
+            return jsonify({'success': False, 'message': resultado}), 400
+        
+    except Exception as e:
+        print(f"Erro ao cadastrar usuário: {str(e)}")
+        return jsonify({'success': False, 'message': 'Erro interno do servidor'}), 500
+
+# API: Listar usuários
+@app.route('/api/usuarios', methods=['GET'])
+def listar_usuarios():
+    try:
+        usuarios = banco.listar_usuarios()
+        return jsonify({
+            'success': True,
+            'usuarios': usuarios,
+            'total': len(usuarios)
+        })
+    except Exception as e:
+        print(f"Erro ao listar usuários: {str(e)}")
+        return jsonify({'success': False, 'message': 'Erro ao listar usuários'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

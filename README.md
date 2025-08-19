@@ -1,3 +1,4 @@
+
 # Projeto-Integrador-Grupo-1
 Repositório para utilização do desenvolvimento do site do Projeto Integrador II - 2025, produzido pelo grupo 1.
 
@@ -31,12 +32,12 @@ O objetivo do nosso site é fazer com que os usuários que não possuem implemen
 ## **Como utilizar**
 
 
-### **1** Depêndencias
-Em seu terminal, digite o comando "pip install flask". Certifique-se de ter o python instalado em sua máquina.
+### **1** Dependências
+Execute o arquivo "setup.bat" para instalar todas as dependências
 
 
 ### **2** Acessando
-Após ter instalado todas as depêndencias, na pasta do projeto se redirecione até o arquivo *app.py* e execute.
+Após ter instalado todas as dependências, na pasta do projeto se redirecione até o arquivo *app.py* e execute.
 
 ### **2.1** 
 Após isso, acesse o *link* gerado no terminal. Pronto, agora é possível nagevar pelo site.
@@ -45,5 +46,3 @@ Após isso, acesse o *link* gerado no terminal. Pronto, agora é possível nagev
 
 ## **Funcionalidades**
 O app ainda esta em desenvolvimento, por isso, as funcionalidades ainda não estão presentes, sendo apenas possível navegar pelo site.
-
-
