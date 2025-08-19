@@ -45,9 +45,9 @@ def cadastro_maquinas2():
 def finaliza_pedido():
     return render_template('pages/finaliza_pedido.html')
 
-# API: Cadastro de usuário
-@app.route('/api/cadastro', methods=['POST'])
-def api_cadastro():
+# Cadastro de usuário
+@app.route('/db/cadastro', methods=['POST'])
+def db_cadastro():
     try:
         dados = request.get_json(silent=True) or {}
         
@@ -78,8 +78,8 @@ def api_cadastro():
         print(f"Erro ao cadastrar usuário: {str(e)}")
         return jsonify({'success': False, 'message': 'Erro interno do servidor'}), 500
 
-# API: Listar usuários
-@app.route('/api/usuarios', methods=['GET'])
+# Listar usuários
+@app.route('/db/usuarios', methods=['GET'])
 def listar_usuarios():
     try:
         usuarios = banco.listar_usuarios()

@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-Arquivo de compatibilidade para o app.py
-"""
-
 from banco import DataBase
 
 # Instância global do banco
