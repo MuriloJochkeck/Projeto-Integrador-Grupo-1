@@ -24,7 +24,11 @@
                 <input class="form-input" type="password" name="senha" placeholder="Senha" required>
                 <button class="btn" type="submit">Continuar</button>
             </form>
-            <a class="link" href="#">Esqueceu sua senha?</a>
+            <div class="login-links">
+                <a class="link" href="#">Esqueceu sua senha?</a>
+                <a class="link cadastrar-link" href="{{ url_for('cadastro') }}">Cadastrar-se</a>
+            </div>
+            
         </div>
         <div class="card">
             <div class="icon">
