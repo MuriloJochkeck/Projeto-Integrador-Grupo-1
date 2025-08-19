@@ -38,8 +38,11 @@ def login():
         if len(senha) < 6:
             return render_template('pages/login_usuario.html', error='Senha deve ter ao menos 6 caracteres.')
 
-        # Exemplo de autenticação fake: aceita qualquer combinação válida de formato
-        session['usuario'] = usuario
+        usuario_bd = banco.autenticar_usuario(usuario, senha)
+        if not usuario_bd:
+            return render_template('pages/login_usuario.html', error='Credenciais inválidas.')
+
+        session['usuario'] = usuario_bd
         return redirect(url_for('index'))
 
     return render_template('pages/login_usuario.html')
