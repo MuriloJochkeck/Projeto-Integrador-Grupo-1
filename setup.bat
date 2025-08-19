@@ -1,6 +1,6 @@
-@echo off
-echo Instalando dependências...
-pip install flask psycopg2 hashlib flask_cors werkzeug
-echo.
-echo Todas as dependências foram instaladas!
-pause
+@REM @echo off
+@REM echo Instalando dependências...
+@REM pip install flask psycopg2 hashlib flask_cors werkzeug
+@REM echo.
+@REM echo Todas as dependências foram instaladas!
+@REM pause

@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, jsonify
-from flask_cors import CORS
 from banco import banco, inicializar_banco
 
 app = Flask(__name__)
-CORS(app)
 
 # Inicializar banco
 inicializar_banco()
@@ -46,7 +44,7 @@ def finaliza_pedido():
     return render_template('pages/finaliza_pedido.html')
 
 # Cadastro de usuário
-@app.route('/db/cadastro', methods=['POST'])
+@app.route('/api/cadastro', methods=['POST'])
 def db_cadastro():
     try:
         dados = request.get_json(silent=True) or {}
@@ -79,7 +77,7 @@ def db_cadastro():
         return jsonify({'success': False, 'message': 'Erro interno do servidor'}), 500
 
 # Listar usuários
-@app.route('/db/usuarios', methods=['GET'])
+@app.route('/api/usuarios', methods=['GET'])
 def listar_usuarios():
     try:
         usuarios = banco.listar_usuarios()
