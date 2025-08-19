@@ -34,7 +34,7 @@ class banco:
             conn = psycopg2.connect(
                 host=self.host,
                 port=self.port,
-                database='postgres',
+                database='projeto_integrador',
                 user=self.user,
                 password=self.password
             )

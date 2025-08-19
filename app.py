@@ -43,35 +43,30 @@ def cadastro_maquinas2():
 def finaliza_pedido():
     return render_template('pages/finaliza_pedido.html')
 
+
+
 # Cadastro de usuário
-@app.route('/api/cadastro', methods=['POST'])
+@app.route('/api/cadastro', methods=['GET', 'POST'])
 def db_cadastro():
     try:
-        dados = request.get_json(silent=True) or {}
-        
-        # Validar campos obrigatórios
-        campos_obrigatorios = ['nome_user', 'telefone_user', 'cpf', 'email', 'senha']
-        for campo in campos_obrigatorios:
-            if not dados.get(campo):
-                return jsonify({'success': False, 'message': f'Campo {campo} é obrigatório'}), 400
-        
-        # Cadastrar usuário usando o banco PostgreSQL
-        resultado = banco.cadastrar_usuario(
-            nome=dados['nome_user'],
-            telefone=dados['telefone_user'],
-            cpf=dados['cpf'],
-            email=dados['email'],
-            senha=dados['senha']
-        )
-        
-        if resultado == "Sucesso":
-            return jsonify({
-                'success': True, 
-                'message': 'Usuário cadastrado com sucesso!'
-            }), 201
-        else:
-            return jsonify({'success': False, 'message': resultado}), 400
-        
+        if request.method == 'POST':        
+            # Cadastrar usuário usando o banco PostgreSQL
+            resultado = banco.cadastrar_usuario(
+                nome = request.form['nome_user'],
+                telefone = request.form['telefone_user'],
+                cpf = request.form['cpf'],
+                email = request.form['email'],
+                senha = request.form['senha']
+            )
+
+            if resultado == "Sucesso":
+                return jsonify({
+                    'success': True, 
+                    'message': 'Usuário cadastrado com sucesso!'
+                }), 201
+            else:
+                return jsonify({'success': False, 'message': resultado}), 400
+
     except Exception as e:
         print(f"Erro ao cadastrar usuário: {str(e)}")
         return jsonify({'success': False, 'message': 'Erro interno do servidor'}), 500
