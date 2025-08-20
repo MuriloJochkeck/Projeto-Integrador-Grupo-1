@@ -19,10 +19,11 @@
           </a>
         </div>
       </header>
+      
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <form>
+          <form action="/api/cadastro_maquinas" method="POST" id="form-cadastro_maquinas">
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
 
             <div class="row">
@@ -34,7 +35,7 @@
             <input type="text" name="rua" placeholder="Rua" required />
             <input type="text" name="referencia" placeholder="Referência" />
 
-            <button type="button" id="btn-avancar-1">Avançar</button>
+            <button type="submit" id="btn-avancar-1">Avançar</button>
           </form>
         </div>
       </div>

@@ -195,3 +195,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.getElementById("form-cadastro_maquinas").addEventListener("submit", function(e) {
+    e.preventDefault(); // Evita envio imediato
+
+    const cep = this.cep.value.trim();
+    const uf = this.uf.value.trim();
+    const numero = this.numero.value.trim();
+    const cidade = this.cidade.value.trim();
+    const rua = this.rua.value;
+    const referencia = this.referencia.value;
+});
