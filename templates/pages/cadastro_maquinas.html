@@ -26,7 +26,7 @@
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <form action="/api/cadastro_maquinas" method="POST" id="form-cadastro_maquinas">
+          <form id="form-cadastro_maquinas">
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
 
             <div class="row">
@@ -38,7 +38,7 @@
             <input type="text" name="rua" placeholder="Rua" required />
             <input type="text" name="referencia" placeholder="Referência" />
 
-            <button type="submit" id="btn-avancar-1">Avançar</button>
+            <button type="button" id="btn-avancar-1">Avançar</button>
           </form>
         </div>
       </div>
@@ -46,7 +46,7 @@
 
     
 
-    <div class="passar2" style="display:none;">
+    <div class="passar2" style="display: none;">
       <header class="top-header">
         <div class="logo">
           <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
@@ -94,35 +94,18 @@
             <textarea name="descricao" rows="4" placeholder="Condição, capacidade, consumo..."></textarea>
 
             <div class="botoes">
-              <button type="button" id="btn-voltar-1" class="voltar">Voltar</button>
-              <button type="submit" class="avancar">Avançar</button>
+              <button type="button" id="btn-voltar-1" class="voltar" style="background-color: #5a8454 ;">Voltar</button>
+              <button type="submit" class="avancar" style="background-color: #5a8454;">Avançar</button>
             </div>
           </form>
         </div>
       </div>
     </div>
 
-    <footer class="custom-footer">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
-        </div>
-        <div class="footer-info">
-          <div class="footer-contact">
-            <strong>Informações de contato:</strong><br />
-            (49) 99999-9999<br />
-            <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-          </div>
-        </div>
-        <div class="footer-buttons">
-          <button class="footer-btn">Fale conosco</button>
-          <button class="footer-btn">Sobre nós</button>
-        </div>
-      </div>
-      <hr class="footer-divider" />
-      <div class="footer-copy">
-        Copyright © 2025 – Todos os direitos estão reservados
-      </div>
-    </footer>
+      {% block footer %}
+      {% include 'pages/footer.html' %}
+      {% endblock %}
+
+    <script src="{{ url_for('static', filename='js/cadastro_maquinas.js') }}"></script>
   </body>
 </html>

@@ -76,9 +76,8 @@ class banco:
                     id SERIAL PRIMARY KEY,
                     cep VARCHAR(10) NOT NULL,
                     uf CHAR(2) NOT NULL,
-                    numero VARCHAR(10) NOT NULL,
+                    numero INTEGER NOT NULL,
                     cidade VARCHAR(50) NOT NULL,
-                    bairro VARCHAR(50) NOT NULL,
                     rua VARCHAR(100) NOT NULL,
                     referencia VARCHAR(200),
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -164,16 +163,16 @@ class banco:
 
 ################### CADASTRAR MAQUINAS ###############
 
-    def cadastrar_maquina(self, id, cep, uf, numero, cidade, bairro, rua, referencia):
+    def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia):
         """Cadastra uma máquina"""
         try:
             cursor = self.connection.cursor()
             # Inserir máquina
             cursor.execute("""
-                INSERT INTO maquinas (id, cep, uf, numero, cidade, bairro, rua, referencia)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id
-            """, (cep, uf, numero, cidade, bairro, rua, referencia))
+            """, (cep, uf, numero, cidade, rua, referencia))
             maquina_id = cursor.fetchone()[0]
             self.connection.commit()
             cursor.close()
@@ -187,7 +186,7 @@ class banco:
         """Lista todas as máquinas"""
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT id, cep, uf, numero, cidade, bairro, rua, referencia FROM maquinas ORDER BY id")
+            cursor.execute("SELECT id, cep, uf, numero, cidade, rua, referencia FROM maquinas ORDER BY id")
             maquinas = cursor.fetchall()
             cursor.close()
             # Converter para lista de dicionários
@@ -199,9 +198,8 @@ class banco:
                     'uf': maquina[2],
                     'numero': maquina[3],
                     'cidade': maquina[4],
-                    'bairro': maquina[5],
-                    'rua': maquina[6],
-                    'referencia': maquina[7]
+                    'rua': maquina[5],
+                    'referencia': maquina[6]
                 })
             return lista_maquinas
         except Exception as e:

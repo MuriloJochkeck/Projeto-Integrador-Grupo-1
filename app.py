@@ -70,22 +70,23 @@ def listar_usuarios():
             'total': len(usuarios)
         })
 
-@app.route('/api/cadastro_maquinas', methods=['POST'])
-def cadastrar_maquinas():
-    if request.method == 'POST':
-        # Cadastrar máquina usando o banco PostgreSQL
-        resultado = banco.cadastrar_maquina(
-            cep = request.form['cep'],
-            uf = request.form['uf'],
-            cidade = request.form['cidade'],
-            rua = request.form['rua'],
-            referencia = request.form['referencia']
-        )
+# @app.route('/api/cadastro_maquinas', methods=['GET', 'POST'])
+# def cadastrar_maquinas():
+#     if request.method == 'POST':
+#         # Cadastrar máquina usando o banco PostgreSQL
+#         resultado = banco.cadastrar_maquina(
+#             cep = request.form['cep'],
+#             uf = request.form['uf'],
+#             numero = request.form['numero'],
+#             cidade = request.form['cidade'],
+#             rua = request.form['rua'],
+#             referencia = request.form['referencia']
+#         )
 
-        if resultado == "Sucesso":
-            return redirect(url_for('index'))
-        else:
-            return jsonify({'success': False, 'message': resultado}), 400
+#         if resultado == "Sucesso":
+#             return redirect(url_for('index'))
+#         else:
+#             return jsonify({'success': False, 'message': resultado}), 400
 
 @app.route('/api/maquinas', methods=['GET'])
 def listar_maquinas():

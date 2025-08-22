@@ -70,7 +70,7 @@ function mascaraNumero(input) {
     .replace(/\D/g, ""); 
 }
 
-/////// Troca pagina //////
+///// Troca pagina //////
 document.addEventListener("DOMContentLoaded", function () {
   const btnAvancar = document.getElementById("btn-avancar-1");
   const btnVoltar = document.getElementById("btn-voltar-1");
@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-
 
 ///////// Botão ///////////
 
