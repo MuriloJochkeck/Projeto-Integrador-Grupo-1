@@ -1,5 +1,6 @@
 import psycopg2
 import hashlib
+import json
 
 class banco:
     def __init__(self):
@@ -53,7 +54,75 @@ class banco:
         except Exception as e:
             print(f" Erro ao criar banco: {e}")
             return False
-    
+    def criar_tabela(self):
+        """Cria as tabelas de usuários e pedidos"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS usuarios (
+                    id SERIAL PRIMARY KEY,
+                    nome VARCHAR(100) NOT NULL,
+                    telefone VARCHAR(20) NOT NULL,
+                    cpf VARCHAR(14) UNIQUE NOT NULL,
+                    email VARCHAR(120) UNIQUE NOT NULL,
+                    senha VARCHAR(200) NOT NULL,
+                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS maquinas (
+                    id SERIAL PRIMARY KEY,
+                    cep VARCHAR(10) NOT NULL,
+                    uf CHAR(2) NOT NULL,
+                    numero INTEGER NOT NULL,
+                    cidade VARCHAR(50) NOT NULL,
+                    rua VARCHAR(100) NOT NULL,
+                    referencia VARCHAR(200),
+                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS pedidos (
+                    id SERIAL PRIMARY KEY,
+                    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    itens JSONB NOT NULL,
+                    total DECIMAL(10, 2) NOT NULL,
+                    parcelas INTEGER,
+                    cupom VARCHAR(50),
+                    status VARCHAR(20) DEFAULT 'pendente'
+                )
+            """)
+            self.connection.commit()
+            cursor.close()
+            print(" Tabelas criadas com sucesso!")
+            return True
+        except Exception as e:
+            print(f" Erro ao criar tabelas: {e}")
+            return False
+            
+    def salvar_pedido(self, pedido_data):
+        """Salva um novo pedido no banco de dados"""
+        try:
+            cursor = self.connection.cursor()
+            itens_json = json.dumps(pedido_data.get('itens', []))
+            total = pedido_data.get('total', 0)
+            parcelas = pedido_data.get('parcelas', None)
+            cupom = pedido_data.get('cupom', None)
+
+            cursor.execute("""
+                INSERT INTO pedidos (itens, total, parcelas, cupom)
+                VALUES (%s, %s, %s, %s) RETURNING id
+            """, (itens_json, total, parcelas, cupom))
+            
+            pedido_id = cursor.fetchone()[0]
+            self.connection.commit()
+            cursor.close()
+            print(f" Pedido salvo! ID: {pedido_id}")
+            return "Sucesso"
+        except Exception as e:
+            print(f" Erro ao salvar pedido: {e}")
+            return "Erro interno"
+                
     def criar_tabela(self):
         """Cria a tabela de usuários"""
         try:

@@ -38,7 +38,7 @@ def cadastro_maquinas():
 
 @app.route('/finaliza_pedido')
 def finaliza_pedido():
-    return render_template('pages/finaliza_pedido.html')
+    return render_template('pages/finaliza_pedido.html', total=0)
 
 
 
