@@ -23,34 +23,38 @@
       </div>
       </header>
     
-      <form action="/api/cadastro_maquinas" method="POST">
+      <form action="\api\cadastro_maquinas" method="POST">
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <div id="form-cadastro_maquinas">
+          <form id="form-cadastro_maquinas" >
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
 
-            <div class="row">
-              <input type="text" name="uf" placeholder="UF" maxlength="2" required oninput="mascaraUF(this)" />
-              <input type="text" name="numero" placeholder="Número" required oninput="mascaraNumero(this)" />
-            </div>
+              <div class="row">
+                <input type="text" name="uf" placeholder="UF" maxlength="2" required oninput="mascaraUF(this)" />
+                <input type="text" name="numero" placeholder="Número" required oninput="mascaraNumero(this)" />
+              </div>
 
-            <input type="text" name="cidade" placeholder="Cidade" required />
-            <input type="text" name="rua" placeholder="Rua" required />
-            <input type="text" name="referencia" placeholder="Referência" />
+              <input type="text" name="cidade" placeholder="Cidade" required />
+              <input type="text" name="rua" placeholder="Rua" required />
+              <input type="text" name="referencia" placeholder="Referência" />
 
             <button type="button" id="btn-avancar-1">Avançar</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
 
-    
+      
 
     <div class="passar2" style="display: none;">
       <header class="top-header">
         <div class="logo">
           <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo" />
+        </div>
+        <div class="search-bar">
+          <input type="text" placeholder="Buscar..." />
+          <span class="search-icon">&#128269;</span>
         </div>
         <div class="icons">
           <a href="{{ url_for('carrinho') }}">
@@ -61,39 +65,53 @@
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <div>
+          <form>
             <input type="text" name="modelo" placeholder="Modelo máquina" required />
             <input type="text" name="equipamento" placeholder="Equipamento" required />
             <input type="text" name="preco" placeholder="Preço" oninput="mascaraPreco(this)">
 
-            <label class="aluguel-label">Forma de Aluguel</label>
-            <div class="aluguel-opcoes">
-              <div class="dias">
-                <button type="button" class="botao-dia">Dia</button>
+              <label class="aluguel-label">Forma de Aluguel</label>
+              <div class="aluguel-opcoes">
+                <div class="dias">
+                  <button type="button" class="botao-dia" data-value="dia">Dia</button>
+                </div>
+                <div class="horarios">
+                  <button type="button" class="botao-hora" data-value="hora">Horas</button>
+                </div>
               </div>
-              <div class="horarios">
-                <button type="button" class="botao-hora">Horas</button>
+              <input type="hidden" id="forma_aluguel" name="forma_aluguel" value="" required />
+
+              <script>
+                  document.querySelectorAll('.aluguel-opcoes button').forEach(button => {
+                    button.addEventListener('click', () => {
+                      const value = button.getAttribute('data-value');
+                      document.getElementById('forma_aluguel').value = value;
+
+                      // feedback visual
+                      document.querySelectorAll('.aluguel-opcoes button').forEach(b => b.classList.remove('ativo'));
+                      button.classList.add('ativo');
+                    });
+                  });
+              </script>
+
+              <label class="imagem-label">Anexar imagens</label>
+              <div class="upload-box">
+                <p>Clique aqui para inserir as imagens</p>
+                <img src="{{ url_for('static', filename='media/login/pastaUpload.png') }}" alt="Ícone de pasta" />
+                <input type="file" name="imagens" id="imagens" accept="image/*" multiple />
               </div>
-            </div>
+              
+              <div id="preview-imagens"></div>
+              
 
-            <label class="imagem-label">Anexar imagens</label>
-            <div class="upload-box">
-              <p>Clique aqui para inserir as imagens</p>
-              <img src="{{ url_for('static', filename='media/login/pastaUpload.png') }}" alt="Ícone de pasta" />
-              <input type="file" name="imagens" id="imagens" accept="image/*" multiple />
-            </div>
-            
-            <div id="preview-imagens"></div>
-            
-
-            <label class="descricao-label">Descrição</label>
-            <textarea name="descricao" rows="4" placeholder="Condição, capacidade, consumo..."></textarea>
+              <label class="descricao-label">Descrição</label>
+              <textarea name="descricao" rows="4" placeholder="Condição, capacidade, consumo..."></textarea>
 
             <div class="botoes">
               <button type="button" id="btn-voltar-1" class="voltar" style="background-color: #5a8454 ;">Voltar</button>
               <button type="submit" class="avancar" style="background-color: #5a8454;">Avançar</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

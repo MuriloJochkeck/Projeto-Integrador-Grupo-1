@@ -91,6 +91,14 @@ class banco:
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """) 
+
+            cursor.execute(""" 
+                CREATE TABLE IF NOT EXISTS imagens_maquinas (
+                    id SERIAL PRIMARY KEY,
+                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+                    imagem_url VARCHAR(200) NOT NULL
+                )
+                """)   
             
             self.connection.commit()
             cursor.close()
@@ -183,26 +191,27 @@ class banco:
 
     def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia, 
                          modelo_maquina, equipamento, preco, forma_aluguel, 
-                         imagem_url=None, descricao=None):
+                            descricao=None):
         """Cadastra uma máquina com todos os campos"""
+        
         try:
             cursor = self.connection.cursor()
             
             cursor.execute("""
                 INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia,
                                     modelo_maquina, equipamento, preco, forma_aluguel,
-                                    imagem_url, descricao)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                    descricao)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
             """, (cep, uf, numero, cidade, rua, referencia, modelo_maquina, 
-                 equipamento, preco, forma_aluguel, imagem_url, descricao))
+                 equipamento, preco, forma_aluguel, descricao))
             
             maquina_id = cursor.fetchone()[0]
             self.connection.commit()
             cursor.close()
             
             print(f" Máquina cadastrada! ID: {maquina_id}")
-            return "Sucesso"
+            return maquina_id
         except Exception as e:
             print(f" Erro ao cadastrar máquina: {e}")
             return "Erro interno"
@@ -214,7 +223,7 @@ class banco:
             cursor.execute("""
                 SELECT id, cep, uf, numero, cidade, rua, referencia, 
                        modelo_maquina, equipamento, preco, forma_aluguel, 
-                       imagem_url, descricao 
+                       descricao 
                 FROM maquinas ORDER BY id
             """)
             maquinas = cursor.fetchall()
@@ -234,14 +243,29 @@ class banco:
                     'equipamento': maquina[8],
                     'preco': maquina[9],
                     'forma_aluguel': maquina[10],
-                    'imagem_url': maquina[11],
-                    'descricao': maquina[12]
+                    'descricao': maquina[11]
                 })
             return lista_maquinas
         except Exception as e:
             print(f" Erro ao listar máquinas: {e}")
             return []
-
+        
+    def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
+        try:
+            cursor = self.connection.cursor()
+            for url in imagens_urls:
+                cursor.execute("""
+                    INSERT INTO imagens_maquinas (maquina_id, imagem_url)
+                    VALUES (%s, %s)
+                """, (maquina_id, url))
+            self.connection.commit()
+            cursor.close()
+            print(f"Imagens cadastradas para a máquina {maquina_id}")
+            return True
+        except Exception as e:
+            print(f"Erro cadastrar_imagens_maquina: {e}")
+            return False
+    
 # Instância global
 banco = banco()
 
