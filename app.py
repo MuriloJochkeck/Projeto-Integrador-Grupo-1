@@ -3,7 +3,7 @@ from banco import banco, inicializar_banco
 import hashlib
 import os
 from werkzeug.utils import secure_filename
-import traceback
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'PI2025GRUPO1'  
@@ -15,13 +15,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def imagem_permitida(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario_id' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 # Inicializar banco
 inicializar_banco()
 
 # Rotas básicas
 @app.route('/')
 def index():
-    return render_template('index.html')
+    maquinas = banco.listar_maquinas() 
+    return render_template('index.html', maquinas = maquinas)
 
 @app.route('/cadastro') 
 def cadastro():
@@ -55,7 +64,8 @@ def carrinho():
 
 @app.route('/aluguel')
 def aluguel():
-    return render_template('pages/aluguel.html')
+    maquinas = banco.listar_maquinas()
+    return render_template('pages/aluguel.html' , maquinas=maquinas)
 
 @app.route('/endereço_user')
 def endereço_user():
@@ -67,8 +77,14 @@ def cadastro_maquinas():
 
 
 @app.route('/finaliza_pedido')
+@login_required
 def finaliza_pedido():
-    return render_template('pages/finaliza_pedido.html', total=0)
+    usuario_id = session['usuario_id']
+    carrinho = banco.listar_itens_carrinho(usuario_id)
+    total = sum(item['preco'] * item['quantidade'] for item in carrinho)
+    return render_template('pages/finaliza_pedido.html', total=total)
+
+    
 
 
 # Cadastro de usuário
@@ -100,6 +116,7 @@ def listar_usuarios():
         })
 
 @app.route('/api/cadastro_maquinas', methods=['GET', 'POST'])
+@login_required
 def cadastrar_maquinas():
     try:
         # Primeiro cadastra a máquina
@@ -121,20 +138,17 @@ def cadastrar_maquinas():
 
         imagens = request.files.getlist("imagens")
         id_maquina = maquina_id
-        if not id_maquina:
-            return jsonify({"success": False, "message": "Erro ao cadastrar imagem"}), 500
-
-        # Salvar múltiplas imagens
-        imagens = request.files.getlist("imagens")
         for img in imagens:
             if img and img.filename != "":
                 if not imagem_permitida(img.filename):
                     continue
                 filename = secure_filename(img.filename)
                 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-                imagem_url = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                img.save(imagem_url)
-                banco.cadastrar_imagens_maquina(id_maquina, imagem_url)
+                imagem_url = f"uploads/{filename}"  # Caminho relativo à pasta 'static'
+                img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                # Salvar no banco apenas 'uploads/nome_da_imagem.ext'
+                banco.cadastrar_imagens_maquina(id_maquina, [imagem_url])
 
         return redirect(url_for('index'))
 
@@ -160,15 +174,46 @@ def cadastrar_imagens_maquina(self, maquina_id, imagens):
         print(f"Erro ao cadastrar imagens: {e}")
         return "Erro interno"
 
+def listar_maquinas(self):
+    try:
+        cursor = self.connection.cursor()
+        cursor.execute("""
+            SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+                   COALESCE(
+                       (SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 
+                       ''
+                   ) as imagem_url
+            FROM maquinas m ORDER BY m.id
+        """)
+        maquinas = cursor.fetchall()
+        cursor.close()
 
+        lista_maquinas = []
+        for m in maquinas:
+            # Corrige barras e remove "static/" caso esteja duplicado
+            imagens = m[5].replace("\\", "/") if m[5] else ""
+            lista_maquinas.append({
+                'id': m[0],
+                'modelo_maquina': m[1],
+                'equipamento': m[2],
+                'preco': float(m[3]),
+                'forma_aluguel': m[4],
+                'imagem_url': imagens
+            })
+        return lista_maquinas
+    except Exception as e:
+        print(f"Erro listar_maquinas: {e}")
+        return []
+    
 @app.route('/api/maquinas', methods=['GET'])
-def listar_maquinas():
+def list_maquinas():
     maquinas = banco.listar_maquinas()
     return jsonify({
         'success': True,
         'maquinas': maquinas,
         'total': len(maquinas)
     })
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -38,6 +38,20 @@
         <div class="carousel">
             <button class="prev">&#10094;</button>
             <div class="carousel-track">
+            {% for maquina in maquinas %}
+            <div class="card-inicial">
+                <a href="{{ url_for('aluguel') }}" class="card-link">
+                    {% if maquina['imagem_url'] %}
+                        <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
+                            alt="{{ maquina['modelo_maquina'] }}">
+                    {% endif %}
+                    <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
+                </a>
+                <p>Total de máquinas: {{ maquinas|length }}</p>
+            </div>
+            {% endfor %}
+        <!-- </div>
+            <div class="carousel-track">
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
                         <img src="../static/media/trator/colheitadera3.jpg" alt="VALTRA BC7500">
@@ -87,7 +101,7 @@
                     <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
                 </div>
             </div>
-            <button class="next">&#10095;</button>
+            <button class="next">&#10095;</button> -->
         </div>
     </section>
 

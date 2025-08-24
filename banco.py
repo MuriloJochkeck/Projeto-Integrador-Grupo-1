@@ -1,6 +1,5 @@
 import psycopg2
 import hashlib
-import json
 
 class banco:
     def __init__(self):
@@ -100,6 +99,26 @@ class banco:
                 )
                 """)   
             
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS carrinhos (
+            #         id SERIAL PRIMARY KEY,
+            #         usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+            #         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            #         UNIQUE (usuario_id) -- cada usuário tem um carrinho único
+            #     );
+            # """)
+            
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS itens_carrinho (
+            #         id SERIAL PRIMARY KEY,
+            #         carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
+            #         maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+            #         quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+            #         forma_aluguel VARCHAR(5) NOT NULL,
+            #         UNIQUE (carrinho_id, maquina_id)
+            #     );
+            # """)                   
+            
             self.connection.commit()
             cursor.close()
             print(" Tabelas criadas!")
@@ -107,7 +126,11 @@ class banco:
         except Exception as e:
             print(f" Erro ao criar tabela: {e}")
             return False
-    
+
+
+#################### CADASTRAR USUÁRIOS ############### 
+
+
     def hash_senha(self, senha):
         """Cria hash da senha"""
         return hashlib.sha256(senha.encode()).hexdigest()
@@ -253,6 +276,11 @@ class banco:
     def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
         try:
             cursor = self.connection.cursor()
+
+            # Garantir que imagens_urls é uma lista
+            if isinstance(imagens_urls, str):
+                imagens_urls = [imagens_urls]
+
             for url in imagens_urls:
                 cursor.execute("""
                     INSERT INTO imagens_maquinas (maquina_id, imagem_url)
@@ -265,7 +293,7 @@ class banco:
         except Exception as e:
             print(f"Erro cadastrar_imagens_maquina: {e}")
             return False
-    
+        
 # Instância global
 banco = banco()
 
@@ -281,4 +309,3 @@ def inicializar_banco():
         return False
     
     return True
-

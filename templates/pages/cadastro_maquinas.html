@@ -23,11 +23,10 @@
       </div>
       </header>
     
-      <form action="\api\cadastro_maquinas" method="POST">
+      <form action="\api\cadastro_maquinas" method="POST" enctype="multipart/form-data" id="form-cadastro_maquinas">
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <form id="form-cadastro_maquinas" >
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
 
               <div class="row">
@@ -40,7 +39,6 @@
               <input type="text" name="referencia" placeholder="Referência" />
 
             <button type="button" id="btn-avancar-1">Avançar</button>
-          </form>
         </div>
       </div>
     </div>
@@ -65,7 +63,6 @@
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <form>
             <input type="text" name="modelo" placeholder="Modelo máquina" required />
             <input type="text" name="equipamento" placeholder="Equipamento" required />
             <input type="text" name="preco" placeholder="Preço" oninput="mascaraPreco(this)">
@@ -111,7 +108,6 @@
               <button type="button" id="btn-voltar-1" class="voltar" style="background-color: #5a8454 ;">Voltar</button>
               <button type="submit" class="avancar" style="background-color: #5a8454;">Avançar</button>
             </div>
-          </form>
         </div>
       </div>
     </div>
