@@ -2,6 +2,7 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Finalizar Pedido</title>
     <link
       rel="stylesheet"
@@ -12,7 +13,7 @@
     <header class="top-header">
       <div class="logo">
         <a href="{{ url_for('index') }}"
-          ><img src="../../static/media/login/logo.png" alt="Logo"
+          ><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"
         /></a>
       </div>
 
@@ -70,7 +71,7 @@
             <div class="pix-method">
               <label><input type="radio" name="payment" checked /> PIX</label>
               <img
-                src="../../static/media/download.png"
+                src="{{ url_for('static', filename='media/download.png') }}"
                 alt="QR Code"
                 class="qrcode-img"
               />

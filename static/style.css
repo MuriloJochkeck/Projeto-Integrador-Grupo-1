@@ -7,11 +7,8 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 auto; 
-  top: 0;
-  left: 0;
   width: 100%;
   box-sizing: border-box;
-  z-index: 1000;
 }
 
 .logo img {
@@ -948,6 +945,210 @@ button:hover,
   margin-top: 20px;
 }
 
+/* ====== RESPONSIVIDADE PARA CADASTRO DE MÁQUINAS ====== */
+@media (max-width: 768px) {
+  /* Header responsivo */
+  .top-header {
+    padding: 8px 15px;
+  }
+  
+  .logo img {
+    height: 50px;
+  }
+  
+  .icons img {
+    height: 50px;
+  }
+  
+  /* Container responsivo */
+  .container {
+    gap: 30px;
+    min-height: calc(70vh - 100px);
+  }
+  
+  .form-container {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 90%;
+  }
+  
+  .form-container h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"],
+  textarea {
+    padding: 12px;
+    margin-bottom: 12px;
+    font-size: 16px; /* Evita zoom no iOS */
+  }
+  
+  .row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .row input {
+    margin-bottom: 12px;
+  }
+  
+  .aluguel-opcoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .aluguel-opcoes button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+  
+  .upload-box {
+    height: 100px;
+    padding-top: 15px;
+  }
+  
+  .upload-box p {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .botoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .botoes button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 95%;
+  }
+  
+  .form-container h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  input[type="text"],
+  textarea {
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .upload-box {
+    height: 80px;
+    padding-top: 10px;
+  }
+  
+  .upload-box p {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  
+  .upload-box img {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .aluguel-label,
+  .imagem-label,
+  .descricao-label {
+    font-size: 14px;
+    margin: 12px 0 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .form-container {
+    padding: 12px;
+    margin: 10px auto;
+  }
+  
+  .form-container h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  input[type="text"],
+  textarea {
+    padding: 12px;
+    font-size: 16px;
+  }
+  
+  .upload-box {
+    height: 70px;
+    padding-top: 8px;
+  }
+  
+  .upload-box p {
+    font-size: 12px;
+  }
+}
+
+/* Orientação landscape para dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+  .container {
+    min-height: calc(60vh - 80px);
+    gap: 20px;
+  }
+  
+  .form-container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+  
+  .form-container h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  input[type="text"],
+  textarea {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .row {
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .aluguel-opcoes {
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .aluguel-opcoes button {
+    width: auto;
+    padding: 10px 20px;
+  }
+  
+  .upload-box {
+    height: 80px;
+    padding-top: 10px;
+  }
+  
+  .botoes {
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .botoes button {
+    width: auto;
+    padding: 12px 20px;
+  }
+}
+
 button.voltar,
 button.avancar {
   flex: 1;
@@ -1083,6 +1284,7 @@ button.avancar {
   border: 2px solid #2e7d32;
   font-weight: bold;
 }
+
 
 
 /* ====== HEADER ====== */
@@ -1592,6 +1794,602 @@ s .filtros button {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   text-align: center;
+}
+
+/* ====== RESPONSIVIDADE PARA PÁGINA DE ALUGUEL ====== */
+@media (max-width: 768px) {
+  .container-aluguel {
+    margin: 80px auto 30px auto;
+    padding: 0 15px;
+    gap: 30px;
+  }
+  
+  .top-section {
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+  }
+  
+  .produto {
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .imagens {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .miniaturas {
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .miniaturas img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .imagem-principal img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+  
+  .detalhes {
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  .detalhes h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .preco {
+    font-size: 20px;
+    margin: 15px 0;
+  }
+  
+  .preco span {
+    font-size: 14px;
+  }
+  
+  .preco small {
+    font-size: 12px;
+  }
+  
+  .botoes {
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+    align-items: center;
+  }
+  
+  .botoes button {
+    min-width: 250px;
+    padding: 15px 30px;
+    font-size: 16px;
+    min-height: 50px;
+  }
+  
+  .locado {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  
+  .descricao-avaliacao {
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 25px;
+  }
+  
+  .descricao {
+    margin: 0;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .avaliacao-geral {
+    padding: 15px;
+  }
+  
+  .nota {
+    font-size: 20px;
+  }
+  
+  .nota .numero {
+    font-size: 28px;
+  }
+  
+  .nota .estrelas {
+    font-size: 24px;
+  }
+  
+  .filtros {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .filtros button {
+    min-width: 150px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .bloco-avaliacoes {
+    padding: 40px 20px;
+    margin: 0 -15px;
+    width: calc(100% + 30px);
+  }
+  
+  .titulo-avaliacoes {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .avaliacoes {
+    gap: 20px;
+    margin: 30px 0;
+  }
+  
+  .card-avaliacoes {
+    width: 200px;
+    height: 120px;
+    padding: 20px;
+  }
+  
+  .usuario img {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .card-avaliacoes .estrelas {
+    font-size: 24px;
+  }
+  
+  .deixe-sua button {
+    padding: 12px 20px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-aluguel {
+    margin: 70px auto 25px auto;
+    padding: 0 10px;
+    gap: 25px;
+  }
+  
+  .top-section {
+    gap: 20px;
+  }
+  
+  .produto {
+    gap: 20px;
+  }
+  
+  .imagens {
+    gap: 12px;
+  }
+  
+  .miniaturas {
+    gap: 8px;
+  }
+  
+  .miniaturas img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .imagem-principal img {
+    max-width: 350px;
+  }
+  
+  .detalhes h1 {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  
+  .preco {
+    font-size: 18px;
+    margin: 12px 0;
+  }
+  
+  .preco span {
+    font-size: 13px;
+  }
+  
+  .preco small {
+    font-size: 11px;
+  }
+  
+  .botoes {
+    gap: 12px;
+    margin: 12px 0;
+  }
+  
+  .botoes button {
+    min-width: 220px;
+    padding: 12px 24px;
+    font-size: 15px;
+    min-height: 45px;
+  }
+  
+  .descricao-avaliacao {
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .descricao {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .avaliacao-geral {
+    padding: 12px;
+  }
+  
+  .nota {
+    font-size: 18px;
+  }
+  
+  .nota .numero {
+    font-size: 24px;
+  }
+  
+  .nota .estrelas {
+    font-size: 20px;
+  }
+  
+  .filtros button {
+    min-width: 120px;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .bloco-avaliacoes {
+    padding: 30px 15px;
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+  }
+  
+  .titulo-avaliacoes {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+  
+  .avaliacoes {
+    gap: 15px;
+    margin: 25px 0;
+  }
+  
+  .card-avaliacoes {
+    width: 180px;
+    height: 110px;
+    padding: 15px;
+  }
+  
+  .usuario img {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .card-avaliacoes .estrelas {
+    font-size: 20px;
+  }
+  
+  .deixe-sua button {
+    padding: 10px 18px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container-aluguel {
+    margin: 65px auto 20px auto;
+    padding: 0 8px;
+    gap: 20px;
+  }
+  
+  .top-section {
+    gap: 18px;
+  }
+  
+  .produto {
+    gap: 18px;
+  }
+  
+  .imagens {
+    gap: 10px;
+  }
+  
+  .miniaturas {
+    gap: 6px;
+  }
+  
+  .miniaturas img {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .imagem-principal img {
+    max-width: 300px;
+  }
+  
+  .detalhes h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .preco {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .preco span {
+    font-size: 12px;
+  }
+  
+  .preco small {
+    font-size: 10px;
+  }
+  
+  .botoes {
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .botoes button {
+    min-width: 200px;
+    padding: 10px 20px;
+    font-size: 14px;
+    min-height: 42px;
+  }
+  
+  .descricao-avaliacao {
+    gap: 18px;
+    margin-top: 18px;
+  }
+  
+  .descricao {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .avaliacao-geral {
+    padding: 10px;
+  }
+  
+  .nota {
+    font-size: 16px;
+  }
+  
+  .nota .numero {
+    font-size: 20px;
+  }
+  
+  .nota .estrelas {
+    font-size: 18px;
+  }
+  
+  .filtros button {
+    min-width: 100px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  .bloco-avaliacoes {
+    padding: 25px 12px;
+    margin: 0 -8px;
+    width: calc(100% + 16px);
+  }
+  
+  .titulo-avaliacoes {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .avaliacoes {
+    gap: 12px;
+    margin: 20px 0;
+  }
+  
+  .card-avaliacoes {
+    width: 160px;
+    height: 100px;
+    padding: 12px;
+  }
+  
+  .usuario img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .card-avaliacoes .estrelas {
+    font-size: 18px;
+  }
+  
+  .deixe-sua button {
+    padding: 8px 16px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+}
+
+/* Orientação landscape para dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+  .container-aluguel {
+    margin: 60px auto 20px auto;
+    gap: 20px;
+  }
+  
+  .top-section {
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .produto {
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .imagens {
+    flex-direction: row;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .miniaturas {
+    flex-direction: column;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+  
+  .miniaturas img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .imagem-principal img {
+    max-width: 250px;
+  }
+  
+  .detalhes {
+    text-align: left;
+    max-width: 300px;
+  }
+  
+  .detalhes h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .preco {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .botoes {
+    flex-direction: row;
+    gap: 10px;
+    margin: 10px 0;
+    justify-content: flex-start;
+  }
+  
+  .botoes button {
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+  
+  .descricao-avaliacao {
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .descricao {
+    text-align: left;
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .avaliacao-geral {
+    padding: 12px;
+    min-width: 200px;
+  }
+  
+  .bloco-avaliacoes {
+    padding: 25px 15px;
+  }
+  
+  .avaliacoes {
+    gap: 15px;
+  }
+  
+  .card-avaliacoes {
+    width: 120px;
+    height: 80px;
+    padding: 10px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .botoes button:focus,
+  .filtros button:focus,
+  .deixe-sua button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(119, 165, 111, 0.3);
+  }
+  
+ 
+  .botoes button,
+  .filtros button,
+  .deixe-sua button {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  
+  .miniaturas img {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  
+  .container-aluguel {
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  
+  
+  .imagens {
+    box-sizing: border-box;
+  }
+  
+  
+  .top-section,
+  .descricao-avaliacao,
+  .bloco-avaliacoes {
+    box-sizing: border-box;
+  }
+}
+
+
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  button {
+    font-size: 16px !important;
+  }
+}
+
+
+@media (hover: none) and (pointer: coarse) {
+  .card-avaliacoes:hover {
+    transform: none;
+  }
+  
+  .botoes button:hover,
+  .filtros button:hover,
+  .deixe-sua button:hover {
+    background: rgba(97, 110, 103, 0.2);
+  }
 }
 
 
@@ -2281,7 +3079,7 @@ s .filtros button {
   }
 }
 
-/* Melhorias para orientação landscape em dispositivos móveis */
+
 @media (max-width: 768px) and (orientation: landscape) {
   .main-content-carrinho {
     margin: 60px 20px 15px 20px;
@@ -2300,7 +3098,7 @@ s .filtros button {
   }
 }
 
-/* Melhorias de acessibilidade para dispositivos móveis */
+
 @media (max-width: 768px) {
   .quantity-button:focus {
     outline: none;
@@ -2319,16 +3117,16 @@ s .filtros button {
   }
 }
 
-/* Prevenção de zoom em dispositivos móveis para inputs do carrinho */
+
 @media (max-width: 768px) {
   .coupon-input {
     font-size: 16px !important;
   }
 }
 
-/* Melhorias adicionais para dispositivos móveis */
+
 @media (max-width: 768px) {
-  /* Melhorar botões de remoção em mobile */
+
   .remove-item {
     min-height: 44px !important;
     padding: 8px 16px !important;
@@ -2340,13 +3138,11 @@ s .filtros button {
     align-self: center;
   }
 
-  /* Melhorar espaçamento dos itens */
   .product-item {
     border-bottom: 2px solid #e0e0e0;
     margin-bottom: 8px;
   }
 
-  /* Melhorar visualização dos preços */
   .product-price {
     background: #f8f8f8;
     padding: 12px;
@@ -2354,14 +3150,13 @@ s .filtros button {
     margin-top: 8px;
   }
 
-  /* Melhorar botão finalizar */
   .finish-button {
     min-height: 50px;
     font-weight: 600;
     letter-spacing: 0.5px;
   }
 
-  /* Melhorar input do cupom */
+
   .coupon-input {
     border: 2px solid #ddd;
     transition: border-color 0.3s ease;
@@ -2372,7 +3167,7 @@ s .filtros button {
   }
 }
 
-/* Melhorias para dispositivos muito pequenos */
+
 @media (max-width: 360px) {
   .remove-item {
     font-size: 13px !important;
@@ -2391,7 +3186,7 @@ s .filtros button {
   }
 }
 
-/* Melhorias para orientação landscape em dispositivos pequenos */
+
 @media (max-width: 480px) and (orientation: landscape) {
   .main-content-carrinho {
     margin: 60px 15px 10px 15px;
@@ -2574,7 +3369,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin: 80px 20px 20px 20px;
+  padding: 0;
 }
 /* ====== RESPONSIVIDADE PARA CADASTRO DE USUÁRIO ====== */
 
@@ -2809,5 +3605,661 @@ body {
     }
     .checkout-container {
         padding: 12px;
+    }
+}
+
+/* ====== RESPONSIVIDADE PARA PÁGINA DE FINALIZAR PEDIDO ====== */
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: 20px;
+        margin: 20px auto;
+        border-radius: 8px;
+        max-width: 95%;
+        width: 95%;
+    }
+    
+    .checkout-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        padding: 0 10px;
+    }
+    
+    .main-sections {
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+    
+    .products-section {
+        padding: 16px;
+        overflow-x: auto;
+    }
+    
+    .products-table {
+        font-size: 14px;
+        min-width: 300px;
+    }
+    
+    .products-table th, 
+    .products-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+    
+    .summary-section {
+        padding: 16px;
+    }
+    
+    .summary-section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+    
+    .summary-row {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        padding: 0 5px;
+    }
+    
+    .summary-row.total {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .coupon-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+    
+    .payment-section {
+        padding: 20px;
+        margin-top: 24px;
+    }
+    
+    .payment-section h3 {
+        font-size: 1.3rem;
+        margin-bottom: 18px;
+        padding: 0 5px;
+    }
+    
+    .payment-methods {
+        gap: 24px;
+    }
+    
+    .pix-method, 
+    .card-method {
+        padding: 16px;
+        min-width: auto;
+        margin: 0 5px;
+    }
+    
+    .qrcode-img {
+        min-width: 250px;
+        max-width: 100%;
+        height: auto;
+        margin: 15px auto;
+    }
+    
+    .copy-btn {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    .installments-table {
+        font-size: 0.9rem;
+        width: 100%;
+    }
+    
+    .installments-table td {
+        padding: 8px 6px;
+        white-space: nowrap;
+    }
+    
+    .card-form {
+        gap: 12px;
+        padding: 0 5px;
+    }
+    
+    .card-form input {
+        flex: 1 1 100%;
+        padding: 12px;
+        font-size: 16px; /* Evita zoom no iOS */
+        margin-bottom: 8px;
+    }
+    
+    .send-card-btn {
+        padding: 14px 24px;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+    
+    .actions {
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 28px;
+        padding: 0 10px;
+    }
+    
+    .back-btn, 
+    .finish-btn {
+        width: 100%;
+        padding: 18px 24px;
+        font-size: 1.1em;
+        min-height: 52px;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout-container {
+        padding: 18px;
+        margin: 18px auto;
+        max-width: 98%;
+        width: 98%;
+    }
+    
+    .checkout-title {
+        font-size: 1.8rem;
+        margin-bottom: 18px;
+        padding: 0 15px;
+    }
+    
+    .main-sections {
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+    
+    .products-section {
+        padding: 14px;
+        overflow-x: auto;
+    }
+    
+    .products-table {
+        font-size: 13px;
+        min-width: 280px;
+    }
+    
+    .products-table th, 
+    .products-table td {
+        padding: 10px 6px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    
+    .summary-section {
+        padding: 14px;
+    }
+    
+    .summary-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .summary-row {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+        padding: 0 8px;
+    }
+    
+    .summary-row.total {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .coupon-btn {
+        padding: 12px 18px;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+    
+    .payment-section {
+        padding: 16px;
+        margin-top: 20px;
+    }
+    
+    .payment-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 14px;
+        padding: 0 8px;
+    }
+    
+    .payment-methods {
+        gap: 18px;
+    }
+    
+    .pix-method, 
+    .card-method {
+        padding: 14px;
+        margin: 0 8px;
+    }
+    
+    .qrcode-img {
+        min-width: 200px;
+        margin: 12px auto;
+    }
+    
+    .copy-btn {
+        margin-top: 18px;
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+    
+    .installments-table {
+        font-size: 0.85rem;
+        width: 100%;
+    }
+    
+    .card-form {
+        gap: 10px;
+        padding: 0 8px;
+    }
+    
+    .card-form input {
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+    
+    .send-card-btn {
+        padding: 12px 18px;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+    
+    .actions {
+        gap: 14px;
+        margin-top: 24px;
+        padding: 0 15px;
+    }
+    
+    .back-btn, 
+    .finish-btn {
+        padding: 16px 18px;
+        font-size: 1em;
+        min-height: 48px;
+    }
+}
+
+@media (max-width: 360px) {
+    .checkout-container {
+        padding: 16px;
+        margin: 16px auto;
+        max-width: 99%;
+        width: 99%;
+    }
+    
+    .checkout-title {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+        padding: 0 20px;
+    }
+    
+    .main-sections {
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+    
+    .products-section {
+        padding: 16px;
+        overflow-x: auto;
+    }
+    
+    .products-table {
+        font-size: 12px;
+        min-width: 260px;
+    }
+    
+    .products-table th, 
+    .products-table td {
+        padding: 12px 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+    
+    .summary-section {
+        padding: 16px;
+    }
+    
+    .summary-section h2 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .summary-row {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        padding: 0 10px;
+    }
+    
+    .payment-section {
+        padding: 18px;
+        margin-top: 22px;
+    }
+    
+    .payment-section h3 {
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+        padding: 0 10px;
+    }
+    
+    .payment-methods {
+        gap: 20px;
+    }
+    
+    .pix-method, 
+    .card-method {
+        padding: 16px;
+        margin: 0 10px;
+    }
+    
+    .qrcode-img {
+        min-width: 180px;
+        margin: 15px auto;
+    }
+    
+    .actions {
+        gap: 16px;
+        margin-top: 26px;
+        padding: 0 20px;
+    }
+    
+    .back-btn, 
+    .finish-btn {
+        padding: 18px 20px;
+        font-size: 0.95em;
+        min-height: 50px;
+    }
+}
+
+/* Orientação landscape para dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+    .checkout-container {
+        margin: 15px auto;
+    }
+    
+    .checkout-title {
+        font-size: 1.8rem;
+        margin-bottom: 16px;
+    }
+    
+    .main-sections {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .payment-methods {
+        gap: 16px;
+    }
+    
+    .pix-method, 
+    .card-method {
+        padding: 10px;
+    }
+    
+    .qrcode-img {
+        min-width: 200px;
+    }
+    
+    .actions {
+        flex-direction: row;
+        gap: 20px;
+    }
+    
+    .back-btn, 
+    .finish-btn {
+        width: auto;
+        flex: 1;
+        min-height: 45px;
+    }
+}
+
+/* Melhorias de acessibilidade para dispositivos móveis */
+@media (max-width: 768px) {
+    .coupon-btn:focus,
+    .copy-btn:focus,
+    .send-card-btn:focus,
+    .back-btn:focus,
+    .finish-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(123, 169, 123, 0.3);
+    }
+    
+    .card-form input:focus {
+        outline: none;
+        border-color: #7ba97b;
+        box-shadow: 0 0 0 2px rgba(123, 169, 123, 0.2);
+    }
+    
+    /* Melhorar área de toque para botões */
+    .coupon-btn,
+    .copy-btn,
+    .send-card-btn,
+    .back-btn,
+    .finish-btn {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Melhorar área de toque para inputs */
+    .card-form input {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Melhorar espaçamento geral para evitar corte */
+    .checkout-container {
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    /* Garantir que tabelas não cortem conteúdo */
+    .products-section {
+        box-sizing: border-box;
+    }
+    
+    /* Melhorar espaçamento dos métodos de pagamento */
+    .payment-methods {
+        box-sizing: border-box;
+    }
+    
+    /* Garantir que botões tenham espaço suficiente */
+    .actions {
+        box-sizing: border-box;
+    }
+}
+
+/* Prevenção de zoom em dispositivos móveis */
+@media (max-width: 768px) {
+    .card-form input {
+        font-size: 16px !important;
+    }
+}
+
+/* ===== PÁGINA DE ENDEREÇO RESPONSIVA ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        gap: 20px;
+        min-height: calc(100vh - 200px);
+    }
+    
+    .card {
+        width: 95%;
+        max-width: 400px;
+        padding: 24px 20px;
+        margin: 0 auto;
+    }
+    
+    .card h1 {
+        font-size: 1.8em;
+        margin: 12px 0 16px 0;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .form-row .form-input {
+        flex: none;
+        width: 100%;
+    }
+    
+    .form-input {
+        padding: 14px 16px;
+        font-size: 16px;
+        margin-bottom: 12px;
+        min-height: 48px;
+        box-sizing: border-box;
+    }
+    
+    .btn {
+        padding: 14px 20px;
+        font-size: 16px;
+        min-height: 48px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    
+    /* Melhorar espaçamento entre botões */
+    .form-row:last-child {
+        gap: 16px;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .card {
+        width: 98%;
+        padding: 20px 16px;
+    }
+    
+    .card h1 {
+        font-size: 1.6em;
+        margin: 10px 0 14px 0;
+    }
+    
+    .form-input {
+        padding: 12px 14px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        min-height: 44px;
+    }
+    
+    .btn {
+        padding: 12px 18px;
+        font-size: 15px;
+        min-height: 44px;
+    }
+    
+    .form-row:last-child {
+        gap: 12px;
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .card {
+        width: 100%;
+        padding: 18px 14px;
+    }
+    
+    .card h1 {
+        font-size: 1.5em;
+        margin: 8px 0 12px 0;
+    }
+    
+    .form-input {
+        padding: 10px 12px;
+        font-size: 16px;
+        margin-bottom: 8px;
+        min-height: 42px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+        min-height: 42px;
+    }
+    
+    .form-row:last-child {
+        gap: 10px;
+        margin-top: 14px;
+    }
+}
+
+/* Orientação paisagem em dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container {
+        min-height: calc(100vh - 150px);
+        padding: 15px;
+    }
+    
+    .card {
+        padding: 20px 24px;
+    }
+    
+    .card h1 {
+        font-size: 1.6em;
+        margin: 8px 0 12px 0;
+    }
+    
+    .form-row {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .form-row:last-child {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* Melhorias de acessibilidade para dispositivos móveis */
+@media (max-width: 768px) {
+    .form-input:focus {
+        outline: none;
+        border-color: #7ba97b;
+        box-shadow: 0 0 0 2px rgba(123, 169, 123, 0.2);
+    }
+    
+    .btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(123, 169, 123, 0.3);
+    }
+    
+    /* Prevenção de zoom em dispositivos móveis */
+    .form-input {
+        font-size: 16px !important;
+    }
+    
+    /* Melhorar área de toque */
+    .form-input,
+    .btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Garantir que o container não cause overflow */
+    .container {
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    .card {
+        box-sizing: border-box;
     }
 }
