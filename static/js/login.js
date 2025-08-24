@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (e) => {
     if (isCadastro) {
-      const nome = form.Nome_usuario.value.trim();
-      const telefone = form.telefone.value.trim();
+      const nome = form.nome_user.value.trim();
+      const telefone = form.telefone_user.value.trim();
       const cpf = form.cpf.value.trim();
-      const email = form.Email_usuario.value.trim();
+      const email = form.email.value.trim();
       const senha = form.senha.value;
       const confirmarSenha = form.confirmar_senha.value;
 

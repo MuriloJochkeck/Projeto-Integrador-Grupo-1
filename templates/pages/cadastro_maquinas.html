@@ -22,11 +22,12 @@
           </a>
       </div>
       </header>
-      
+    
+      <form action="\api\cadastro_maquinas" method="POST">
       <div class="container">
         <div class="form-container">
           <h1>Cadastrar Máquinas</h1>
-          <form id="form-cadastro_maquinas">
+          <form id="form-cadastro_maquinas" >
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
 
             <div class="row">
@@ -71,7 +72,6 @@
 
             <label class="aluguel-label">Forma de Aluguel</label>
             <div class="aluguel-opcoes">
-
               <div class="dias">
                 <button type="button" class="botao-dia">Dia</button>
               </div>
@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-
+    </form>
       {% block footer %}
       {% include 'pages/footer.html' %}
       {% endblock %}

@@ -149,6 +149,12 @@ class banco:
                     cidade VARCHAR(50) NOT NULL,
                     rua VARCHAR(100) NOT NULL,
                     referencia VARCHAR(200),
+                    modelo_maquina VARCHAR(100) NOT NULL,
+                    equipamento VARCHAR(100) NOT NULL,
+                    preco DECIMAL(10, 2) NOT NULL,
+                    forma_aluguel VARCHAR(5) NOT NULL,
+                    imagem_url VARCHAR(200),
+                    descricao TEXT,
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """) 
@@ -224,41 +230,82 @@ class banco:
             return []
 
     
+    def login_email(self, email):
+        """Busca um usuário pelo email"""
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT id, nome, senha FROM usuarios WHERE email = %s", (email,))
+        resultado = cursor.fetchone()
+        if resultado:
+            return {'id': resultado[0], 'nome': resultado[1], 'senha': resultado[2]}
+        return None
+    
     def fechar(self):
         """Fecha a conexão"""
         if self.connection:
             self.connection.close()
             print(" Conexão fechada")
 
+
 ################### CADASTRAR MAQUINAS ###############
 
-    def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia):
-        """Cadastra uma máquina"""
+    # def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia):
+    #     """Cadastra uma máquina"""
+    #     try:
+    #         cursor = self.connection.cursor()
+    #         # Inserir máquina
+    #         cursor.execute("""
+    #             INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia)
+    #             VALUES (%s, %s, %s, %s, %s, %s)
+    #             RETURNING id
+    #         """, (cep, uf, numero, cidade, rua, referencia))
+    #         maquina_id = cursor.fetchone()[0]
+    #         self.connection.commit()
+    #         cursor.close()
+    #         print(f" Máquina cadastrada! ID: {maquina_id}")
+    #         return "Sucesso"
+    #     except Exception as e:
+    #         print(f" Erro ao cadastrar máquina: {e}")
+    #         return "Erro interno"
+    
+    def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia, 
+                         modelo_maquina, equipamento, preco, forma_aluguel, 
+                         imagem_url=None, descricao=None):
+        """Cadastra uma máquina com todos os campos"""
         try:
             cursor = self.connection.cursor()
-            # Inserir máquina
+            
             cursor.execute("""
-                INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia,
+                                    modelo_maquina, equipamento, preco, forma_aluguel,
+                                    imagem_url, descricao)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
-            """, (cep, uf, numero, cidade, rua, referencia))
+            """, (cep, uf, numero, cidade, rua, referencia, modelo_maquina, 
+                 equipamento, preco, forma_aluguel, imagem_url, descricao))
+            
             maquina_id = cursor.fetchone()[0]
             self.connection.commit()
             cursor.close()
+            
             print(f" Máquina cadastrada! ID: {maquina_id}")
             return "Sucesso"
         except Exception as e:
             print(f" Erro ao cadastrar máquina: {e}")
             return "Erro interno"
-        
+    
     def listar_maquinas(self):
-        """Lista todas as máquinas"""
+        """Lista todas as máquinas com todos os campos"""
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT id, cep, uf, numero, cidade, rua, referencia FROM maquinas ORDER BY id")
+            cursor.execute("""
+                SELECT id, cep, uf, numero, cidade, rua, referencia, 
+                       modelo_maquina, equipamento, preco, forma_aluguel, 
+                       imagem_url, descricao 
+                FROM maquinas ORDER BY id
+            """)
             maquinas = cursor.fetchall()
             cursor.close()
-            # Converter para lista de dicionários
+            
             lista_maquinas = []
             for maquina in maquinas:
                 lista_maquinas.append({
@@ -268,12 +315,42 @@ class banco:
                     'numero': maquina[3],
                     'cidade': maquina[4],
                     'rua': maquina[5],
-                    'referencia': maquina[6]
+                    'referencia': maquina[6],
+                    'modelo_maquina': maquina[7],
+                    'equipamento': maquina[8],
+                    'preco': maquina[9],
+                    'forma_aluguel': maquina[10],
+                    'imagem_url': maquina[11],
+                    'descricao': maquina[12]
                 })
             return lista_maquinas
         except Exception as e:
             print(f" Erro ao listar máquinas: {e}")
             return []
+        
+# def listar_maquinas(self):
+#         """Lista todas as máquinas"""
+#         try:
+#             cursor = self.connection.cursor()
+#             cursor.execute("SELECT id, cep, uf, numero, cidade, rua, referencia FROM maquinas ORDER BY id")
+#             maquinas = cursor.fetchall()
+#             cursor.close()
+#             # Converter para lista de dicionários
+#             lista_maquinas = []
+#             for maquina in maquinas:
+#                 lista_maquinas.append({
+#                     'id': maquina[0],
+#                     'cep': maquina[1],
+#                     'uf': maquina[2],
+#                     'numero': maquina[3],
+#                     'cidade': maquina[4],
+#                     'rua': maquina[5],
+#                     'referencia': maquina[6]
+#                 })
+#             return lista_maquinas
+#         except Exception as e:
+#             print(f" Erro ao listar máquinas: {e}")
+#             return []
 
 # Instância global
 banco = banco()
