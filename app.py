@@ -120,7 +120,6 @@ def cadastrar_maquinas():
         )
 
         imagens = request.files.getlist("imagens")
-        print("Arquivos recebidos:", [f.filename for f in imagens])
         id_maquina = maquina_id
         if not id_maquina:
             return jsonify({"success": False, "message": "Erro ao cadastrar imagem"}), 500
@@ -137,7 +136,7 @@ def cadastrar_maquinas():
                 img.save(imagem_url)
                 banco.cadastrar_imagens_maquina(id_maquina, imagem_url)
 
-        return jsonify({"success": True, "message": "Máquina cadastrada com sucesso!"})
+        return redirect(url_for('index'))
 
     except Exception as e:
         print("Erro ao cadastrar máquina:", e)
