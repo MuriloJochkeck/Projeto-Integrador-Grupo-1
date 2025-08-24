@@ -34,9 +34,9 @@ def login():
             session['usuario_nome'] = usuario['nome']
             return redirect(url_for('index'))
         else:
-            return jsonify({'success': False, 'message': 'Email ou senha inválidos'}), 401
+            mensagem = 'Email ou senha incorretos'
+            return render_template('pages/login_usuario.html', mensagem=mensagem)
 
-    # Se for GET, mostra o formulário
     return render_template('pages/login_usuario.html')
 
 
@@ -122,7 +122,6 @@ def listar_maquinas():
         'maquinas': maquinas,
         'total': len(maquinas)
     })
-
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -23,7 +23,11 @@
             <form id="loginForm" method="POST" action="/login">
                 <input class="form-input" type="email" name="email" placeholder="Email" required>
                 <input class="form-input" type="password" name="senha" placeholder="Senha" required>
+                {% if mensagem %}
+                    <div style="color: red">{{ mensagem }}</div>
+                {% endif %}
                 <button class="btn" type="submit">Continuar</button>
+    
             </form>
             <div class="login-links">
                 <a class="link" href="#">Esqueceu sua senha?</a>
