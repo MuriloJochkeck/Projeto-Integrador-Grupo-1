@@ -75,6 +75,13 @@ def endereço_user():
 def cadastro_maquinas():
     return render_template('pages/cadastro_maquinas.html')
 
+@app.route('/ver_mais_colheitadeira')
+def ver_mais_colheitadeira():
+    return render_template('pages/ver_mais_colheitadeira.html')
+
+@app.route('/ver_mais_trator')
+def ver_mais_trator():
+    return render_template('pages/ver_mais_trator.html')
 
 @app.route('/finaliza_pedido')
 @login_required

@@ -33,7 +33,7 @@
     <section class="carousel-section">
         <div class="section-header">
             <h2>Colheitadeiras</h2>
-            <a href="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_colheitadeira') }}" class="#">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
@@ -50,7 +50,7 @@
                 <p>Total de máquinas: {{ maquinas|length }}</p>
             </div>
             {% endfor %}
-        <!-- </div>
+        </div>
             <div class="carousel-track">
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
@@ -101,14 +101,14 @@
                     <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
                 </div>
             </div>
-            <button class="next">&#10095;</button> -->
+            <button class="next">&#10095;</button>
         </div>
     </section>
 
     <section class="carousel-section">
         <div class="section-header">
             <h2>Tratores</h2>
-            <a href="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_trator') }}" class="#">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
