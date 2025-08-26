@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer - Base</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     
 </head>
@@ -24,8 +24,8 @@
             </div>
           </div>
           <div class="footer-buttons">
-            <button class="footer-btn">Fale conosco</button>
-            <button class="footer-btn">Sobre nós</button>
+            <a class="footer-btn" href="{{ url_for('faleconosco') }}">Fale conosco</a>
+            <a class="footer-btn" href="{{ url_for('sobrenos') }}">Sobre nós</a>
           </div>
         </div>
         <hr class="footer-divider" />

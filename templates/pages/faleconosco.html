@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fale Conosco</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top-header">
+    <div class="logo">
+      <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h1>Fale Conosco</h1>
+      <p>Tire suas dúvidas ou envie uma mensagem.</p>
+      <form id="form-contato">
+        <input class="form-input" type="text" name="nome" placeholder="Seu nome" required>
+        <input class="form-input" type="email" name="email" placeholder="Seu e-mail" required>
+        <textarea class="form-input" name="mensagem" rows="5" placeholder="Sua mensagem" required></textarea>
+        <button class="btn" type="submit">Enviar</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('form-contato').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Mensagem enviada! Em breve entraremos em contato.');
+      this.reset();
+    });
+  </script>
+
+  {% block footer %}
+  {% include 'pages/footer.html' %}
+  {% endblock %}
+</body>
+</html>
+
+

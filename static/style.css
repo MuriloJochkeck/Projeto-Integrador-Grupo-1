@@ -1150,10 +1150,17 @@ button.avancar {
   transition: background 0.2s;
   min-width: 140px;
   text-align: center;
+  text-decoration: none;
 }
 
 .footer-btn:hover {
   background: #5b8c5b;
+  text-decoration: none;
+}
+
+.footer-btn:visited {
+  color: #fff;
+  text-decoration: none;
 }
 
 .footer-divider {
