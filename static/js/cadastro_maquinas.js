@@ -70,7 +70,7 @@ function mascaraNumero(input) {
     .replace(/\D/g, ""); 
 }
 
-/////// Troca pagina //////
+///// Troca pagina //////
 document.addEventListener("DOMContentLoaded", function () {
   const btnAvancar = document.getElementById("btn-avancar-1");
   const btnVoltar = document.getElementById("btn-voltar-1");
@@ -111,34 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-///////// Botão ///////////
-
-function configurarSelecao(grupoClasse) {
-  const botoes = document.querySelectorAll("." + grupoClasse);
-
-  botoes.forEach(botao => {
-    botao.addEventListener("click", () => {
-
-      if (botao.classList.contains("selecionado")) {
-        botao.classList.remove("selecionado");
-      } else {
-
-        botoes.forEach(b => b.classList.remove("selecionado"));
-        botao.classList.add("selecionado");
-      }
-    });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  configurarSelecao("botao-dia");
-  configurarSelecao("botao-hora");
-});
-
-
-
 //////// Adicionar imagem temporaria //////////////
-
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -150,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const arquivos = inputImagens.files;
 
       if (arquivos.length > 0) {
+        preview.innerHTML = ""; // limpa preview anterior
         Array.from(arquivos).forEach(arquivo => {
           if (arquivo.type.startsWith("image/")) {
             const reader = new FileReader();
@@ -163,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      inputImagens.value = "";
+      // REMOVIDO: inputImagens.value = "";
     });
   }
 });
@@ -195,3 +169,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+

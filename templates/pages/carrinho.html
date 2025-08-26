@@ -2,8 +2,6 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#77a56f">
   <title>Meu Carrinho</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -11,6 +9,11 @@
   <header class="top-header">
       <div class="logo">
           <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
+      </div>
+  
+      <div class="search-bar">
+          <input type="text" placeholder="Buscar..." />
+          <span class="search-icon">&#128269;</span> 
       </div>
   
       <div class="icons"> 
@@ -80,10 +83,8 @@
     </div>
   </div>
    <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
-   
-
-  {% block footer %}
-  {% include 'pages/footer.html' %}
-  {% endblock %}
+   {% block footer %}
+   {% include 'pages/footer.html' %}
+   {% endblock %}
 </body>
 </html> 

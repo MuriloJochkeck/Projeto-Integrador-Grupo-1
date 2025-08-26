@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endereço</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
     <header class="top-header">
         <div class="logo">
-            <a href="{{ url_for('index') }}"><img src="../media/login/logo.png" alt="Logo"></a>
+            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
         </div>
         
         <div class="icons">
             <a href="{{ url_for('carrinho') }}">
-                <img src="../media/login/carrinho.png" alt="Carrinho">
+                <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
             </a>
             <a href="{{ url_for('login') }}">
-                <img class="user-icon" src="../media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Entrar">
+                <img class="user-icon" src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}" alt="Entrar">
             </a>
         </div>
     </header>

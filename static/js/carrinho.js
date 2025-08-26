@@ -304,3 +304,80 @@ btnAdicionarCarrinho?.addEventListener('click', () => {
 
 // ===== INICIALIZAÇÃO DAS AVALIAÇÕES =====
 carregarAvaliacoesSalvas();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const productList = document.querySelector('.product-list');
+    const subtotalEl = document.querySelector('.summary-row span:nth-child(2)');
+    const totalEl = document.querySelector('.summary-row.bold span:nth-child(2)');
+    const finishButton = document.querySelector('.finish-button');
+
+    // Função para atualizar carrinho
+    async function atualizarCarrinho() {
+        try {
+            const res = await fetch('/api/carrinho');
+            const data = await res.json();
+            if (!data.success) return;
+
+            productList.innerHTML = '';
+            let subtotal = 0;
+
+            data.itens.forEach((item, index) => {
+                const totalItem = item.preco * item.quantidade;
+                subtotal += totalItem;
+
+                const div = document.createElement('div');
+                div.classList.add('product-item');
+                div.innerHTML = `
+                    <img class="product-image" src="/${item.imagem_url}" alt="${item.nome}" />
+                    <div class="product-info">
+                        <div class="product-name">${item.nome}</div>
+                    </div>
+                    <div class="quantity-control">
+                        <div class="quantity-buttons">
+                            <button class="quantity-button" data-index="${index}" data-action="decrement">-</button>
+                            <span class="quantity-value" id="quantity-${index}">${item.quantidade}</span>
+                            <button class="quantity-button" data-index="${index}" data-action="increment">+</button>
+                        </div>
+                        <span class="quantity-label">${item.forma_aluguel}</span>
+                    </div>
+                    <div class="product-price">
+                        ${item.quantidade}x R$ ${item.preco.toFixed(2)}<br/>
+                        Total: <span class="price-total">R$ ${totalItem.toFixed(2)}</span>
+                    </div>
+                `;
+                productList.appendChild(div);
+
+                // Eventos de incrementar/decrementar
+                div.querySelectorAll('.quantity-button').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        let quantidade = item.quantidade;
+                        if (btn.dataset.action === 'increment') quantidade++;
+                        else if (btn.dataset.action === 'decrement' && quantidade > 1) quantidade--;
+
+                        // Atualiza no servidor
+                        await fetch('/api/carrinho/adicionar', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `maquina_id=${item.maquina_id}&quantidade=${quantidade}&forma_aluguel=${item.forma_aluguel}`
+                        });
+                        atualizarCarrinho();
+                    });
+                });
+            });
+
+            subtotalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
+            totalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
+
+        } catch (err) {
+            console.error('Erro ao carregar carrinho:', err);
+        }
+    }
+
+    // Botão finalizar pedido
+    finishButton.addEventListener('click', () => {
+        window.location.href = '/finaliza_pedido';
+    });
+
+    atualizarCarrinho();
+});

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="top-header">
+        <div class="logo">
+            <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+            <span class="search-icon">&#128269;</span> 
+        </div>
+
+        <div class="icons">
+            <a href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
+            <a href="{{ url_for('login') }}"><img src="../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt=""></a>
+        </div>
+    </header>
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2>Tratores</h2>
+        </div>
+        <div class="carousel">
+            <div class="carousel-track">
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator1.jpg" alt="Trator Valtra">
+                        <p class="price">R$2.800,00<span>/dia</span></p>
+                        <p class="desc">Trator Valtra</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Valtra', '../static/media/trator/trator1.jpg', 2800.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator2.jpg" alt="Trator Massey">
+                        <p class="price">R$3.200,00<span>/dia</span></p>
+                        <p class="desc">Trator Massey</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Massey', '../static/media/trator/trator2.jpg', 3200.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator3.jpg" alt="trator3">
+                        <p class="price">R$5.500,00<span>/dia</span></p>
+                        <p class="desc">trator</p>
+                    </a>    
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Colheitadeira 1', '../static/media/trator/colheitdera1.jpg', 5500.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trato4.jpg" alt="Trator Valtra">
+                        <p class="price">R$2.800,00<span>/dia</span></p>
+                        <p class="desc">Trator Valtra</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Valtra', '../static/media/trator/trator1.jpg', 2800.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trato5.jpg" alt="trator5">
+                        <p class="price">R$3.200,00<span>/dia</span></p>
+                        <p class="desc">Trator Massey</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Massey', '../static/media/trator/trator2.jpg', 3200.00)">Adicionar ao Carrinho</button>
+                </div>
+                
+    </section>
+{% block footer %}
+{% include 'pages/footer.html' %}
+{% endblock %}
+</body>
+</html>

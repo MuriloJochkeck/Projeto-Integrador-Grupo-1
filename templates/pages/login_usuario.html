@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header class="top-header">
         <div class="logo">
             <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
         </div>
+        
     </header>
     <div class="container">
         <div class="card">
             <div class="icon">
-                <img src="{{ url_for('static', filename='media/login/181534.png') }}" alt="Login">
+                <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt="Login">
             </div>
             <h2>Já tem uma conta?</h2>
             <p>Informe seus dados abaixo para acessá-la.</p>
-            {% if error %}
-            <p style="color: red; margin-top: 8px;">{{ error }}</p>
-            {% endif %}
-            <form id="loginForm" method="post" action="/login">
-                <input class="form-input" type="text" name="usuario" placeholder="Email/Telefone" required>
+            <form id="loginForm" method="POST" action="/login">
+                <input class="form-input" type="email" name="email" placeholder="Email" required>
                 <input class="form-input" type="password" name="senha" placeholder="Senha" required>
+                {% if mensagem %}
+                    <div style="color: red">{{ mensagem }}</div>
+                {% endif %}
                 <button class="btn" type="submit">Continuar</button>
+    
             </form>
             <div class="login-links">
                 <a class="link" href="#">Esqueceu sua senha?</a>
@@ -42,10 +44,11 @@
             <a href="{{ url_for('cadastro') }}" class="btn" style="text-align:center; text-decoration:none;">Cadastre-se</a>
         </div>
     </div>
+    
     {% block footer %}
     {% include 'pages/footer.html' %}
     {% endblock %}
-
+    
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>

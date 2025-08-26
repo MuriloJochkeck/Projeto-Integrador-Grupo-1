@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer - Base</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-    
 </head>
 <body>
     <footer class="custom-footer">
         <div class="footer-content">
           <div class="footer-logo">
             <div class="logo">
-                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
+                <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
             </div>
           </div>
           <div class="footer-info">
@@ -32,6 +30,6 @@
         <div class="footer-copy">
           Copyright © 2025 – Todos os direitos estão reservados
         </div>
-    </footer>
+      </footer>
 </body>
 </html>

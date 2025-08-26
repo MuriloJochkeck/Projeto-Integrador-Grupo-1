@@ -34,7 +34,7 @@ class banco:
             conn = psycopg2.connect(
                 host=self.host,
                 port=self.port,
-                database='postgres',
+                database='projeto_integrador',
                 user=self.user,
                 password=self.password
             )
@@ -53,7 +53,8 @@ class banco:
         except Exception as e:
             print(f" Erro ao criar banco: {e}")
             return False
-    
+            
+                
     def criar_tabela(self):
         """Cria a tabela de usuários"""
         try:
@@ -70,15 +71,66 @@ class banco:
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS maquinas (
+                    id SERIAL PRIMARY KEY,
+                    cep VARCHAR(10) NOT NULL,
+                    uf CHAR(2) NOT NULL,
+                    numero INTEGER NOT NULL,
+                    cidade VARCHAR(50) NOT NULL,
+                    rua VARCHAR(100) NOT NULL,
+                    referencia VARCHAR(200),
+                    modelo_maquina VARCHAR(100) NOT NULL,
+                    equipamento VARCHAR(100) NOT NULL,
+                    preco DECIMAL(10, 2) NOT NULL,
+                    forma_aluguel VARCHAR(5) NOT NULL,
+                    imagem_url VARCHAR(200),
+                    descricao TEXT,
+                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """) 
+
+            cursor.execute(""" 
+                CREATE TABLE IF NOT EXISTS imagens_maquinas (
+                    id SERIAL PRIMARY KEY,
+                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+                    imagem_url VARCHAR(200) NOT NULL
+                )
+                """)   
+            
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS carrinhos (
+            #         id SERIAL PRIMARY KEY,
+            #         usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+            #         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            #         UNIQUE (usuario_id) -- cada usuário tem um carrinho único
+            #     );
+            # """)
+            
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS itens_carrinho (
+            #         id SERIAL PRIMARY KEY,
+            #         carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
+            #         maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+            #         quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+            #         forma_aluguel VARCHAR(5) NOT NULL,
+            #         UNIQUE (carrinho_id, maquina_id)
+            #     );
+            # """)                   
             
             self.connection.commit()
             cursor.close()
-            print(" Tabela 'usuarios' criada!")
+            print(" Tabelas criadas!")
             return True
         except Exception as e:
             print(f" Erro ao criar tabela: {e}")
             return False
-    
+
+
+#################### CADASTRAR USUÁRIOS ############### 
+
+
     def hash_senha(self, senha):
         """Cria hash da senha"""
         return hashlib.sha256(senha.encode()).hexdigest()
@@ -86,13 +138,6 @@ class banco:
     def cadastrar_usuario(self, nome, telefone, cpf, email, senha):
         """Cadastra um usuário"""
         try:
-            # Validações básicas
-            if len(nome) < 2:
-                return "Nome muito curto"
-            
-            if len(senha) < 6:
-                return "Senha muito curta"
-            
             cursor = self.connection.cursor()
             
             # Verificar se email já existe
@@ -148,54 +193,15 @@ class banco:
             print(f" Erro ao listar: {e}")
             return []
 
-    def obter_usuario_por_email_ou_telefone(self, identificador):
-        """Obtém um usuário pelo email OU telefone (somente dígitos)."""
-        try:
-            cursor = self.connection.cursor()
-            # Normaliza telefone para somente dígitos
-            import re
-            telefone_digits = re.sub(r"\D", "", identificador)
-
-            cursor.execute(
-                """
-                SELECT id, nome, email, cpf, telefone, senha
-                FROM usuarios
-                WHERE email = %s OR REPLACE(REPLACE(REPLACE(telefone, '(', ''), ')', ''), '-', '') = %s
-                LIMIT 1
-                """,
-                (identificador, telefone_digits)
-            )
-            row = cursor.fetchone()
-            cursor.close()
-            if not row:
-                return None
-            return {
-                'id': row[0],
-                'nome': row[1],
-                'email': row[2],
-                'cpf': row[3],
-                'telefone': row[4],
-                'senha_hash': row[5],
-            }
-        except Exception as e:
-            print(f" Erro ao buscar usuário: {e}")
-            return None
-
-    def autenticar_usuario(self, identificador, senha_em_texto):
-        """Valida credenciais. Retorna dict do usuário (sem a senha) se ok; senão, None."""
-        try:
-            usuario = self.obter_usuario_por_email_ou_telefone(identificador)
-            if not usuario:
-                return None
-            senha_hash = self.hash_senha(senha_em_texto)
-            if senha_hash != usuario.get('senha_hash'):
-                return None
-            # Remove hash antes de retornar
-            usuario_limpo = {k: v for k, v in usuario.items() if k != 'senha_hash'}
-            return usuario_limpo
-        except Exception as e:
-            print(f" Erro ao autenticar: {e}")
-            return None
+    
+    def login_email(self, email):
+        """Busca um usuário pelo email"""
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT id, nome, senha FROM usuarios WHERE email = %s", (email,))
+        resultado = cursor.fetchone()
+        if resultado:
+            return {'id': resultado[0], 'nome': resultado[1], 'senha': resultado[2]}
+        return None
     
     def fechar(self):
         """Fecha a conexão"""
@@ -203,6 +209,93 @@ class banco:
             self.connection.close()
             print(" Conexão fechada")
 
+
+################### CADASTRAR MAQUINAS ###############
+
+    def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia, 
+                         modelo_maquina, equipamento, preco, forma_aluguel, 
+                            descricao=None):
+        """Cadastra uma máquina com todos os campos"""
+        
+        try:
+            cursor = self.connection.cursor()
+            
+            cursor.execute("""
+                INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia,
+                                    modelo_maquina, equipamento, preco, forma_aluguel,
+                                    descricao)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING id
+            """, (cep, uf, numero, cidade, rua, referencia, modelo_maquina, 
+                 equipamento, preco, forma_aluguel, descricao))
+            
+            maquina_id = cursor.fetchone()[0]
+            self.connection.commit()
+            cursor.close()
+            
+            print(f" Máquina cadastrada! ID: {maquina_id}")
+            return maquina_id
+        except Exception as e:
+            print(f" Erro ao cadastrar máquina: {e}")
+            return "Erro interno"
+    
+    def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
+        try:
+            cursor = self.connection.cursor()
+
+            # Garantir que imagens_urls é uma lista
+            if isinstance(imagens_urls, str):
+                imagens_urls = [imagens_urls]
+
+            for url in imagens_urls:
+                cursor.execute("""
+                    INSERT INTO imagens_maquinas (maquina_id, imagem_url)
+                    VALUES (%s, %s)
+                """, (maquina_id, url))
+            self.connection.commit()
+            cursor.close()
+            print(f"Imagens cadastradas para a máquina {maquina_id}")
+            return True
+        except Exception as e:
+            print(f"Erro cadastrar_imagens_maquina: {e}")
+            return False
+        
+    def listar_maquinas(self):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("""
+                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+                    COALESCE(
+                        (SELECT imagem_url 
+                            FROM imagens_maquinas 
+                            WHERE maquina_id = m.id 
+                            LIMIT 1), 
+                        ''
+                    ) AS imagem_url
+                FROM maquinas m
+                ORDER BY m.id
+            """)
+            maquinas = cursor.fetchall()
+            cursor.close()
+
+            lista_maquinas = []
+            for m in maquinas:
+                lista_maquinas.append({
+                    'id': m[0],
+                    'modelo_maquina': m[1],
+                    'equipamento': m[2],
+                    'preco': float(m[3]),
+                    'forma_aluguel': m[4],
+                    'imagem_url': m[5]
+                })
+            return lista_maquinas
+        except Exception as e:
+            print(f"Erro listar_maquinas: {e}")
+            return []
+
+        
+
+        
 # Instância global
 banco = banco()
 

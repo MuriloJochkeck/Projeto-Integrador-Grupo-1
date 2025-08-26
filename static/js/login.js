@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', (e) => {
     if (isCadastro) {
-      const nome = form.Nome_usuario.value.trim();
-      const telefone = form.telefone.value.trim();
+      const nome = form.nome_user.value.trim();
+      const telefone = form.telefone_user.value.trim();
       const cpf = form.cpf.value.trim();
-      const email = form.Email_usuario.value.trim();
+      const email = form.email.value.trim();
       const senha = form.senha.value;
       const confirmarSenha = form.confirmar_senha.value;
 
@@ -79,33 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const ehEmail = validarEmail(usuario);
-      const ehTelefone = validarTelefone(usuario);
-
-      if (!ehEmail && !ehTelefone) {
-        alert("Informe um email ou telefone válido.");
-        e.preventDefault();
-        return;
-      }
-
-      if (!validarSenha(senha)) {
-        alert("Senha deve ter ao menos 6 caracteres.");
-        e.preventDefault();
-        return;
-      }
+      alert("Login enviado!");
     }
   });
 
   function validarEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  function validarTelefone(valor) {
-    const somenteDigitos = valor.replace(/\D/g, "");
-    return /^\d{10,11}$/.test(somenteDigitos);
-  }
-
-  function validarSenha(s) {
-    return typeof s === 'string' && s.length >= 6;
   }
 });
