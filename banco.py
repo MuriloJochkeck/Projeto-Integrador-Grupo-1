@@ -1,6 +1,5 @@
 import psycopg2
 import hashlib
-import json
 
 class banco:
     def __init__(self):
@@ -54,74 +53,7 @@ class banco:
         except Exception as e:
             print(f" Erro ao criar banco: {e}")
             return False
-    def criar_tabela(self):
-        """Cria as tabelas de usuários e pedidos"""
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS usuarios (
-                    id SERIAL PRIMARY KEY,
-                    nome VARCHAR(100) NOT NULL,
-                    telefone VARCHAR(20) NOT NULL,
-                    cpf VARCHAR(14) UNIQUE NOT NULL,
-                    email VARCHAR(120) UNIQUE NOT NULL,
-                    senha VARCHAR(200) NOT NULL,
-                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS maquinas (
-                    id SERIAL PRIMARY KEY,
-                    cep VARCHAR(10) NOT NULL,
-                    uf CHAR(2) NOT NULL,
-                    numero INTEGER NOT NULL,
-                    cidade VARCHAR(50) NOT NULL,
-                    rua VARCHAR(100) NOT NULL,
-                    referencia VARCHAR(200),
-                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS pedidos (
-                    id SERIAL PRIMARY KEY,
-                    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    itens JSONB NOT NULL,
-                    total DECIMAL(10, 2) NOT NULL,
-                    parcelas INTEGER,
-                    cupom VARCHAR(50),
-                    status VARCHAR(20) DEFAULT 'pendente'
-                )
-            """)
-            self.connection.commit()
-            cursor.close()
-            print(" Tabelas criadas com sucesso!")
-            return True
-        except Exception as e:
-            print(f" Erro ao criar tabelas: {e}")
-            return False
             
-    def salvar_pedido(self, pedido_data):
-        """Salva um novo pedido no banco de dados"""
-        try:
-            cursor = self.connection.cursor()
-            itens_json = json.dumps(pedido_data.get('itens', []))
-            total = pedido_data.get('total', 0)
-            parcelas = pedido_data.get('parcelas', None)
-            cupom = pedido_data.get('cupom', None)
-
-            cursor.execute("""
-                INSERT INTO pedidos (itens, total, parcelas, cupom)
-                VALUES (%s, %s, %s, %s) RETURNING id
-            """, (itens_json, total, parcelas, cupom))
-            
-            pedido_id = cursor.fetchone()[0]
-            self.connection.commit()
-            cursor.close()
-            print(f" Pedido salvo! ID: {pedido_id}")
-            return "Sucesso"
-        except Exception as e:
-            print(f" Erro ao salvar pedido: {e}")
-            return "Erro interno"
                 
     def criar_tabela(self):
         """Cria a tabela de usuários"""
@@ -158,15 +90,47 @@ class banco:
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """) 
+
+            cursor.execute(""" 
+                CREATE TABLE IF NOT EXISTS imagens_maquinas (
+                    id SERIAL PRIMARY KEY,
+                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+                    imagem_url VARCHAR(200) NOT NULL
+                )
+                """)   
+            
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS carrinhos (
+            #         id SERIAL PRIMARY KEY,
+            #         usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+            #         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            #         UNIQUE (usuario_id) -- cada usuário tem um carrinho único
+            #     );
+            # """)
+            
+            # cursor.execute("""
+            #     CREATE TABLE IF NOT EXISTS itens_carrinho (
+            #         id SERIAL PRIMARY KEY,
+            #         carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
+            #         maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+            #         quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+            #         forma_aluguel VARCHAR(5) NOT NULL,
+            #         UNIQUE (carrinho_id, maquina_id)
+            #     );
+            # """)                   
             
             self.connection.commit()
             cursor.close()
-            print(" Tabela 'usuarios' e 'maquinas' criada!")
+            print(" Tabelas criadas!")
             return True
         except Exception as e:
             print(f" Erro ao criar tabela: {e}")
             return False
-    
+
+
+#################### CADASTRAR USUÁRIOS ############### 
+
+
     def hash_senha(self, senha):
         """Cria hash da senha"""
         return hashlib.sha256(senha.encode()).hexdigest()
@@ -248,110 +212,90 @@ class banco:
 
 ################### CADASTRAR MAQUINAS ###############
 
-    # def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia):
-    #     """Cadastra uma máquina"""
-    #     try:
-    #         cursor = self.connection.cursor()
-    #         # Inserir máquina
-    #         cursor.execute("""
-    #             INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia)
-    #             VALUES (%s, %s, %s, %s, %s, %s)
-    #             RETURNING id
-    #         """, (cep, uf, numero, cidade, rua, referencia))
-    #         maquina_id = cursor.fetchone()[0]
-    #         self.connection.commit()
-    #         cursor.close()
-    #         print(f" Máquina cadastrada! ID: {maquina_id}")
-    #         return "Sucesso"
-    #     except Exception as e:
-    #         print(f" Erro ao cadastrar máquina: {e}")
-    #         return "Erro interno"
-    
     def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia, 
                          modelo_maquina, equipamento, preco, forma_aluguel, 
-                         imagem_url=None, descricao=None):
+                            descricao=None):
         """Cadastra uma máquina com todos os campos"""
+        
         try:
             cursor = self.connection.cursor()
             
             cursor.execute("""
                 INSERT INTO maquinas (cep, uf, numero, cidade, rua, referencia,
                                     modelo_maquina, equipamento, preco, forma_aluguel,
-                                    imagem_url, descricao)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                    descricao)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
             """, (cep, uf, numero, cidade, rua, referencia, modelo_maquina, 
-                 equipamento, preco, forma_aluguel, imagem_url, descricao))
+                 equipamento, preco, forma_aluguel, descricao))
             
             maquina_id = cursor.fetchone()[0]
             self.connection.commit()
             cursor.close()
             
             print(f" Máquina cadastrada! ID: {maquina_id}")
-            return "Sucesso"
+            return maquina_id
         except Exception as e:
             print(f" Erro ao cadastrar máquina: {e}")
             return "Erro interno"
     
+    def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
+        try:
+            cursor = self.connection.cursor()
+
+            # Garantir que imagens_urls é uma lista
+            if isinstance(imagens_urls, str):
+                imagens_urls = [imagens_urls]
+
+            for url in imagens_urls:
+                cursor.execute("""
+                    INSERT INTO imagens_maquinas (maquina_id, imagem_url)
+                    VALUES (%s, %s)
+                """, (maquina_id, url))
+            self.connection.commit()
+            cursor.close()
+            print(f"Imagens cadastradas para a máquina {maquina_id}")
+            return True
+        except Exception as e:
+            print(f"Erro cadastrar_imagens_maquina: {e}")
+            return False
+        
     def listar_maquinas(self):
-        """Lista todas as máquinas com todos os campos"""
         try:
             cursor = self.connection.cursor()
             cursor.execute("""
-                SELECT id, cep, uf, numero, cidade, rua, referencia, 
-                       modelo_maquina, equipamento, preco, forma_aluguel, 
-                       imagem_url, descricao 
-                FROM maquinas ORDER BY id
+                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+                    COALESCE(
+                        (SELECT imagem_url 
+                            FROM imagens_maquinas 
+                            WHERE maquina_id = m.id 
+                            LIMIT 1), 
+                        ''
+                    ) AS imagem_url
+                FROM maquinas m
+                ORDER BY m.id
             """)
             maquinas = cursor.fetchall()
             cursor.close()
-            
+
             lista_maquinas = []
-            for maquina in maquinas:
+            for m in maquinas:
                 lista_maquinas.append({
-                    'id': maquina[0],
-                    'cep': maquina[1],
-                    'uf': maquina[2],
-                    'numero': maquina[3],
-                    'cidade': maquina[4],
-                    'rua': maquina[5],
-                    'referencia': maquina[6],
-                    'modelo_maquina': maquina[7],
-                    'equipamento': maquina[8],
-                    'preco': maquina[9],
-                    'forma_aluguel': maquina[10],
-                    'imagem_url': maquina[11],
-                    'descricao': maquina[12]
+                    'id': m[0],
+                    'modelo_maquina': m[1],
+                    'equipamento': m[2],
+                    'preco': float(m[3]),
+                    'forma_aluguel': m[4],
+                    'imagem_url': m[5]
                 })
             return lista_maquinas
         except Exception as e:
-            print(f" Erro ao listar máquinas: {e}")
+            print(f"Erro listar_maquinas: {e}")
             return []
-        
-# def listar_maquinas(self):
-#         """Lista todas as máquinas"""
-#         try:
-#             cursor = self.connection.cursor()
-#             cursor.execute("SELECT id, cep, uf, numero, cidade, rua, referencia FROM maquinas ORDER BY id")
-#             maquinas = cursor.fetchall()
-#             cursor.close()
-#             # Converter para lista de dicionários
-#             lista_maquinas = []
-#             for maquina in maquinas:
-#                 lista_maquinas.append({
-#                     'id': maquina[0],
-#                     'cep': maquina[1],
-#                     'uf': maquina[2],
-#                     'numero': maquina[3],
-#                     'cidade': maquina[4],
-#                     'rua': maquina[5],
-#                     'referencia': maquina[6]
-#                 })
-#             return lista_maquinas
-#         except Exception as e:
-#             print(f" Erro ao listar máquinas: {e}")
-#             return []
 
+        
+
+        
 # Instância global
 banco = banco()
 
@@ -367,4 +311,3 @@ def inicializar_banco():
         return False
     
     return True
-

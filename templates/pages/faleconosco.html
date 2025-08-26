@@ -22,17 +22,40 @@
         <input class="form-input" type="email" name="email" placeholder="Seu e-mail" required>
         <textarea class="form-input" name="mensagem" rows="5" placeholder="Sua mensagem" required></textarea>
         <button class="btn" type="submit">Enviar</button>
+            <p id="status-enviado" class="status-message">Mensagem enviada! Em breve entraremos em contato.</p>
       </form>
+    </div>
+
+    <div class="card contact-card">
+      <h2>Contato</h2>
+      <p>Fale diretamente com nossa equipe</p>
+      <div class="contact-info">
+        <div><strong>Telefone:</strong> (49) 99999-9999</div>
+        <div><strong>E-mail:</strong> <a class="link" href="algumemail">exemplo_email</a></div>
+        <div><strong>Horário:</strong> add horários</div>
+      </div>
     </div>
   </main>
 
-  <script>
-    document.getElementById('form-contato').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Mensagem enviada! Em breve entraremos em contato.');
-      this.reset();
-    });
+     <script>
+    (function() {
+      const form = document.getElementById('form-contato');
+      const status = document.getElementById('status-enviado');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitBtn.style.display = 'none';
+        status.style.display = 'block';
+        form.reset();
+        setTimeout(() => {
+          status.style.display = 'none';
+          submitBtn.style.display = 'block';
+        }, 4000);
+      });
+    })();
   </script>
+
 </body>
 </html>
 

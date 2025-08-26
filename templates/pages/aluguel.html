@@ -38,7 +38,11 @@
             <img src="{{ url_for('static', filename='media/trator/colheitdera1.jpg') }}" alt="Miniatura 4" />
           </div>
           <div class="imagem-principal">
-            <img src="{{ url_for('static', filename='media/trator/colheitadera2.jpg') }}" alt="Colheitadeira principal" />
+            {% if maquina['imagem_url'] %}
+              <img src="{{ url_for('static/uploads', filename=maquina['imagem_url']) }}" 
+                alt="{{ maquina['modelo_maquina'] }}">
+            {% endif %}
+            <!-- <img src="{{ url_for('static', filename='media/trator/colheitadera2.jpg') }}" alt="Colheitadeira principal" /> -->
           </div>
         </div>
 

@@ -33,12 +33,26 @@
     <section class="carousel-section">
         <div class="section-header">
             <h2>Colheitadeiras</h2>
-            <a href="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_colheitadeira') }}" class="#">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
             <div class="carousel-track">
-                <div class="card-inicial">
+            {% for maquina in maquinas %}
+            <div class="card-inicial">
+                <!-- <a href="{{ url_for('aluguel'), maquina_id[id_maquina] }}" class="card-link"> -->
+                <a href="{{ url_for('aluguel') }}" class="card-link"></a>
+                    {% if maquina['imagem_url'] %}
+                        <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
+                            alt="{{ maquina['modelo_maquina'] }}">
+                    {% endif %}
+                    <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+            <div class="carousel-track">
+                <!-- <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
                         <img src="../static/media/trator/colheitadera3.jpg" alt="VALTRA BC7500">
                         <p class="price">R$4.900,00<span>/dia</span></p>
@@ -85,7 +99,7 @@
                         <p class="desc">SLC 6200</p>
                     </a>    
                     <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
-                </div>
+                </div> -->
             </div>
             <button class="next">&#10095;</button>
         </div>
@@ -94,7 +108,7 @@
     <section class="carousel-section">
         <div class="section-header">
             <h2>Tratores</h2>
-            <a href="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_trator') }}" class="#">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
