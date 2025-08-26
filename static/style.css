@@ -849,6 +849,7 @@ body {
 }
 
 
+
 /* ====== cadastro_maquinas.css ====== */
 .form-container {
   background-color: #f3f3f3;
@@ -942,13 +943,16 @@ button:hover,
 .upload-box {
   width: 100%;
   border: 1px solid #000;
-  height: 120px;
+  min-height: 150px;       
   border-radius: 5px;
   text-align: center;
   position: relative;
-  padding-top: 20px;
+  padding: 15px 10px;
   margin-bottom: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;       
 }
+
 
 .upload-box p {
   margin-bottom: 10px;
@@ -964,9 +968,10 @@ button:hover,
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 50%;     
   opacity: 0;
   cursor: pointer;
+  z-index: 2;     
 }
 
 .botoes {
@@ -1207,14 +1212,15 @@ h1 {
 #preview-imagens {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 8px;
   justify-content: center;
+  margin-top: 10px;
+  z-index: 1;     
 }
 
 #preview-imagens img {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border: 1px solid #ccc;
   border-radius: 5px;
