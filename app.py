@@ -29,8 +29,8 @@ inicializar_banco()
 # Rotas básicas
 @app.route('/')
 def index():
-    maquinas = banco.listar_maquinas() 
-    return render_template('index.html', maquinas = maquinas)
+    maquinas = banco.listar_maquinas()
+    return render_template('index.html', maquinas=maquinas)
 
 @app.route('/cadastro') 
 def cadastro():

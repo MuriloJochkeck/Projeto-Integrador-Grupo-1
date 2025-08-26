@@ -239,40 +239,6 @@ class banco:
             print(f" Erro ao cadastrar máquina: {e}")
             return "Erro interno"
     
-    def listar_maquinas(self):
-        """Lista todas as máquinas com todos os campos"""
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                SELECT id, cep, uf, numero, cidade, rua, referencia, 
-                       modelo_maquina, equipamento, preco, forma_aluguel, 
-                       descricao 
-                FROM maquinas ORDER BY id
-            """)
-            maquinas = cursor.fetchall()
-            cursor.close()
-            
-            lista_maquinas = []
-            for maquina in maquinas:
-                lista_maquinas.append({
-                    'id': maquina[0],
-                    'cep': maquina[1],
-                    'uf': maquina[2],
-                    'numero': maquina[3],
-                    'cidade': maquina[4],
-                    'rua': maquina[5],
-                    'referencia': maquina[6],
-                    'modelo_maquina': maquina[7],
-                    'equipamento': maquina[8],
-                    'preco': maquina[9],
-                    'forma_aluguel': maquina[10],
-                    'descricao': maquina[11]
-                })
-            return lista_maquinas
-        except Exception as e:
-            print(f" Erro ao listar máquinas: {e}")
-            return []
-        
     def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
         try:
             cursor = self.connection.cursor()
@@ -293,6 +259,42 @@ class banco:
         except Exception as e:
             print(f"Erro cadastrar_imagens_maquina: {e}")
             return False
+        
+    def listar_maquinas(self):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("""
+                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+                    COALESCE(
+                        (SELECT imagem_url 
+                            FROM imagens_maquinas 
+                            WHERE maquina_id = m.id 
+                            LIMIT 1), 
+                        ''
+                    ) AS imagem_url
+                FROM maquinas m
+                ORDER BY m.id
+            """)
+            maquinas = cursor.fetchall()
+            cursor.close()
+
+            lista_maquinas = []
+            for m in maquinas:
+                lista_maquinas.append({
+                    'id': m[0],
+                    'modelo_maquina': m[1],
+                    'equipamento': m[2],
+                    'preco': float(m[3]),
+                    'forma_aluguel': m[4],
+                    'imagem_url': m[5]
+                })
+            return lista_maquinas
+        except Exception as e:
+            print(f"Erro listar_maquinas: {e}")
+            return []
+
+        
+
         
 # Instância global
 banco = banco()
