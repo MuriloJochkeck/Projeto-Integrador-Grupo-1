@@ -1,14 +1,15 @@
 import psycopg2
 import hashlib
+from acessodb import db_host, db_port, db_user, db_senha, db_database
 
 class banco:
     def __init__(self):
         # Configurações
-        self.host = 'localhost'
-        self.port = 5432
-        self.database = 'projeto_integrador'
-        self.user = 'postgres'
-        self.password = '1234'
+        self.host = db_host
+        self.port = db_port
+        self.database = db_database
+        self.user = db_user
+        self.password = db_senha
         self.connection = None
     
     def conectar(self):
@@ -34,7 +35,7 @@ class banco:
             conn = psycopg2.connect(
                 host=self.host,
                 port=self.port,
-                database='projeto_integrador',
+                database='murilo',
                 user=self.user,
                 password=self.password
             )
@@ -81,8 +82,8 @@ class banco:
                     cidade VARCHAR(50) NOT NULL,
                     rua VARCHAR(100) NOT NULL,
                     referencia VARCHAR(200),
-                    modelo_maquina VARCHAR(100) NOT NULL,
-                    equipamento VARCHAR(100) NOT NULL,
+                    modelo_maquina VARCHAR(150) NOT NULL,
+                    equipamento VARCHAR(150) NOT NULL,
                     preco DECIMAL(10, 2) NOT NULL,
                     forma_aluguel VARCHAR(5) NOT NULL,
                     imagem_url VARCHAR(200),

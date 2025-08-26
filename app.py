@@ -67,6 +67,15 @@ def aluguel():
     maquinas = banco.listar_maquinas()
     return render_template('pages/aluguel.html' , maquinas=maquinas)
 
+@app.route('/maquina/<int:maquina_id>')
+def ver_maquina(maquina_id):
+    maquinas = banco.listar_maquinas()
+    maquina = next((m for m in maquinas if m['id'] == maquina_id), None)
+    if not maquina:
+        return "Máquina não encontrada", 404
+    return render_template('pages/aluguel.html', maquina=maquina)
+
+
 @app.route('/endereço_user')
 def endereço_user():
     return render_template('pages/endereco_usuario.html')
@@ -189,36 +198,6 @@ def cadastrar_imagens_maquina(self, maquina_id, imagens):
         print(f"Erro ao cadastrar imagens: {e}")
         return "Erro interno"
 
-def listar_maquinas(self):
-    try:
-        cursor = self.connection.cursor()
-        cursor.execute("""
-            SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
-                   COALESCE(
-                       (SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 
-                       ''
-                   ) as imagem_url
-            FROM maquinas m ORDER BY m.id
-        """)
-        maquinas = cursor.fetchall()
-        cursor.close()
-
-        lista_maquinas = []
-        for m in maquinas:
-            # Corrige barras e remove "static/" caso esteja duplicado
-            imagens = m[5].replace("\\", "/") if m[5] else ""
-            lista_maquinas.append({
-                'id': m[0],
-                'modelo_maquina': m[1],
-                'equipamento': m[2],
-                'preco': float(m[3]),
-                'forma_aluguel': m[4],
-                'imagem_url': imagens
-            })
-        return lista_maquinas
-    except Exception as e:
-        print(f"Erro listar_maquinas: {e}")
-        return []
     
 @app.route('/api/maquinas', methods=['GET'])
 def list_maquinas():

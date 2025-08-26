@@ -38,18 +38,19 @@
         <div class="carousel">
             <button class="prev">&#10094;</button>
             <div class="carousel-track">
-            {% for maquina in maquinas %}
-            <div class="card-inicial">
-                <!-- <a href="{{ url_for('aluguel'), maquina_id[id_maquina] }}" class="card-link"> -->
-                <a href="{{ url_for('aluguel') }}" class="card-link"></a>
-                    {% if maquina['imagem_url'] %}
-                        <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
-                            alt="{{ maquina['modelo_maquina'] }}">
-                    {% endif %}
-                    <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
-                </a>
-            </div>
-            {% endfor %}
+                    {% for maquina in maquinas if 'colheitadeira' in maquina['equipamento']|lower %}
+                        <div class="card-inicial">
+                            <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
+                                {% if maquina['imagem_url'] %}
+                                    <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
+                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% endif %}
+                                <p class="price">R${{ '%.2f'|format(maquina['preco']) }}
+                                    <span>/{{ maquina['forma_aluguel'] }}</span></p>
+                                <p class="desc">{{ maquina['modelo_maquina']}}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
         </div>
             <div class="carousel-track">
                 <!-- <div class="card-inicial">
@@ -113,7 +114,21 @@
         <div class="carousel">
             <button class="prev">&#10094;</button>
             <div class="carousel-track">
-                <div class="card-inicial">
+                    {% for maquina in maquinas if 'trator' in maquina['equipamento']|lower %}
+                        <div class="card-inicial">
+                            <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link"></a>
+                                {% if maquina['imagem_url'] %}
+                                    <img src="{{ url_for('static', filename=maquina['imagem_url']) }}" 
+                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% endif %}
+                                <p class="price">R${{ '%.2f'|format(maquina['preco']) }}
+                                    <span>/{{ maquina['forma_aluguel'] }}</span></p>
+                                <p class="desc">{{ maquina['modelo_maquina']}}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+            </div>
+                <!-- <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
                         <img src="../static/media/trator/trator1.jpg" alt="Trator Valtra">
                         <p class="price">R$2.800,00<span>/dia</span></p>
@@ -160,7 +175,7 @@
                         <p class="desc">Colheitadeira 1</p>
                     </a>    
                     <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Colheitadeira 1', '../static/media/trator/colheitdera1.jpg', 5500.00)">Adicionar ao Carrinho</button>
-                </div>
+                </div> -->
             </div>
             <button class="next">&#10095;</button>
         </div>

@@ -26,51 +26,52 @@
   </header>
 
 
-  <main class="container-aluguel">
-    <section class="top-section">
-      <div class="produto">
-        <!-- Coluna esquerda: Miniaturas + Imagem principal -->
-        <div class="imagens">
-          <div class="miniaturas">
-            <img src="{{ url_for('static', filename='media/trator/A2S.jpg') }}" alt="Miniatura 1" />
-            <img src="{{ url_for('static', filename='media/trator/colheitadeira-massey-ferguson-9895-2.webp') }}" alt="Miniatura 2" />
-            <img src="{{ url_for('static', filename='media/trator/Captura de tela 2025-06-20 235637.png') }}" alt="Miniatura 3" />
-            <img src="{{ url_for('static', filename='media/trator/colheitdera1.jpg') }}" alt="Miniatura 4" />
+    <main class="container-aluguel">
+      <section class="top-section">
+        <div class="produto">
+          <!-- Coluna esquerda: Miniaturas + Imagem principal -->
+          <div class="imagens">
+            <div class="miniaturas">
+              {% if maquina['imagem_url'] %}
+                <img src="{{ url_for('static', filename=maquina['imagem_url']) }}" alt="Miniatura 1" />
+              {% else %}
+                <img src="{{ url_for('static', filename='media/trator/placeholder.jpg') }}" alt="Miniatura 1" />
+              {% endif %}
+
+            <div class="imagem-principal">
+              {% if maquina['imagem_url'] %}
+                <img src="{{ url_for('static', filename=maquina['imagem_url']) }}" 
+                    alt="{{ maquina['modelo_maquina'] }}">
+              {% else %}
+                <img src="{{ url_for('static', filename='media/trator/placeholder.jpg') }}" 
+                    alt="Sem imagem">
+              {% endif %}
+            </div>
           </div>
-          <div class="imagem-principal">
-            {% if maquina['imagem_url'] %}
-              <img src="{{ url_for('static/uploads', filename=maquina['imagem_url']) }}" 
-                alt="{{ maquina['modelo_maquina'] }}">
-            {% endif %}
-            <!-- <img src="{{ url_for('static', filename='media/trator/colheitadera2.jpg') }}" alt="Colheitadeira principal" /> -->
+
+          <div class="detalhes">
+            <h1>{{ maquina['equipamento'] }} <br> {{ maquina['modelo_maquina'] }} <strong>S790</strong></h1>
+            <p class="preco">
+              R$ {{ maquina['preco']|round(2) }} <span>Valor / {{ maquina['forma_aluguel'] }}</span><br />
+            </p>
+            <div class="botoes">
+              <button class="alugar">Alugar agora</button>
+              <button class="carrinho">Adicionar ao carrinho</button>
+            </div>
+            <p class="locado">Locado por <a href="#">Murilo Jochkeck</a></p>
           </div>
         </div>
+      </section>
+  </main>
 
-
-        <div class="detalhes">
-          <h1>Colheitadeira <br> John Deere <strong>S790</strong></h1>
-          <p class="preco">
-            R$ 4.490,90 <span>Valor / Diário</span><br />
-            <small>em 12x R$374,24</small>
-          </p>
-          <div class="botoes">
-            <button class="alugar">Alugar agora</button>
-            <button class="carrinho">Adicionar ao carrinho</button>
-          </div>
-          <p class="locado">Locado por <a href="#">Murilo Jochkeck</a></p>
-        </div>
-      </div>
-    </section>
 
 
     <section class="descricao-avaliacao">
       <div class="descricao">
-        <p><strong>Descrição:</strong> Colheitadeira de alto desempenho, ideal para grandes áreas agrícolas. Equipada
-          com motor John Deere PowerTech™ de 625 cv, graneleiro com capacidade para até 14.100 litros e sistema de
-          separação rotativo de 3,5 m, garante alta eficiência e baixa perda, mesmo em culturas de alta umidade.<br>
-          Produtividade de até 75 toneladas/hora, com consumo médio de 1,2 a 1,6 L por tonelada colhida. Conta com
-          tecnologias AutoTrac™, HarvestSmart™, JDLink™ e CommandCenter™. Plataforma Draper de até 45 pés.</p>
+        <p><strong>Descrição:</strong> {{ maquina['descricao'] }}</p>
       </div>
+    </section>
+
 
       <div class="avaliacao-geral">
         <div class="nota">
