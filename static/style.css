@@ -382,6 +382,11 @@ body {
   
   .logo img {
     height: 50px;
+    margin-right: 0rem;
+  }
+
+  #img_header{
+    margin-left: 2rem;
   }
   
   .search-bar {
@@ -398,6 +403,8 @@ body {
   .icons img {
     height: 50px;
   }
+
+
   
   .section-header h2 {
     font-size: 1.3em;
@@ -2698,7 +2705,6 @@ s .filtros button {
     padding: 10px 20px;
     font-size: 0.9em;
     min-width: 120px;
-    min-height: 40px; /* Garante área de toque adequada */
   }
 
   .footer-copy {
