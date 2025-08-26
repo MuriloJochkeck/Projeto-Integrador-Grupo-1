@@ -117,7 +117,26 @@ class banco:
             #         forma_aluguel VARCHAR(5) NOT NULL,
             #         UNIQUE (carrinho_id, maquina_id)
             #     );
-            # """)                   
+            # """)   
+            # 
+            # cursor.execute("""
+            #    CREATE TABLE IF NOT EXISTS pedidos (
+            #       id SERIAL PRIMARY KEY,
+            #      usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+            #     total DECIMAL(10, 2) NOT NULL,
+            #    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            #   );
+            # """)
+            # 
+            # cursor.execute("""
+            #   CREATE TABLE IF NOT EXISTS itens_pedido (
+            #      id SERIAL PRIMARY KEY,
+            #   pedido_id INTEGER NOT NULL REFERENCES pedidos(id) ON DELETE CASCADE,
+            #   maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+            #   quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+            #  preco DECIMAL(10, 2) NOT NULL
+            #  );
+            # """)                
             
             self.connection.commit()
             cursor.close()
