@@ -98,10 +98,10 @@ def finaliza_pedido():
 def sobrenos():
     return render_template('pages/sobrenos.html')
 
-
 @app.route('/faleconosco')
 def faleconosco():
     return render_template('pages/faleconosco.html')
+
 # Cadastro de usuário
 @app.route('/api/cadastro', methods=['GET', 'POST'])
 def db_cadastro():
