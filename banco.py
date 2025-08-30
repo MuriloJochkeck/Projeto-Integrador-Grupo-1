@@ -1,15 +1,14 @@
 import psycopg2
 import hashlib
-from acessodb import db_host, db_port, db_user, db_senha, db_database
 
 class banco:
     def __init__(self):
         # Configurações
-        self.host = db_host
-        self.port = db_port
-        self.database = db_database
-        self.user = db_user
-        self.password = db_senha
+        self.host = 'localhost'
+        self.port = 5432
+        self.database = 'projeto_integrador'
+        self.user = 'postgres'
+        self.password = '1234'
         self.connection = None
     
     def conectar(self):
@@ -35,7 +34,7 @@ class banco:
             conn = psycopg2.connect(
                 host=self.host,
                 port=self.port,
-                database='murilo',
+                database='projeto_integrador',
                 user=self.user,
                 password=self.password
             )
@@ -100,25 +99,25 @@ class banco:
                 )
                 """)   
             
-            # cursor.execute("""
-            #     CREATE TABLE IF NOT EXISTS carrinhos (
-            #         id SERIAL PRIMARY KEY,
-            #         usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
-            #         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            #         UNIQUE (usuario_id) -- cada usuário tem um carrinho único
-            #     );
-            # """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS carrinhos (
+                    id SERIAL PRIMARY KEY,
+                    usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE (usuario_id) -- cada usuário tem um carrinho único
+                );
+            """)
             
-            # cursor.execute("""
-            #     CREATE TABLE IF NOT EXISTS itens_carrinho (
-            #         id SERIAL PRIMARY KEY,
-            #         carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
-            #         maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
-            #         quantidade INTEGER NOT NULL CHECK (quantidade > 0),
-            #         forma_aluguel VARCHAR(5) NOT NULL,
-            #         UNIQUE (carrinho_id, maquina_id)
-            #     );
-            # """)   
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS itens_carrinho (
+                    id SERIAL PRIMARY KEY,
+                    carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
+                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
+                    quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+                    forma_aluguel VARCHAR(5) NOT NULL,
+                    UNIQUE (carrinho_id, maquina_id)
+                );
+            """)   
             # 
             # cursor.execute("""
             #    CREATE TABLE IF NOT EXISTS pedidos (
@@ -284,15 +283,22 @@ class banco:
         try:
             cursor = self.connection.cursor()
             cursor.execute("""
-                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+                SELECT m.id,
+                    m.modelo_maquina,
+                    m.equipamento,
+                    m.preco,
+                    m.forma_aluguel,
+                    m.descricao,
+                    u.nome AS usuario_nome,
                     COALESCE(
-                        (SELECT imagem_url 
-                            FROM imagens_maquinas 
-                            WHERE maquina_id = m.id 
-                            LIMIT 1), 
-                        ''
-                    ) AS imagem_url
+                        array_agg(i.imagem_url) FILTER (WHERE i.imagem_url IS NOT NULL),
+                        '{}'
+                    ) AS imagens
                 FROM maquinas m
+                LEFT JOIN usuarios u ON m.usuario_id = u.id
+                LEFT JOIN imagens_maquinas i ON m.id = i.maquina_id
+                GROUP BY m.id, m.modelo_maquina, m.equipamento, m.preco, 
+                        m.forma_aluguel, m.descricao, u.nome
                 ORDER BY m.id
             """)
             maquinas = cursor.fetchall()
@@ -306,14 +312,87 @@ class banco:
                     'equipamento': m[2],
                     'preco': float(m[3]),
                     'forma_aluguel': m[4],
-                    'imagem_url': m[5]
+                    'descricao': m[5],
+                    'usuario_nome': m[6] if m[6] else "Desconhecido",
+                    'imagens': m[7]  # lista de imagens
                 })
             return lista_maquinas
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
 
-        
+
+############################ CARRINHO ###############################
+
+    def pegar_carrinho_usuario(self, usuario_id):
+        """Retorna o carrinho do usuário, cria se não existir"""
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT id FROM carrinhos WHERE usuario_id = %s", (usuario_id,))
+        resultado = cursor.fetchone()
+        if resultado:
+            carrinho_id = resultado[0]
+        else:
+            cursor.execute("INSERT INTO carrinhos (usuario_id) VALUES (%s) RETURNING id", (usuario_id,))
+            carrinho_id = cursor.fetchone()[0]
+            self.connection.commit()
+        cursor.close()
+        return carrinho_id
+
+    def adicionar_item_carrinho(self, usuario_id, maquina_id, quantidade, forma_aluguel):
+        carrinho_id = self.pegar_carrinho_usuario(usuario_id)
+        cursor = self.connection.cursor()
+        # Verifica se o item já existe
+        cursor.execute("""
+            SELECT id, quantidade FROM itens_carrinho
+            WHERE carrinho_id=%s AND maquina_id=%s
+        """, (carrinho_id, maquina_id))
+        resultado = cursor.fetchone()
+        if resultado:
+            # Atualiza a quantidade
+            novo_qtd = resultado[1] + quantidade
+            cursor.execute("""
+                UPDATE itens_carrinho SET quantidade=%s, forma_aluguel=%s
+                WHERE id=%s
+            """, (novo_qtd, forma_aluguel, resultado[0]))
+        else:
+            cursor.execute("""
+                INSERT INTO itens_carrinho (carrinho_id, maquina_id, quantidade, forma_aluguel)
+                VALUES (%s, %s, %s, %s)
+            """, (carrinho_id, maquina_id, quantidade, forma_aluguel))
+        self.connection.commit()
+        cursor.close()
+        return True
+
+    def listar_itens_carrinho(self, usuario_id):
+        carrinho_id = self.pegar_carrinho_usuario(usuario_id)
+        cursor = self.connection.cursor()
+        cursor.execute("""
+            SELECT ic.id, m.modelo_maquina, m.preco, ic.quantidade, ic.forma_aluguel, 
+                COALESCE((SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1),'') AS imagem
+            FROM itens_carrinho ic
+            JOIN maquinas m ON ic.maquina_id = m.id
+            WHERE ic.carrinho_id = %s
+        """, (carrinho_id,))
+        itens = cursor.fetchall()
+        cursor.close()
+        lista = []
+        for i in itens:
+            lista.append({
+                'id': i[0],
+                'modelo_maquina': i[1],
+                'preco': float(i[2]),
+                'quantidade': i[3],
+                'forma_aluguel': i[4],
+                'imagem': i[5]
+            })
+        return lista
+
+    def remover_item_carrinho(self, item_id):
+        cursor = self.connection.cursor()
+        cursor.execute("DELETE FROM itens_carrinho WHERE id=%s", (item_id,))
+        self.connection.commit()
+        cursor.close()
+        return True
 
         
 # Instância global

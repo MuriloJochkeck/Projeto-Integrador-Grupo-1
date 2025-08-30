@@ -31,22 +31,22 @@
         <div class="produto">
           <!-- Coluna esquerda: Miniaturas + Imagem principal -->
           <div class="imagens">
-            <div class="miniaturas">
-              {% if maquina['imagem_url'] %}
-                <img src="{{ url_for('static', filename=maquina['imagem_url']) }}" alt="Miniatura 1" />
-              {% else %}
-                <img src="{{ url_for('static', filename='media/trator/placeholder.jpg') }}" alt="Miniatura 1" />
-              {% endif %}
+            <div class="imagens">
+              <!-- Miniaturas -->
+              <div class="miniaturas">
+                  {% for img in maquina['imagens'] %}
+                      <img src="{{ url_for('static', filename=img) }}" alt="Miniatura {{ loop.index }}">
+                  {% endfor %}
+              </div>
 
-            <div class="imagem-principal">
-              {% if maquina['imagem_url'] %}
-                <img src="{{ url_for('static', filename=maquina['imagem_url']) }}" 
-                    alt="{{ maquina['modelo_maquina'] }}">
-              {% else %}
-                <img src="{{ url_for('static', filename='media/trator/placeholder.jpg') }}" 
-                    alt="Sem imagem">
-              {% endif %}
-            </div>
+              <!-- Imagem principal -->
+              <div class="imagem-principal">
+                  {% if maquina['imagens'] %}
+                      <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" alt="Imagem principal">
+                  {% else %}
+                      <p>Sem imagem</p>
+                  {% endif %}
+              </div>
           </div>
 
           <div class="detalhes">
@@ -58,7 +58,7 @@
               <button class="alugar">Alugar agora</button>
               <button class="carrinho">Adicionar ao carrinho</button>
             </div>
-            <p class="locado">Locado por <a href="#">Murilo Jochkeck</a></p>
+            <p class="locado">Locado por <a href="#">{{ maquina['locador_nome'] }}</a></p>
           </div>
         </div>
       </section>

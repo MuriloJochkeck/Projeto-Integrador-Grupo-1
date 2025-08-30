@@ -30,13 +30,8 @@
     <form action="\api\cadastro_maquinas" method="POST" enctype="multipart/form-data" id="form-cadastro_maquinas">
       <div class="container">
         <div class="form-container">
-<<<<<<< HEAD
           <h1>Cadastrar Localização</h1>
             <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
-=======
-          <h1>Cadastrar Máquinas</h1>
-          <input type="text" name="cep" placeholder="CEP" required oninput="mascaraCEP(this)" />
->>>>>>> 71d5db1f261de928b824ed916e08158b63a1787e
 
           <div class="row">
             <input type="text" name="uf" placeholder="UF" maxlength="2" required oninput="mascaraUF(this)" />
@@ -128,13 +123,9 @@
     </div>
   </div>
   </form>
-  {% block footer %}
-  {% include 'pages/footer.html' %}
-  {% endblock %}
 
   <script src="{{ url_for('static', filename='js/cadastro_maquinas.js') }}"></script>
 
-<<<<<<< HEAD
     <div class="passar2" style="display: none;">
       <header class="top-header">
         <div class="logo">
@@ -208,8 +199,4 @@
 
     <script src="{{ url_for('static', filename='js/cadastro_maquinas.js') }}"></script>
   </body>
-=======
-</body>
-
->>>>>>> 71d5db1f261de928b824ed916e08158b63a1787e
 </html>

@@ -8,83 +8,89 @@
 <body>
   <header class="top-header">
       <div class="logo">
-            <a href="{{ url_for('index') }}"><img src="../static/imgs/download.jfif" alt="Logo"></a>
+        <a href="{{ url_for('index') }}">
+          <img src="{{ url_for('static', filename='imgs/download.jfif') }}" alt="Logo">
+        </a>
       </div>
   
       <div class="search-bar">
-          <input type="text" placeholder="Buscar..." />
-          <span class="search-icon">&#128269;</span> 
+        <input type="text" placeholder="Buscar..." />
+        <span class="search-icon">&#128269;</span> 
       </div>
   
       <div class="icons"> 
-          <a href="{{ url_for('login') }}">
-            <a href="{{ url_for('index') }}"><img src="../static/imgs/download.jfif" alt="Logo"></a>
-          </a>
+        <a href="{{ url_for('login') }}">
+          <img src="{{ url_for('static', filename='imgs/download.jfif') }}" alt="Login">
+        </a>
       </div>
   </header>
+
   <div class="main-content-carrinho">
     <div class="cart-container">
+
+      <!-- Seção de itens -->
       <div class="cart-section">
         <div class="cart-card">
           <div class="cart-title">Meu carrinho</div>
           <div class="product-list">
-            <div class="product-item">
-              <img class="product-image" src=" img que precisar  " alt="Trator pequeno" /> <!--  fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
-              <div class="product-info">
-                <div class="product-name">nome da maquina</div>
-              </div>
-              <div class="quantity-control">
-                <div class="quantity-buttons">
-                  <button class="quantity-button" data-index="0" data-action="decrement">-</button>
-                  <span class="quantity-value" id="quantity-0">1</span>
-                  <button class="quantity-button" data-index="0" data-action="increment">+</button>
+            {% if itens %}
+                {% for item in itens %}
+                <div class="product-item">
+                  <img class="product-image" 
+                       src="{{ url_for('static', filename=item['imagem']) }}" 
+                       alt="{{ item['modelo_maquina'] }}" />
+                  <div class="product-info">
+                    <div class="product-name">{{ item['modelo_maquina'] }}</div>
+                  </div>
+                  <div class="quantity-control">
+                    <div class="quantity-buttons">
+                      <form method="POST" action="{{ url_for('carrinho_adicionar') }}">
+                          <input type="hidden" name="maquina_id" value="{{ item['id'] }}">
+                          <input type="hidden" name="forma_aluguel" value="{{ item['forma_aluguel'] }}">
+                          <button type="submit" name="acao" value="decrement">-</button>
+                          <span class="quantity-value">{{ item['quantidade'] }}</span>
+                          <button type="submit" name="acao" value="increment">+</button>
+                      </form>
+                    </div>
+                    <span class="quantity-label">Horas</span>
+                  </div>
+                  <div class="product-price">
+                    {{ item['quantidade'] }}x R$ {{ '%.2f'|format(item['preco']) }}<br/>
+                    Total: <span class="price-total">R$ {{ '%.2f'|format(item['preco']*item['quantidade']) }}</span>
+                  </div>
+                  <div class="remove-item">
+                    <a href="{{ url_for('carrinho_remover', item_id=item['id']) }}">Remover</a>
+                  </div>
                 </div>
-                <span class="quantity-label">Horas</span>
-              </div>
-              <div class="product-price">
-                1x R$ "valor que precisar depois eu mudo pra puxar o valor"<br />
-                Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o valor"</span>
-              </div>
-            </div>
-            <div class="product-item">
-              <img class="product-image" src="foto que precisar" alt="Ensiladeira" />    <!--    fazer uma funcao em que puxa a img da maquina que o usuario selecionou -->
-              <div class="product-info">
-                <div class="product-name">nome da maquina</div>
-              </div>
-              <div class="quantity-control">
-                <div class="quantity-buttons">
-                  <button class="quantity-button" data-index="1" data-action="decrement">-</button>
-                  <span class="quantity-value" id="quantity-1">1</span>
-                  <button class="quantity-button" data-index="1" data-action="increment">+</button>
-                </div>
-                <span class="quantity-label">Horas</span>
-              </div>
-              <div class="product-price">
-                1x R$ "valor que precisar depois eu mudo pra puxar o valor"<br /><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
-                Total: <span class="price-total">"valor que precisar depois eu mudo pra puxar o valor"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
-              </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <p>Seu carrinho está vazio.</p>
+            {% endif %}
           </div>
         </div>
       </div>
+
+      <!-- Resumo do pedido -->
       <div class="summary-section">
         <div class="summary-title">Resumo</div>
         <div class="summary-row">
           <span>Subtotal</span>
-          <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor da maquina que o usuario selecionou -->
+          <span>R$ {{ '%.2f'|format(total) }}</span>
         </div>
         <div class="summary-row bold">
           <span>Total</span>
-          <span>R$ "valor que precisar"</span><!--    fazer uma funcao em que puxa o valor das maquina(s) somada(s) que o usuario selecionou -->
+          <span>R$ {{ '%.2f'|format(total) }}</span>
         </div>
         <input class="coupon-input" placeholder="Cupom de desconto" />
-        <button class="finish-button">Finalizar Pedido</button>
+        <!-- <button class="finish-button" onclick="window.location.href='{{ url_for('finaliza_pedido') }}'">Finalizar Pedido</button> -->
       </div>
+
     </div>
   </div>
-   <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
-   {% block footer %}
-   {% include 'pages/footer.html' %}
-   {% endblock %}
+
+  <!-- <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script> -->
+  {% block footer %}
+    {% include 'pages/footer.html' %}
+  {% endblock %}
 </body>
-</html> 
+</html>
