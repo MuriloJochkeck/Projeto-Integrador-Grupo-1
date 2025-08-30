@@ -22,74 +22,90 @@
             <a href="{{ url_for('login') }}"><img src="../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" alt=""></a>
         </div>
     </header>
-    <section class="carousel-section">
-        
+        <section class="carousel-section">
         <div class="section-header">
-            <h2>Tratores</h2>
+            <h2>Trator</h2>     
         </div>
         <div class="carousel">
             <div class="carousel-track">
+
+            <div class="carousel-track">
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator1.jpg" alt="Trator Valtra">
-                        <p class="price">R$2.800,00<span>/dia</span></p>
-                        <p class="desc">Trator Valtra</p>
+                        <img src="../static/media/trator/trator1.jpg" alt="VALTRA BC7500">
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Valtra', '../static/media/trator/trator1.jpg', 2800.00)">Adicionar ao Carrinho</button>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
                 </div>
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator2.jpg" alt="Trator Massey">
-                        <p class="price">R$3.200,00<span>/dia</span></p>
-                        <p class="desc">Trator Massey</p>
+                        <img src="../static/media/trator/trator2.jpg" alt="CR5 NEW HOLLAND">
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Massey', '../static/media/trator/trator2.jpg', 3200.00)">Adicionar ao Carrinho</button>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
                 </div>
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator3.jpg" alt="trator3">
-                        <p class="price">R$5.500,00<span>/dia</span></p>
-                        <p class="desc">trator</p>
+                        <img src="../static/media/trator/trator3.jpg" alt="SLC 6200">
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
                     </a>    
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Colheitadeira 1', '../static/media/trator/colheitdera1.jpg', 5500.00)">Adicionar ao Carrinho</button>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="carousel-section">
+        <div class="section-header">
+        </div>
+        <div class="carousel">
+            <div class="carousel-track">
+            {% for maquina in maquinas %}
+            <div class="card-inicial">
+                <a href="{{ url_for('aluguel') }}" class="card-link">
+                    {% if maquina['imagem_url'] %}
+                        <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
+                            alt="{{ maquina['modelo_maquina'] }}">
+                    {% endif %}
+                    <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
+                </a>
+                <p>Total de máquinas: {{ maquinas|length }}</p>
+            </div>
+            {% endfor %}
+        </div>
+            <div class="carousel-track">
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator1.jpg" alt="VALTRA BC7500">
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
                 </div>
 
-                
-    </section>
-            <div class="section-header">
-                <h2>Tratores</h2>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator2.jpg" alt="CR5 NEW HOLLAND">
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/trator3.jpg" alt="SLC 6200">
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                    </a>    
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                </div>
             </div>
-            <div class="carousel">
-                <div class="carousel-track">
-                    <div class="card-inicial">
-                        <a href="{{ url_for('aluguel') }}" class="card-link">
-                            <img src="../static/media/trator/trator1.jpg" alt="Trator Valtra">
-                            <p class="price">R$2.800,00<span>/dia</span></p>
-                            <p class="desc">Trator Valtra</p>
-                        </a>
-                        <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Valtra', '../static/media/trator/trator1.jpg', 2800.00)">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="card-inicial">
-                        <a href="{{ url_for('aluguel') }}" class="card-link">
-                            <img src="../static/media/trator/trator2.jpg" alt="Trator Massey">
-                            <p class="price">R$3.200,00<span>/dia</span></p>
-                            <p class="desc">Trator Massey</p>
-                        </a>
-                        <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Trator Massey', '../static/media/trator/trator2.jpg', 3200.00)">Adicionar ao Carrinho</button>
-                    </div>
-                    <div class="card-inicial">
-                        <a href="{{ url_for('aluguel') }}" class="card-link">
-                            <img src="../static/media/trator/trator3.jpg" alt="trator3">
-                            <p class="price">R$5.500,00<span>/dia</span></p>
-                            <p class="desc">trator</p>
-                        </a>    
-                        <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('Colheitadeira 1', '../static/media/trator/colheitdera1.jpg', 5500.00)">Adicionar ao Carrinho</button>
-                    </div>
-
-                
+        </div>
     </section>
-{% block footer %}
-{% include 'pages/footer.html' %}
-{% endblock %}
+    {% block footer %}
+    {% include 'pages/footer.html' %}
+    {% endblock %}
 </body>
 </html>

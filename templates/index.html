@@ -9,7 +9,7 @@
 <body>
     <header class="top-header">
         <div class="logo">
-            <a href="{{ url_for('index') }}"><img src="../static/imgs/download.jfif" alt="Logo"></a>
+            <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
         </div>
 
         <div class="search-bar">
@@ -18,14 +18,13 @@
         </div>
 
         <div class="icons">
-            <a id="img_header" href="{{ url_for('carrinho') }}"><img src="../static/imgs/download (2).jfif" alt="Carrinho"></a>
-            <a  href="{{ url_for('login') }}"><img src="../static/imgs/download (1).jfif" alt=""></a>
+            <a id="img_header" href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
+            <a  href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
         </div>
     </header>
 
     <div class="home-links">
         <a href="{{ url_for('cadastro') }}">Cadastro</a>
-        <!-- <a href="{{ url_for('aluguel') }}">Aluguel</a> -->
         <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
         <a href="{{ url_for('endereço_user') }}">Endereço</a>
     </div>
@@ -38,26 +37,54 @@
         <div class="carousel">
             <button class="prev">&#10094;</button>
             <div class="carousel-track">
-                    {% for maquina in maquinas if 'colheitadeira' in maquina['equipamento']|lower %}
-                        {% if loop.index <= 6 %}
-                        <div class="card-inicial">
-                            <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
-                                {% if maquina['imagens'] %}
-                                    <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" 
-                                        alt="{{ maquina['modelo_maquina'] }}">
-                                {% endif %}
-                                <p class="price">R${{ '%.2f'|format(maquina['preco']) }}
-                                    <span>/{{ maquina['forma_aluguel'] }}</span></p>
-                                <p class="desc">{{ maquina['modelo_maquina']}}</p>
-                            </a>
-                            <form method="POST" action="{{ url_for('carrinho_adicionar') }}">
-                                <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
-                                <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
-                                <button type="submit" class="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
-                            </form>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
+                                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/colheitadera3.jpg" alt="VALTRA BC7500">
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/Captura de tela 2025-06-20 235637.png" alt="CR5 NEW HOLLAND">
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp" alt="SLC 6200">
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                    </a>    
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/colheitadera4.jpg" alt="VALTRA BC7500">
+                        <p class="price">R$4.900,00<span>/dia</span></p>
+                        <p class="desc">VALTRA BC7500</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/colheitadera5.jpg" alt="CR5 NEW HOLLAND">
+                        <p class="price">R$6.300,00<span>/dia</span></p>
+                        <p class="desc">CR5 NEW HOLLAND</p>
+                    </a>
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('aluguel') }}" class="card-link">
+                        <img src="../static/media/trator/colheitadera6.jpg" alt="SLC 6200">
+                        <p class="price">R$3.500,00<span>/dia</span></p>
+                        <p class="desc">SLC 6200</p>
+                    </a>    
+                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                </div>
         </div>
             <button class="next">&#10095;</button>
         </div>
