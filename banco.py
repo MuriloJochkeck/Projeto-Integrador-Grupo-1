@@ -1,6 +1,12 @@
 import psycopg2
 import hashlib
-from acessodb import db_host, db_port, db_user, db_password, db_database
+from acessodb import db_host, db_port, db_user, db_password, db_database, supabase_url, supabase_key, bucket_name
+from supabase import create_client, Client
+
+SUPABASE_URL = supabase_url
+SUPABASE_KEY = supabase_key
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+BUCKET_NAME = bucket_name
 
 class Banco:
     def __init__(self):
@@ -34,7 +40,7 @@ class Banco:
             # Usuários
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS usuarios (
-                    id SERIAL PRIMARY KEY,
+                    id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
                     nome VARCHAR(100) NOT NULL,
                     telefone VARCHAR(20) NOT NULL,
                     cpf VARCHAR(14) UNIQUE NOT NULL,
@@ -109,32 +115,6 @@ class Banco:
     def hash_senha(self, senha):
         return hashlib.sha256(senha.encode()).hexdigest()
 
-    def cadastrar_usuario(self, nome, telefone, cpf, email, senha):
-        try:
-            cursor = self.connection.cursor()
-            # Verificar email/CPF
-            cursor.execute("SELECT id FROM usuarios WHERE email=%s", (email,))
-            if cursor.fetchone():
-                return "Email já cadastrado"
-            cursor.execute("SELECT id FROM usuarios WHERE cpf=%s", (cpf,))
-            if cursor.fetchone():
-                return "CPF já cadastrado"
-
-            senha_hash = self.hash_senha(senha)
-            cursor.execute("""
-                INSERT INTO usuarios (nome, telefone, cpf, email, senha)
-                VALUES (%s,%s,%s,%s,%s) RETURNING id
-            """, (nome, telefone, cpf, email, senha_hash))
-            user_id = cursor.fetchone()[0]
-            self.connection.commit()
-            cursor.close()
-            print(f"Usuário cadastrado! ID: {user_id}")
-            return "Sucesso"
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro cadastrar_usuario: {e}")
-            return "Erro interno"
-
     def listar_usuarios(self):
         try:
             cursor = self.connection.cursor()
@@ -177,26 +157,42 @@ class Banco:
             print(f"Máquina cadastrada! ID: {maquina_id}")
             return maquina_id
         except Exception as e:
-            self.connection.rollback()
             print(f"Erro cadastrar_maquina: {e}")
             return None
 
     def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
         try:
             cursor = self.connection.cursor()
-            if isinstance(imagens_urls, str):
+            
+            # Se veio apenas um arquivo, transforma em lista
+            if not isinstance(imagens_urls, list):
                 imagens_urls = [imagens_urls]
-            for url in imagens_urls:
-                cursor.execute("INSERT INTO imagens_maquinas (maquina_id, imagem_url) VALUES (%s,%s)",
-                               (maquina_id, url))
+
+            for arquivo in imagens_urls:
+                # arquivo.filename já existe sem precisar abrir local
+                nome_arquivo = arquivo.filename
+                conteudo = arquivo.read()
+
+                # Envia direto para o bucket do Supabase
+                supabase.storage.from_(BUCKET_NAME).upload(
+                    path=nome_arquivo,  # caminho dentro do bucket
+                    file=conteudo       # bytes do arquivo
+                )
+
+                # Aqui você pode salvar a URL retornada no banco
+                url_arquivo = supabase.storage.from_(BUCKET_NAME).get_public_url(nome_arquivo)
+                cursor.execute(
+                    "INSERT INTO imagens_maquina (maquina_id, url) VALUES (%s, %s)",
+                    (maquina_id, url_arquivo)
+                )
+            
             self.connection.commit()
             cursor.close()
-            print(f"Imagens cadastradas para máquina {maquina_id}")
             return True
         except Exception as e:
-            self.connection.rollback()
-            print(f"Erro cadastrar_imagens_maquina: {e}")
+            print("Erro cadastrar_imagens_maquina:", e)
             return False
+                
 
     def listar_maquinas(self):
         try:

@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from banco import banco, inicializar_banco
 import hashlib
-import os
-from werkzeug.utils import secure_filename
 from functools import wraps
+from supabase import create_client, Client
+from acessodb import supabase_url, supabase_key, bucket_name
+
+SUPABASE_URL = supabase_url
+SUPABASE_KEY = supabase_key
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
 app.secret_key = 'PI2025GRUPO1'  
@@ -117,21 +121,44 @@ def faleconosco():
 
 @app.route('/api/cadastro', methods=['GET', 'POST'])
 def db_cadastro():
-        if request.method == 'POST':        
-            # Cadastrar usuário usando o banco PostgreSQL
-            resultado = banco.cadastrar_usuario(
-                nome = request.form['nome_user'],
-                telefone = request.form['telefone_user'],
-                cpf = request.form['cpf'],
-                email = request.form['email'],
-                senha = request.form['senha']
-            )
+    nome = request.form.get('nome_user')
+    telefone = request.form.get('telefone_user')
+    cpf = request.form.get('cpf')
+    email = request.form.get('email')
+    senha = request.form.get('senha')
 
-        if resultado == "Sucesso":
-            return redirect(url_for('index'))
-        else:
-            return jsonify({'success': False, 'message': resultado}), 400
+    if not all([nome, telefone, cpf, email, senha]):
+        return jsonify({"success": False, "message": "Todos os campos são obrigatórios"}), 400
 
+    try:
+
+        existing = supabase.table("usuarios").select("*").eq("email", email).execute()
+        if existing.data:
+            return jsonify({"success": False, "message": "Email já cadastrado"}), 400
+
+        # Cria o usuário no Auth
+        usuario = supabase.auth.admin.create_user({
+            'email': email,
+            'password': senha,
+            'email_confirm': True,
+            'user_metadata': {'nome': nome}  
+        })
+
+        # Salva os dados extras na tabela "usuarios"
+        supabase.table('usuarios').insert({
+            'id': usuario.user.id,  # id do Auth
+            'nome': nome,
+            'telefone': telefone,
+            'cpf': cpf
+        }).execute()
+
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        print("Erro ao cadastrar usuário:", e)
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route('/api/usuarios', methods=['GET'])
 def listar_usuarios():
@@ -166,18 +193,13 @@ def cadastrar_maquinas():
         )
 
         imagens = request.files.getlist("imagens")
-        id_maquina = maquina_id
+        id_maquina = maquina_id  
         for img in imagens:
             if img and img.filename != "":
                 if not imagem_permitida(img.filename):
                     continue
-                filename = secure_filename(img.filename)
-                os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-                imagem_url = f"uploads/{filename}"  # Caminho relativo à pasta 'static'
-                img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-                # Salvar no banco apenas 'uploads/nome_da_imagem.ext'
-                banco.cadastrar_imagens_maquina(id_maquina, [imagem_url])
+                
+                banco.cadastrar_imagens_maquina(id_maquina, [img])
 
         return redirect(url_for('index'))
 
@@ -186,23 +208,6 @@ def cadastrar_maquinas():
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "message": "Erro ao cadastrar máquina"}), 500
-    
-def cadastrar_imagens_maquina(self, maquina_id, imagens):
-    """Cadastra várias imagens de uma máquina"""
-    try:
-        cursor = self.connection.cursor()
-        for img in imagens:
-            cursor.execute("""
-                INSERT INTO imagens_maquinas (maquina_id, imagem_url)
-                VALUES (%s, %s)
-            """, (maquina_id, img))
-        self.connection.commit()
-        cursor.close()
-        return "Sucesso"
-    except Exception as e:
-        print(f"Erro ao cadastrar imagens: {e}")
-        return "Erro interno"
-
     
 @app.route('/api/maquinas', methods=['GET'])
 def list_maquinas():
