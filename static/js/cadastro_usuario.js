@@ -43,7 +43,4 @@
         return;
       }
 
-      // Se tudo ok, pode enviar (exemplo: submit no backend)
-      alert("Cadastro realizado com sucesso!");
-      this.submit();
     });

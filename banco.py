@@ -24,7 +24,7 @@ class Banco:
                 port=self.port,
                 database=self.database,
                 user=self.user,
-                password=self.password
+                password=self.password  
             )
             print("Conectado!")
             return True
@@ -45,7 +45,6 @@ class Banco:
                     telefone VARCHAR(20) NOT NULL,
                     cpf VARCHAR(14) UNIQUE NOT NULL,
                     email VARCHAR(120) UNIQUE NOT NULL,
-                    senha VARCHAR(200) NOT NULL,
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
@@ -54,7 +53,7 @@ class Banco:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS maquinas (
                     id SERIAL PRIMARY KEY,
-                    usuario_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
+                    usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
                     cep VARCHAR(10) NOT NULL,
                     uf CHAR(2) NOT NULL,
                     numero INTEGER NOT NULL,
@@ -83,7 +82,7 @@ class Banco:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS carrinhos (
                     id SERIAL PRIMARY KEY,
-                    usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+                    usuario_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
                     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE (usuario_id)
                 )
@@ -115,6 +114,40 @@ class Banco:
     def hash_senha(self, senha):
         return hashlib.sha256(senha.encode()).hexdigest()
 
+    def cadastrar_usuario(self, nome, telefone, cpf, email, senha):
+        """Cadastra um usuário"""
+        try:
+            cursor = self.connection.cursor()
+
+            # Verificar se email já existe
+            cursor.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
+            if cursor.fetchone():
+                return "Email já cadastrado"
+
+            # Verificar se CPF já existe
+            cursor.execute("SELECT id FROM usuarios WHERE cpf = %s", (cpf,))
+            if cursor.fetchone():
+                return "CPF já cadastrado"
+
+            # Inserir usuário
+            senha_hash = self.hash_senha(senha)
+            cursor.execute("""
+                INSERT INTO usuarios (nome, telefone, cpf, email, senha)
+                VALUES (%s, %s, %s, %s, %s)
+                RETURNING id
+            """, (nome, telefone, cpf, email, senha_hash))
+
+            user_id = cursor.fetchone()[0]
+            self.connection.commit()
+            cursor.close()
+
+            print(f" Usuário cadastrado! ID: {user_id}")
+            return "Sucesso"
+
+        except Exception as e:
+            print(f" Erro: {e}")
+            return "Erro interno"
+        
     def listar_usuarios(self):
         try:
             cursor = self.connection.cursor()
@@ -125,19 +158,22 @@ class Banco:
         except Exception as e:
             print(f"Erro listar_usuarios: {e}")
             return []
-
-    def login_email(self, email):
+        
+            
+       
+    def get_user_by_id(self, user_id):
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT id, nome, senha FROM usuarios WHERE email=%s", (email,))
+            cursor.execute("SELECT id, nome, telefone, cpf, email FROM usuarios WHERE id=%s", (str(user_id),))
             resultado = cursor.fetchone()
             cursor.close()
             if resultado:
-                return {'id': resultado[0], 'nome': resultado[1], 'senha': resultado[2]}
+                return {'id': resultado[0], 'nome': resultado[1], 'telefone': resultado[2], 'cpf': resultado[3], 'email': resultado[4]}
             return None
         except Exception as e:
-            print(f"Erro login_email: {e}")
+            print(f"Erro get_user_by_id: {e}")
             return None
+                    
 
     # ----------------- Máquinas -----------------
 
@@ -160,38 +196,23 @@ class Banco:
             print(f"Erro cadastrar_maquina: {e}")
             return None
 
-    def cadastrar_imagens_maquina(self, maquina_id, imagens_urls):
+    def cadastrar_imagens_maquina(self, maquina_id, imagens_public_urls):
         try:
             cursor = self.connection.cursor()
-            
-            # Se veio apenas um arquivo, transforma em lista
-            if not isinstance(imagens_urls, list):
-                imagens_urls = [imagens_urls]
-
-            for arquivo in imagens_urls:
-                # arquivo.filename já existe sem precisar abrir local
-                nome_arquivo = arquivo.filename
-                conteudo = arquivo.read()
-
-                # Envia direto para o bucket do Supabase
-                supabase.storage.from_(BUCKET_NAME).upload(
-                    path=nome_arquivo,  # caminho dentro do bucket
-                    file=conteudo       # bytes do arquivo
-                )
-
-                # Aqui você pode salvar a URL retornada no banco
-                url_arquivo = supabase.storage.from_(BUCKET_NAME).get_public_url(nome_arquivo)
+            for url in imagens_public_urls:
                 cursor.execute(
-                    "INSERT INTO imagens_maquina (maquina_id, url) VALUES (%s, %s)",
-                    (maquina_id, url_arquivo)
+                    "INSERT INTO imagens_maquinas (maquina_id, imagem_url) VALUES (%s, %s)",
+                    (maquina_id, url)
                 )
-            
             self.connection.commit()
             cursor.close()
+            print(f"URLs de imagens cadastradas para máquina ID: {maquina_id}")
             return True
         except Exception as e:
-            print("Erro cadastrar_imagens_maquina:", e)
+            self.connection.rollback()
+            print(f"Erro cadastrar_imagens_maquina: {e}")
             return False
+        
                 
 
     def listar_maquinas(self):

@@ -46,6 +46,9 @@
         <div class="form-row">
           <!-- Email -->
           <input class="form-input" type="email" name="email" placeholder="Email" required>
+          {% if mensagem %}
+              <div style="color: red">{{ mensagem }}</div>
+          {% endif %}
         </div>
 
         <div class="form-row">

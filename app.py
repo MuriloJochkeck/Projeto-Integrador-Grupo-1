@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from banco import banco, inicializar_banco
-import hashlib
 from functools import wraps
 from supabase import create_client, Client
 from acessodb import supabase_url, supabase_key, bucket_name
@@ -10,14 +9,12 @@ SUPABASE_KEY = supabase_key
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
-app.secret_key = 'PI2025GRUPO1'  
 
-UPLOAD_FOLDER = 'static/uploads'
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 def imagem_permitida(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def login_required(f):
     @wraps(f)
@@ -46,20 +43,33 @@ def login():
         email = request.form['email']
         senha = request.form['senha']
 
-        senha_hash = hashlib.sha256(senha.encode()).hexdigest()
-
-        # Busca usuário no banco
-        usuario = banco.login_email(email)  
-
-        if usuario and usuario['senha'] == senha_hash:
-            session['usuario_id'] = usuario['id']
-            session['usuario_nome'] = usuario['nome']
-            return redirect(url_for('index'))
-        else:
-            mensagem = 'Email ou senha incorretos'
+        try:
+            # Tenta fazer login com Supabase Auth
+            user_session = supabase.auth.sign_in_with_password({"email": email, "password": senha})
+            
+            if user_session.user:
+                # Busca os dados adicionais do usuário na sua tabela 'usuarios'
+                user_data = banco.get_user_by_id(user_session.user.id)
+                if user_data:
+                    session['usuario_id'] = user_session.user.id
+                    session['usuario_nome'] = user_data['nome'] # Assume que 'nome' está na sua tabela 'usuarios'
+                    return redirect(url_for('index'))
+                else:
+                    # Usuário autenticado no Supabase Auth, mas não encontrado na sua tabela 'usuarios'
+                    # Isso pode indicar um problema na criação inicial do usuário ou na sincronização
+                    supabase.auth.sign_out() # Desloga para evitar inconsistência
+                    mensagem = 'Erro ao carregar dados do usuário. Tente novamente.'
+                    return render_template('pages/login_usuario.html', mensagem=mensagem)
+            else:
+                mensagem = 'Email ou senha incorretos.'
+                return render_template('pages/login_usuario.html', mensagem=mensagem)
+        except Exception as e:
+            print(f"Erro de login: {e}")
+            mensagem = 'Email ou senha incorretos.' # Mensagem genérica por segurança
             return render_template('pages/login_usuario.html', mensagem=mensagem)
 
     return render_template('pages/login_usuario.html')
+        
 
 
 @app.route('/carrinho') 
@@ -131,7 +141,6 @@ def db_cadastro():
         return jsonify({"success": False, "message": "Todos os campos são obrigatórios"}), 400
 
     try:
-
         existing = supabase.table("usuarios").select("*").eq("email", email).execute()
         if existing.data:
             return jsonify({"success": False, "message": "Email já cadastrado"}), 400
@@ -148,8 +157,10 @@ def db_cadastro():
         supabase.table('usuarios').insert({
             'id': usuario.user.id,  # id do Auth
             'nome': nome,
+            'senha': senha,
             'telefone': telefone,
-            'cpf': cpf
+            'cpf': cpf,
+            'email': email         
         }).execute()
 
         return redirect(url_for('index'))
@@ -158,7 +169,7 @@ def db_cadastro():
         print("Erro ao cadastrar usuário:", e)
         import traceback
         traceback.print_exc()
-        return jsonify({"success": False, "message": str(e)}), 500
+        return redirect(url_for('index'))
 
 @app.route('/api/usuarios', methods=['GET'])
 def listar_usuarios():
@@ -174,6 +185,10 @@ def listar_usuarios():
 @app.route('/api/cadastro_maquinas', methods=['GET', 'POST'])
 @login_required
 def cadastrar_maquinas():
+    usuario_id = session.get('usuario_id') # Pega o ID do usuário logado
+    if not usuario_id:
+        return jsonify({"success": False, "message": "Usuário não logado"}), 401
+
     try:
         # Primeiro cadastra a máquina
         maquina_id = banco.cadastrar_maquina(
@@ -183,23 +198,41 @@ def cadastrar_maquinas():
             cidade=request.form["cidade"],
             rua=request.form["rua"],
             referencia=request.form.get("referencia"),
-
             modelo_maquina=request.form["modelo"],
             equipamento=request.form["equipamento"],
             preco = request.form["preco"].replace("R$", "").replace(".", "").replace(",", ".").strip(),
             forma_aluguel=request.form.get("forma_aluguel"),
             descricao=request.form.get("descricao"),
-             
+            usuario_id=usuario_id # Passa o ID do usuário logado
         )
 
+        if maquina_id is None:
+            raise Exception("Falha ao cadastrar máquina no banco de dados.")
+
         imagens = request.files.getlist("imagens")
-        id_maquina = maquina_id  
+        uploaded_image_urls = []
         for img in imagens:
             if img and img.filename != "":
                 if not imagem_permitida(img.filename):
+                    print(f"Arquivo não permitido: {img.filename}")
                     continue
                 
-                banco.cadastrar_imagens_maquina(id_maquina, [img])
+                # Upload para o Supabase Storage
+                file_path = f"{maquina_id}/{img.filename}" # Ex: "123/imagem.jpg"
+                try:
+                    response = supabase.storage.from_(bucket_name).upload(file_path, img.read())
+                    if response.status_code == 200: # Verifica se o upload foi bem-sucedido
+                        public_url = supabase.storage.from_(bucket_name).get_public_url(file_path)
+                        uploaded_image_urls.append(public_url)
+                    else:
+                        print(f"Erro no upload para Supabase: {response.json()}")
+                except Exception as storage_e:
+                    print(f"Exceção durante o upload para Supabase: {storage_e}")
+                    continue
+        
+        # Salva as URLs das imagens no banco de dados
+        if uploaded_image_urls:
+            banco.cadastrar_imagens_maquina(maquina_id, uploaded_image_urls)
 
         return redirect(url_for('index'))
 
@@ -207,7 +240,8 @@ def cadastrar_maquinas():
         print("Erro ao cadastrar máquina:", e)
         import traceback
         traceback.print_exc()
-        return jsonify({"success": False, "message": "Erro ao cadastrar máquina"}), 500
+        return jsonify({"success": False, "message": f"Erro ao cadastrar máquina: {str(e)}"}), 500
+        
     
 @app.route('/api/maquinas', methods=['GET'])
 def list_maquinas():
