@@ -4306,3 +4306,189 @@ body {
         box-sizing: border-box;
     }
 }
+
+/* Estilos específicos para a página de login */
+.login-page .container {
+  margin-top: 100px; /* Espaço para o header */
+  margin-bottom: 100px; /* Espaço para o footer */
+  min-height: calc(100vh - 200px); /* Altura mínima considerando header e footer */
+  padding: 20px;
+}
+
+.login-page .card {
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+/* Controle de visibilidade do link de cadastro */
+.login-page .cadastrar-link {
+  display: none; /* Esconde por padrão em desktop */
+}
+
+/* Mostra o link de cadastro apenas em dispositivos móveis */
+@media (max-width: 768px) {
+  .login-page .cadastrar-link {
+    display: inline; /* Mostra em dispositivos móveis */
+  }
+  
+  .login-page .container {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    min-height: calc(100vh - 160px);
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .login-page .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px 20px;
+    margin: 0 auto;
+  }
+
+  .login-page .card h2 {
+    font-size: 1.6em;
+    margin: 10px 0 5px 0;
+  }
+
+  .login-page .card p {
+    font-size: 0.95em;
+    margin-bottom: 14px;
+  }
+
+  .login-page .form-input {
+    padding: 12px 14px;
+    font-size: 16px;
+    margin-bottom: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .login-page .btn {
+    padding: 16px 0;
+    font-size: 1.1em;
+    margin-top: 20px;
+    border-radius: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .login-page .top-header {
+    padding: 6px 12px;
+  }
+
+  .login-page .logo img {
+    height: 45px;
+    margin-left: 15px;
+  }
+
+  .login-page .custom-footer {
+    font-size: 0.9em;
+  }
+
+  .login-page .footer-content {
+    padding: 12px 15px 0 15px;
+    gap: 15px;
+  }
+
+  .login-page .footer-logo img {
+    height: 40px;
+  }
+
+  .login-page .footer-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    min-width: 120px;
+  }
+
+  .login-page .footer-copy {
+    font-size: 0.9em;
+    padding: 6px 0 8px 0;
+  }
+}
+
+/* Estilos específicos para a página de cadastro */
+.cadastro-page .container {
+  margin-top: 100px; /* Espaço para o header */
+  margin-bottom: 100px; /* Espaço para o footer */
+  min-height: calc(100vh - 200px); /* Altura mínima considerando header e footer */
+  padding: 20px;
+}
+
+.cadastro-page .card {
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .cadastro-page .container {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    min-height: calc(100vh - 160px);
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .cadastro-page .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px 20px;
+    margin: 0 auto;
+  }
+
+  .cadastro-page .card h1 {
+    font-size: 1.6em;
+    margin: 10px 0 5px 0;
+  }
+
+  .cadastro-page .card p {
+    font-size: 0.95em;
+    margin-bottom: 14px;
+  }
+
+  .cadastro-page .form-input {
+    padding: 12px 14px;
+    font-size: 16px;
+    margin-bottom: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .cadastro-page .btn {
+    padding: 16px 0;
+    font-size: 1.1em;
+    margin-top: 20px;
+    border-radius: 6px;
+    min-height: 44px; /* Garante área de toque adequada */
+  }
+
+  .cadastro-page .top-header {
+    padding: 6px 12px;
+  }
+
+  .cadastro-page .logo img {
+    height: 45px;
+    margin-left: 15px;
+  }
+
+  .cadastro-page .custom-footer {
+    font-size: 0.9em;
+  }
+
+  .cadastro-page .footer-content {
+    padding: 12px 15px 0 15px;
+    gap: 15px;
+  }
+
+  .cadastro-page .footer-logo img {
+    height: 40px;
+  }
+
+  .cadastro-page .footer-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    min-width: 120px;
+  }
+
+  .cadastro-page .footer-copy {
+    font-size: 0.9em;
+    padding: 6px 0 8px 0;
+  }
+}

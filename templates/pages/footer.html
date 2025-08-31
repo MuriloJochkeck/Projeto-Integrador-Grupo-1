@@ -1,36 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footer - Base</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <footer class="custom-footer">
-        <div class="footer-content">
-          <div class="footer-logo">
-            <div class="logo">
-                <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
-            </div>
-          </div>
-          <div class="footer-info">
-            <div class="footer-contact">
-              <strong>Informações de contato:</strong><br />
-              (49) 99999-9999<br />
-              <a href="mailto:Example@gmail.com">Example@gmail.com</a>
-            </div>
-          </div>
-          <div class="footer-buttons">
-            <a class="footer-btn" href="{{ url_for('faleconosco') }}" target="_blank" rel="noopener noreferrer">Fale conosco</a>
-            <a class="footer-btn" href="{{ url_for('sobrenos') }}" target="_blank" rel="noopener noreferrer">Sobre nós</a>
-
-          </div>
+<footer class="custom-footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <div class="logo">
+            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo"></a>
         </div>
-        <hr class="footer-divider" />
-        <div class="footer-copy">
-          Copyright © 2025 – Todos os direitos estão reservados
+      </div>
+      <div class="footer-info">
+        <div class="footer-contact">
+          <strong>Informações de contato:</strong><br />
+          (49) 99999-9999<br />
+          <a href="mailto:Example@gmail.com">Example@gmail.com</a>
         </div>
-      </footer>
-</body>
-</html>
+      </div>
+      <div class="footer-buttons">
+        <a class="footer-btn" href="{{ url_for('faleconosco') }}" target="_blank" rel="noopener noreferrer">Fale conosco</a>
+        <a class="footer-btn" href="{{ url_for('sobrenos') }}" target="_blank" rel="noopener noreferrer">Sobre nós</a>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <div class="footer-copy">
+      Copyright © 2025 – Todos os direitos estão reservados
+    </div>
+  </footer>
