@@ -45,6 +45,7 @@ class Banco:
                     telefone VARCHAR(20) NOT NULL,
                     cpf VARCHAR(14) UNIQUE NOT NULL,
                     email VARCHAR(120) UNIQUE NOT NULL,
+                    senha VARCHAR(40) NOT NULL,
                     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
@@ -111,37 +112,21 @@ class Banco:
 
     # ----------------- Usuários -----------------
 
-    def hash_senha(self, senha):
-        return hashlib.sha256(senha.encode()).hexdigest()
-
-    def cadastrar_usuario(self, nome, telefone, cpf, email, senha):
-        """Cadastra um usuário"""
+    def cadastrar_usuario(self, nome, telefone, cpf, email, supabase_uid):
         try:
             cursor = self.connection.cursor()
 
-            # Verificar se email já existe
-            cursor.execute("SELECT id FROM usuarios WHERE email = %s", (email,))
-            if cursor.fetchone():
-                return "Email já cadastrado"
-
-            # Verificar se CPF já existe
-            cursor.execute("SELECT id FROM usuarios WHERE cpf = %s", (cpf,))
-            if cursor.fetchone():
-                return "CPF já cadastrado"
-
-            # Inserir usuário
-            senha_hash = self.hash_senha(senha)
             cursor.execute("""
-                INSERT INTO usuarios (nome, telefone, cpf, email, senha)
+                INSERT INTO usuarios (id, nome, telefone, cpf, email)
                 VALUES (%s, %s, %s, %s, %s)
                 RETURNING id
-            """, (nome, telefone, cpf, email, senha_hash))
+            """, (supabase_uid, nome, telefone, cpf, email))
 
             user_id = cursor.fetchone()[0]
             self.connection.commit()
             cursor.close()
 
-            print(f" Usuário cadastrado! ID: {user_id}")
+            print(f" Usuário cadastrado no banco local! ID: {user_id}")
             return "Sucesso"
 
         except Exception as e:

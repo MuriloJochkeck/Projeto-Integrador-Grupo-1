@@ -9,7 +9,7 @@ SUPABASE_KEY = supabase_key
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
-
+app.secret_key = 'PI@2025'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def imagem_permitida(filename):
@@ -153,17 +153,15 @@ def db_cadastro():
             'user_metadata': {'nome': nome}  
         })
 
-        # Salva os dados extras na tabela "usuarios"
-        supabase.table('usuarios').insert({
-            'id': usuario.user.id,  # id do Auth
-            'nome': nome,
-            'senha': senha,
-            'telefone': telefone,
-            'cpf': cpf,
-            'email': email         
-        }).execute()
 
-        return redirect(url_for('index'))
+        supabase_uid = usuario.user.id
+        # Agora insere no banco local
+        resultado = banco.cadastrar_usuario(nome, telefone, cpf, email, supabase_uid)
+
+        if resultado == "Sucesso":
+            return redirect(url_for('index'))
+        else:
+            return jsonify({"success": False, "message": "Erro ao salvar no banco local"}), 500
 
     except Exception as e:
         print("Erro ao cadastrar usuário:", e)
