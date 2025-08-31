@@ -61,10 +61,7 @@ def login():
 @app.route('/carrinho') 
 @login_required
 def carrinho():
-    usuario_id = session['usuario_id']
-    itens = banco.listar_itens_carrinho(usuario_id)
-    total = sum(item['preco'] * item['quantidade'] for item in itens)
-    return render_template('pages/carrinho.html', itens=itens, total=total)
+    return render_template('pages/carrinho.html')
 
 @app.route('/aluguel')
 def aluguel():
@@ -219,21 +216,6 @@ def list_maquinas():
 
 ####################### CARRINHO #########################
 
-@app.route('/carrinho/adicionar', methods=['POST'])
-@login_required
-def carrinho_adicionar():
-    usuario_id = session['usuario_id']
-    maquina_id = int(request.form['maquina_id'])
-    quantidade = int(request.form.get('quantidade', 1))
-    forma_aluguel = request.form['forma_aluguel']
-    banco.adicionar_item_carrinho(usuario_id, maquina_id, quantidade, forma_aluguel)
-    return redirect(url_for('carrinho'))
-
-@app.route('/carrinho/remover/<int:item_id>')
-@login_required
-def carrinho_remover(item_id):
-    banco.remover_item_carrinho(item_id)
-    return redirect(url_for('carrinho'))
 
 
 if __name__ == '__main__':
