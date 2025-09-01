@@ -24,10 +24,23 @@
     </header>
 
     <div class="home-links">
+        {% if user %}
+            <span>Bem-vindo, {{ user[0]['nome'] }}!</span>
+        {% else %}
+            <span>Bem-vindo, visitante!</span>
+        {% endif %}
         <a href="{{ url_for('cadastro') }}">Cadastro</a>
         <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
         <a href="{{ url_for('endereço_user') }}">Endereço</a>
-    </div>
+            {% if session.get('usuario_id') %}
+                <!-- Botão de logout -->
+                <form action="{{ url_for('logout') }}" method="get">
+                    <button type="submit">Sair</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
 
     <section class="carousel-section">
         <div class="section-header">

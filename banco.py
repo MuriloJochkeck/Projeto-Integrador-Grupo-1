@@ -1,5 +1,4 @@
 import psycopg2
-import hashlib
 from acessodb import db_host, db_port, db_user, db_password, db_database, supabase_url, supabase_key, bucket_name
 from supabase import create_client, Client
 
@@ -10,11 +9,12 @@ BUCKET_NAME = bucket_name
 
 class Banco:
     def __init__(self):
-        self.host = db_host
+        self.host = 5432
         self.port = db_port
         self.database = db_database
         self.user = db_user
         self.password = db_password
+        sslmode = 'require'
         self.connection = None
 
     def conectar(self):
@@ -112,53 +112,42 @@ class Banco:
 
     # ----------------- Usuários -----------------
 
-    def cadastrar_usuario(self, nome, telefone, cpf, email, supabase_uid):
-        try:
-            cursor = self.connection.cursor()
+   
 
-            cursor.execute("""
-                INSERT INTO usuarios (id, nome, telefone, cpf, email)
-                VALUES (%s, %s, %s, %s, %s)
-                RETURNING id
-            """, (supabase_uid, nome, telefone, cpf, email))
-
-            user_id = cursor.fetchone()[0]
-            self.connection.commit()
-            cursor.close()
-
-            print(f" Usuário cadastrado no banco local! ID: {user_id}")
-            return "Sucesso"
-
-        except Exception as e:
-            print(f" Erro: {e}")
-            return "Erro interno"
         
     def listar_usuarios(self):
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute("SELECT id, nome, email, cpf, telefone FROM usuarios ORDER BY id")
-            usuarios = cursor.fetchall()
-            cursor.close()
-            return [{'id': u[0], 'nome': u[1], 'email': u[2], 'cpf': u[3], 'telefone': u[4]} for u in usuarios]
-        except Exception as e:
-            print(f"Erro listar_usuarios: {e}")
-            return []
-        
+        # try:
+        #     cursor = self.connection.cursor()
+        #     cursor.execute("SELECT id, nome, email, cpf, telefone FROM usuarios ORDER BY id")
+        #     usuarios = cursor.fetchall()
+        #     cursor.close()
+        #     return [{'id': u[0], 'nome': u[1], 'email': u[2], 'cpf': u[3], 'telefone': u[4]} for u in usuarios]
+        # except Exception as e:
+        #     print(f"Erro listar_usuarios: {e}")
+        #     return []
+        res = supabase.table("usuarios").select("*").execute()
+        return res.data
             
        
+    # def get_user_by_id(self, user_id):
+    #     try:
+    #         cursor = self.connection.cursor()
+    #         cursor.execute("SELECT id, nome, telefone, cpf, email FROM usuarios WHERE id=%s", (str(user_id),))
+    #         resultado = cursor.fetchone()
+    #         cursor.close()
+    #         if resultado:
+    #             return {'id': resultado[0], 'nome': resultado[1], 'telefone': resultado[2], 'cpf': resultado[3], 'email': resultado[4]}
+    #         return None
+    #     except Exception as e:
+    #         print(f"Erro get_user_by_id: {e}")
+    #         return None
+    
     def get_user_by_id(self, user_id):
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute("SELECT id, nome, telefone, cpf, email FROM usuarios WHERE id=%s", (str(user_id),))
-            resultado = cursor.fetchone()
-            cursor.close()
-            if resultado:
-                return {'id': resultado[0], 'nome': resultado[1], 'telefone': resultado[2], 'cpf': resultado[3], 'email': resultado[4]}
-            return None
-        except Exception as e:
-            print(f"Erro get_user_by_id: {e}")
-            return None
-                    
+        res = supabase.table("usuarios").select("*").eq("id", str(user_id)).execute()
+        if res.data:
+            return res.data[0]
+        return None
+
 
     # ----------------- Máquinas -----------------
 
@@ -201,30 +190,38 @@ class Banco:
                 
 
     def listar_maquinas(self):
+        # try:
+        #     cursor = self.connection.cursor()
+        #     cursor.execute("""
+        #         SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
+        #                m.descricao, u.nome AS usuario_nome,
+        #                COALESCE(array_agg(i.imagem_url) FILTER (WHERE i.imagem_url IS NOT NULL), '{}') AS imagens
+        #         FROM maquinas m
+        #         LEFT JOIN usuarios u ON m.usuario_id = u.id
+        #         LEFT JOIN imagens_maquinas i ON m.id = i.maquina_id
+        #         GROUP BY m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel, m.descricao, u.nome
+        #         ORDER BY m.id
+        #     """)
+        #     maquinas = cursor.fetchall()
+        #     cursor.close()
+        #     return [{
+        #         'id': m[0],
+        #         'modelo_maquina': m[1],
+        #         'equipamento': m[2],
+        #         'preco': float(m[3]),
+        #         'forma_aluguel': m[4],
+        #         'descricao': m[5],
+        #         'usuario_nome': m[6] if m[6] else "Desconhecido",
+        #         'imagens': m[7]
+        #     } for m in maquinas]
+        # except Exception as e:
+        #     print(f"Erro listar_maquinas: {e}")
+        #     return []
         try:
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
-                       m.descricao, u.nome AS usuario_nome,
-                       COALESCE(array_agg(i.imagem_url) FILTER (WHERE i.imagem_url IS NOT NULL), '{}') AS imagens
-                FROM maquinas m
-                LEFT JOIN usuarios u ON m.usuario_id = u.id
-                LEFT JOIN imagens_maquinas i ON m.id = i.maquina_id
-                GROUP BY m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel, m.descricao, u.nome
-                ORDER BY m.id
-            """)
-            maquinas = cursor.fetchall()
-            cursor.close()
-            return [{
-                'id': m[0],
-                'modelo_maquina': m[1],
-                'equipamento': m[2],
-                'preco': float(m[3]),
-                'forma_aluguel': m[4],
-                'descricao': m[5],
-                'usuario_nome': m[6] if m[6] else "Desconhecido",
-                'imagens': m[7]
-            } for m in maquinas]
+            res = self.supabase.table("maquinas")\
+                .select("id, modelo_maquina, equipamento, preco, forma_aluguel, descricao, usuario_id, imagens_maquinas(imagem_url)")\
+                .execute()
+            return res.data if res.data else []
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
@@ -241,7 +238,7 @@ class Banco:
 banco = Banco()
 
 def inicializar_banco():
-    """Inicializa banco no Supabase"""
+    """Inicializa banco de dados"""
     if not banco.conectar():
         return False
     if not banco.criar_tabela():

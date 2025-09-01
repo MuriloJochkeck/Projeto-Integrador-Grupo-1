@@ -31,7 +31,8 @@ inicializar_banco()
 @app.route('/')
 def index():
     maquinas = banco.listar_maquinas()
-    return render_template('index.html', maquinas=maquinas)
+    user = banco.listar_usuarios()
+    return render_template('index.html', maquinas=maquinas, user=user)
 
 @app.route('/cadastro') 
 def cadastro():
@@ -47,22 +48,33 @@ def login():
             # Tenta fazer login com Supabase Auth
             user_session = supabase.auth.sign_in_with_password({"email": email, "password": senha})
             
+            # if user_session.user:
+            #     # Busca os dados adicionais do usuário na sua tabela 'usuarios'
+            #     user_data = banco.get_user_by_id(user_session.user.id)
+            #     if user_data:
+            #         session['usuario_id'] = user_session.user.id
+            #         session['usuario_nome'] = user_data['nome'] # Assume que 'nome' está na sua tabela 'usuarios'
+            #         return redirect(url_for('index'))
+            #     else:
+            #         # Usuário autenticado no Supabase Auth, mas não encontrado na sua tabela 'usuarios'
+            #         # Isso pode indicar um problema na criação inicial do usuário ou na sincronização
+            #         supabase.auth.sign_out() # Desloga para evitar inconsistência
+            #         mensagem = 'Erro ao carregar dados do usuário. Tente novamente.'
+            #         return render_template('pages/login_usuario.html', mensagem=mensagem)
+            # else:
+            #     mensagem = 'Email ou senha incorretos.'
+            #     return render_template('pages/login_usuario.html', mensagem=mensagem)
             if user_session.user:
-                # Busca os dados adicionais do usuário na sua tabela 'usuarios'
                 user_data = banco.get_user_by_id(user_session.user.id)
                 if user_data:
                     session['usuario_id'] = user_session.user.id
-                    session['usuario_nome'] = user_data['nome'] # Assume que 'nome' está na sua tabela 'usuarios'
+                    session['usuario_nome'] = user_data['nome']
                     return redirect(url_for('index'))
                 else:
-                    # Usuário autenticado no Supabase Auth, mas não encontrado na sua tabela 'usuarios'
-                    # Isso pode indicar um problema na criação inicial do usuário ou na sincronização
-                    supabase.auth.sign_out() # Desloga para evitar inconsistência
+                    supabase.auth.sign_out()
                     mensagem = 'Erro ao carregar dados do usuário. Tente novamente.'
                     return render_template('pages/login_usuario.html', mensagem=mensagem)
-            else:
-                mensagem = 'Email ou senha incorretos.'
-                return render_template('pages/login_usuario.html', mensagem=mensagem)
+
         except Exception as e:
             print(f"Erro de login: {e}")
             mensagem = 'Email ou senha incorretos.' # Mensagem genérica por segurança
@@ -155,19 +167,41 @@ def db_cadastro():
 
 
         supabase_uid = usuario.user.id
-        # Agora insere no banco local
-        resultado = banco.cadastrar_usuario(nome, telefone, cpf, email, supabase_uid)
+        resultado = supabase.table("usuarios").insert({
+            "id": supabase_uid,
+            "nome": nome,
+            "telefone": telefone,
+            "cpf": cpf,
+            "email": email
+        }).execute()
 
-        if resultado == "Sucesso":
+
+        if resultado.data == "Sucesso":
             return redirect(url_for('index'))
         else:
-            return jsonify({"success": False, "message": "Erro ao salvar no banco local"}), 500
+            return redirect(url_for('index'))
 
     except Exception as e:
         print("Erro ao cadastrar usuário:", e)
         import traceback
         traceback.print_exc()
         return redirect(url_for('index'))
+
+
+@app.route('/logout')
+def logout():
+    # Remove dados do Flask session
+    session.pop('usuario_id', None)
+    session.pop('usuario_nome', None)
+
+    # Opcional: desloga do Supabase Auth
+    try:
+        supabase.auth.sign_out()
+    except Exception as e:
+        print(f"Erro ao deslogar do Supabase: {e}")
+
+    # Redireciona para a página de login ou index
+    return redirect(url_for('login'))
 
 @app.route('/api/usuarios', methods=['GET'])
 def listar_usuarios():
