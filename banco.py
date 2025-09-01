@@ -225,7 +225,210 @@ class Banco:
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
+            
 
+    # ----------------- Carrinho -----------------
+    def obter_carrinho(self, usuario_id):
+        """Obtém ou cria um carrinho para o usuário"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("SELECT id FROM carrinhos WHERE usuario_id = %s", (usuario_id,))
+            resultado = cursor.fetchone()
+            
+            if resultado:
+                carrinho_id = resultado[0]
+            else:
+                # Cria um novo carrinho para o usuário
+                cursor.execute("INSERT INTO carrinhos (usuario_id) VALUES (%s) RETURNING id", (usuario_id,))
+                carrinho_id = cursor.fetchone()[0]
+                self.connection.commit()
+                
+            cursor.close()
+            return carrinho_id
+        except Exception as e:
+            print(f"Erro obter_carrinho: {e}")
+            return None
+    
+    def adicionar_ao_carrinho(self, usuario_id, maquina_id, quantidade, forma_aluguel):
+        """Adiciona um item ao carrinho do usuário"""
+        try:
+            # Primeiro obtém ou cria o carrinho
+            carrinho_id = self.obter_carrinho(usuario_id)
+            if not carrinho_id:
+                return False
+                
+            cursor = self.connection.cursor()
+            
+            # Verifica se o item já existe no carrinho
+            cursor.execute(
+                "SELECT id, quantidade FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
+                (carrinho_id, maquina_id)
+            )
+            item_existente = cursor.fetchone()
+            
+            if item_existente:
+                # Atualiza a quantidade do item existente
+                item_id, qtd_atual = item_existente
+                nova_qtd = qtd_atual + quantidade
+                cursor.execute(
+                    "UPDATE itens_carrinho SET quantidade = %s WHERE id = %s",
+                    (nova_qtd, item_id)
+                )
+            else:
+                # Insere um novo item no carrinho
+                cursor.execute(
+                    "INSERT INTO itens_carrinho (carrinho_id, maquina_id, quantidade, forma_aluguel) VALUES (%s, %s, %s, %s)",
+                    (carrinho_id, maquina_id, quantidade, forma_aluguel)
+                )
+                
+            self.connection.commit()
+            cursor.close()
+            print(f"Item adicionado ao carrinho! ID: {maquina_id}")
+            return True
+        except Exception as e:
+            self.connection.rollback()
+            print(f"Erro adicionar_ao_carrinho: {e}")
+            return False
+            
+
+    def remover_do_carrinho(self, usuario_id, maquina_id):
+        """Remove um item do carrinho do usuário"""
+        try:
+            carrinho_id = self.obter_carrinho(usuario_id)
+            if not carrinho_id:
+                return False
+                
+            cursor = self.connection.cursor()
+            cursor.execute(
+                "DELETE FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
+                (carrinho_id, maquina_id)
+            )
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            self.connection.rollback()
+            print(f"Erro remover_do_carrinho: {e}")
+            return False
+    
+    def atualizar_quantidade_carrinho(self, usuario_id, maquina_id, nova_quantidade):
+        """Atualiza a quantidade de um item no carrinho"""
+        try:
+            carrinho_id = self.obter_carrinho(usuario_id)
+            if not carrinho_id:
+                return False
+                
+            cursor = self.connection.cursor()
+            
+            if nova_quantidade <= 0:
+                # Se a quantidade for zero ou negativa, remove o item
+                cursor.execute(
+                    "DELETE FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
+                    (carrinho_id, maquina_id)
+                )
+            else:
+                # Atualiza a quantidade
+                cursor.execute(
+                    "UPDATE itens_carrinho SET quantidade = %s WHERE carrinho_id = %s AND maquina_id = %s",
+                    (nova_quantidade, carrinho_id, maquina_id)
+                )
+                
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            self.connection.rollback()
+            print(f"Erro atualizar_quantidade_carrinho: {e}")
+            return False
+    
+    def limpar_carrinho(self, usuario_id):
+        """Remove todos os itens do carrinho do usuário"""
+        try:
+            carrinho_id = self.obter_carrinho(usuario_id)
+            if not carrinho_id:
+                return False
+                
+            cursor = self.connection.cursor()
+            cursor.execute("DELETE FROM itens_carrinho WHERE carrinho_id = %s", (carrinho_id,))
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            self.connection.rollback()
+            print(f"Erro limpar_carrinho: {e}")
+            return False
+    
+    def listar_itens_carrinho(self, usuario_id):
+        """Lista todos os itens do carrinho do usuário com detalhes das máquinas"""
+        try:
+            carrinho_id = self.obter_carrinho(usuario_id)
+            if not carrinho_id:
+                return []
+                
+            cursor = self.connection.cursor()
+            cursor.execute("""
+                SELECT i.id, i.maquina_id, i.quantidade, i.forma_aluguel,
+                       m.modelo_maquina, m.preco, m.equipamento,
+                       COALESCE((SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 'media/default.jpg') AS imagem
+                FROM itens_carrinho i
+                JOIN maquinas m ON i.maquina_id = m.id
+                WHERE i.carrinho_id = %s
+            """, (carrinho_id,))
+            
+            itens = cursor.fetchall()
+            cursor.close()
+            
+            resultado = []
+            for item in itens:
+                item_id, maquina_id, quantidade, forma_aluguel, modelo_maquina, preco, equipamento, imagem = item
+                preco_float = float(preco)
+                resultado.append({
+                    'id': maquina_id,  # ID da máquina para facilitar remoção
+                    'item_id': item_id,  # ID do item no carrinho
+                    'modelo_maquina': modelo_maquina,
+                    'equipamento': equipamento,
+                    'preco': preco_float,
+                    'quantidade': quantidade,
+                    'forma_aluguel': forma_aluguel,
+                    'subtotal': preco_float * quantidade,
+                    'imagem': imagem
+                })
+                
+            return resultado
+        except Exception as e:
+            print(f"Erro listar_itens_carrinho: {e}")
+            return []
+    
+    def obter_maquina_por_id(self, maquina_id):
+        """Obtém os detalhes de uma máquina pelo ID"""
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("""
+                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel, m.descricao,
+                       COALESCE((SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 'media/default.jpg') AS imagem
+                FROM maquinas m
+                WHERE m.id = %s
+            """, (maquina_id,))
+            
+            resultado = cursor.fetchone()
+            cursor.close()
+            
+            if resultado:
+                id, modelo_maquina, equipamento, preco, forma_aluguel, descricao, imagem = resultado
+                return {
+                    'id': id,
+                    'modelo_maquina': modelo_maquina,
+                    'equipamento': equipamento,
+                    'preco': float(preco),
+                    'forma_aluguel': forma_aluguel,
+                    'descricao': descricao,
+                    'imagem': imagem
+                }
+            return None
+        except Exception as e:
+            print(f"Erro obter_maquina_por_id: {e}")
+            return None
+    
     # ----------------- Conexão -----------------
 
     def fechar(self):
@@ -244,4 +447,5 @@ def inicializar_banco():
     if not banco.criar_tabela():
         return False
     return True
+    
 

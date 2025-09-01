@@ -82,13 +82,13 @@
           <span>R$ {{ '%.2f'|format(total) }}</span>
         </div>
         <input class="coupon-input" placeholder="Cupom de desconto" />
-        <!-- <button class="finish-button" onclick="window.location.href='{{ url_for('finaliza_pedido') }}'">Finalizar Pedido</button> -->
+        <button class="finish-button" data-url="{{ url_for('finaliza_pedido') }}">Finalizar Pedido</button>
       </div>
 
     </div>
   </div>
 
-  <!-- <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script> -->
+  <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
   {% block footer %}
     {% include 'pages/footer.html' %}
   {% endblock %}

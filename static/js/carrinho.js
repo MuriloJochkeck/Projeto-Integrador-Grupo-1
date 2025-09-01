@@ -1,383 +1,325 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//   // ===== FUNÇÕES DO CARRINHO =====
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Inicializa o carrinho
+  carregarCarrinho();
+
+  // Adiciona evento ao botão de finalizar pedido
+  let finishButton = document.querySelector('.finish-button');
+  if (finishButton) {
+    finishButton.addEventListener('click', function() {
+      window.location.href = finishButton.getAttribute('data-url') || '/finaliza_pedido';
+    });
+  }
+
+  // Adiciona evento ao campo de cupom
+  const couponInput = document.querySelector('.coupon-input');
+  if (couponInput) {
+    couponInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        aplicarCupom(couponInput.value);
+      }
+    });
+  }
+
+  // Função para carregar o carrinho da API
+  function carregarCarrinho() {
+    adicionarEventListenersQuantidade();
+    adicionarEventListenersRemover();
+  }
   
-//   // Carregar e exibir itens do carrinho
-//   function carregarCarrinho() {
-//     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//     const productList = document.querySelector('.product-list');
+   // Atualizar resumo da compra (não necessário pois é feito pelo servidor)
+   function atualizarResumo(subtotal, numItens) {
+  
+   }
+  
+   // Adicionar event listeners aos botões de quantidade
+   function adicionarEventListenersQuantidade() {
+     // Os botões já estão configurados com o formulário para enviar ao servidor
+     // Não precisamos adicionar event listeners JavaScript para isso
+   }
+   
+   // Adicionar event listeners aos botões de remover
+   function adicionarEventListenersRemover() {
+     // Os links de remover já estão configurados para chamar a rota do servidor
+     // Não precisamos adicionar event listeners JavaScript para isso
+   }
+   
+   // Função para aplicar cupom de desconto
+   function aplicarCupom(codigo) {
+     if (!codigo) return;
+     
+     // Aqui você pode implementar a lógica para aplicar cupons de desconto
+     // Por exemplo, fazer uma requisição AJAX para verificar o cupom
+     alert('Funcionalidade de cupom em desenvolvimento!');
+   }
+  
+    //Remover item do carrinho - Não é mais necessário, agora usamos a rota do servidor
+   function removerItem(maquinaId) {
+     // Esta função não é mais necessária pois a remoção é feita pelo servidor
+     // Mantida apenas para compatibilidade
+     window.location.href = `/carrinho/remover/${maquinaId}`;
+   }
+  
+  
+   //Configurar sistema de parcelamento
+   function configurarParcelamento() {
+     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+     const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
     
-//     if (!productList) return;
+      //Remover parcelamento anterior se existir
+     const parcelamentoAnterior = document.getElementById('parcelas-select');
+     if (parcelamentoAnterior) {
+       parcelamentoAnterior.parentNode.remove();
+     }
     
-//     productList.innerHTML = '';
+      //Criar novo seletor de parcelas
+     const parcelamentoDiv = document.createElement('div');
+     parcelamentoDiv.className = 'summary-row';
+     parcelamentoDiv.innerHTML = `
+       <span>Parcelas:</span>
+       <select id="parcelas-select" style="padding: 5px; border-radius: 5px; border: 1px solid #aaa;">
+         ${Array.from({length: 12}, (_, i) => i + 1).map(num => 
+           `<option value="${num}">${num}x R$ ${(total / num).toFixed(2)}</option>`
+         ).join('')}
+       </select>
+     `;
     
-//     if (carrinho.length === 0) {
-//       productList.innerHTML = '<p style="text-align: center; color: #666;">Carrinho vazio</p>';
-//       atualizarResumo(0, 0);
-//       return;
-//     }
-    
-//     carrinho.forEach((item, index) => {
-//       const productItem = document.createElement('div');
-//       productItem.className = 'product-item';
-//       productItem.innerHTML = `
-//         <img src="${item.imagem}" alt="${item.nome}" class="product-image">
-//         <div class="product-info">
-//           <div class="product-name">${item.nome}</div>
-//         </div>
-//         <div class="quantity-control">
-//           <div class="quantity-buttons">
-//             <button class="quantity-button" data-index="${index}" data-action="decrement">-</button>
-//             <span class="quantity-value" id="quantity-${index}">${item.quantidade}</span>
-//             <button class="quantity-button" data-index="${index}" data-action="increment">+</button>
-//           </div>
-//           <div class="quantity-label">Horas</div>
-//         </div>
-//         <div class="product-price">
-//           <div>1x R$ ${item.preco.toFixed(2)}</div>
-//           <div class="price-total">Total: R$ ${(item.preco * item.quantidade).toFixed(2)}</div>
-//         </div>
-//         <button class="remove-item" data-index="${index}" style="background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Remover</button>
-//       `;
-//       productList.appendChild(productItem);
-//     });
-    
-//     adicionarEventListenersQuantidade();
-//     const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-//     atualizarResumo(total, carrinho.length);
-//   }
+      //Inserir antes do cupom
+     const cupomInput = document.querySelector('.coupon-input');
+     if (cupomInput && cupomInput.parentNode) {
+       cupomInput.parentNode.insertBefore(parcelamentoDiv, cupomInput);
+     }
+   }
   
-//   // Atualizar resumo da compra
-//   function atualizarResumo(subtotal, numItens) {
-//     const summarySubtotal = document.querySelector('.summary-row:not(.bold)');
-//     const summaryTotal = document.querySelector('.summary-row.bold');
-    
-//     if (summarySubtotal && summaryTotal) {
-//       summarySubtotal.innerHTML = `<span>Subtotal (${numItens} itens)</span><span>R$ ${subtotal.toFixed(2)}</span>`;
-//       summaryTotal.innerHTML = `<span>Total</span><span>R$ ${subtotal.toFixed(2)}</span>`;
-//     }
-//   }
+    //Finalizar pedido
+   function finalizarPedido() {
+     // Agora redirecionamos diretamente para a página de finalização
+     // Os dados do carrinho já estão no servidor
+     const cupom = document.querySelector('.coupon-input')?.value || '';
+     
+     // Se tiver cupom, poderia enviar para o servidor
+     if (cupom) {
+       // Implementação futura: enviar cupom para o servidor
+       alert('Funcionalidade de cupom em desenvolvimento!');
+     }
+     
+     window.location.href = '/finaliza_pedido';
+   }
   
-//   // Adicionar event listeners aos botões de quantidade
-//   function adicionarEventListenersQuantidade() {
-//     const buttons = document.querySelectorAll('.quantity-button');
-//     buttons.forEach(btn => {
-//       btn.addEventListener('click', function() {
-//         const index = this.getAttribute('data-index');
-//         const action = this.getAttribute('data-action');
-//         const valueSpan = document.getElementById('quantity-' + index);
-//         let value = parseInt(valueSpan.textContent, 10);
-        
-//         if (action === 'increment') {
-//           value = value === 8760 ? 1 : value + 1;
-//         } else if (action === 'decrement') {
-//           value = value === 1 ? 8760 : value - 1;
-//         }
-        
-//         valueSpan.textContent = value;
-//         atualizarQuantidadeItem(index, value);
-//       });
-//     });
-//   }
+    //===== EVENT LISTENERS =====
   
-//   // Atualizar quantidade de um item específico
-//   function atualizarQuantidadeItem(index, novaQuantidade) {
-//     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//     if (carrinho[index]) {
-//       carrinho[index].quantidade = novaQuantidade;
-//       localStorage.setItem('carrinho', JSON.stringify(carrinho));
-      
-//       // Atualizar preço total do item na tela
-//       const priceTotal = document.querySelector(`#quantity-${index}`).closest('.product-item').querySelector('.price-total');
-//       if (priceTotal) {
-//         priceTotal.textContent = `Total: R$ ${(carrinho[index].preco * novaQuantidade).toFixed(2)}`;
-//       }
-      
-//       // Atualizar resumo
-//       const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-//       atualizarResumo(total, carrinho.length);
-//     }
-//   }
+    //Event listener para remover itens - Não é mais necessário, agora usamos links diretos
+   // Os links de remoção já estão configurados no HTML para chamar a rota do servidor
+   // Este event listener não é mais necessário
   
-//   // Remover item do carrinho
-//   function removerItem(index) {
-//     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//     carrinho.splice(index, 1);
-//     localStorage.setItem('carrinho', JSON.stringify(carrinho));
-//     carregarCarrinho();
-//   }
+    //Event listener para botão finalizar
+   // Já adicionamos o event listener no início do arquivo
+   // Não precisamos adicionar novamente
   
-//   // Configurar sistema de parcelamento
-//   function configurarParcelamento() {
-//     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//     const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    
-//     // Remover parcelamento anterior se existir
-//     const parcelamentoAnterior = document.getElementById('parcelas-select');
-//     if (parcelamentoAnterior) {
-//       parcelamentoAnterior.parentNode.remove();
-//     }
-    
-//     // Criar novo seletor de parcelas
-//     const parcelamentoDiv = document.createElement('div');
-//     parcelamentoDiv.className = 'summary-row';
-//     parcelamentoDiv.innerHTML = `
-//       <span>Parcelas:</span>
-//       <select id="parcelas-select" style="padding: 5px; border-radius: 5px; border: 1px solid #aaa;">
-//         ${Array.from({length: 12}, (_, i) => i + 1).map(num => 
-//           `<option value="${num}">${num}x R$ ${(total / num).toFixed(2)}</option>`
-//         ).join('')}
-//       </select>
-//     `;
-    
-//     // Inserir antes do cupom
-//     const cupomInput = document.querySelector('.coupon-input');
-//     if (cupomInput && cupomInput.parentNode) {
-//       cupomInput.parentNode.insertBefore(parcelamentoDiv, cupomInput);
-//     }
-//   }
+    //===== INICIALIZAÇÃO =====
+
+   carregarCarrinho();
+   // Não precisamos mais configurar parcelamento via JavaScript
+   // pois isso será feito pelo servidor
+ });
+
+  //===== FUNÇÕES DAS MINIATURAS =====
+ const miniaturas = document.querySelectorAll('.miniaturas img');
+ const imagemPrincipal = document.querySelector('.imagem-principal img');
+
+ miniaturas.forEach(miniatura => {
+   miniatura.addEventListener('click', () => {
+     imagemPrincipal.src = miniatura.src;
+   });
+ });
+
+  //===== FUNÇÕES DAS AVALIAÇÕES =====
+ const btnAvaliar = document.querySelector('.deixe-sua button');
+ const popupAvaliacao = document.getElementById('popupAvaliacao');
+ const estrelas = document.querySelectorAll('#estrelas span');
+ const enviarAvaliacao = document.getElementById('enviarAvaliacao');
+ const areaAvaliacoes = document.querySelector('.avaliacoes');
+ let avaliacaoSelecionada = 0;
+
+ function renderizarAvaliacao(usuario, nota, index) {
+   const novaAvaliacao = document.createElement('div');
+   novaAvaliacao.classList.add('card-avaliacoes', 'removivel');
   
-//   // Finalizar pedido
-//   function finalizarPedido() {
-//     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//     if (carrinho.length === 0) {
-//       alert('Carrinho vazio! Adicione produtos antes de finalizar.');
-//       return;
-//     }
-    
-//     const parcelas = document.getElementById('parcelas-select')?.value || 1;
-//     const cupom = document.querySelector('.coupon-input')?.value || '';
-    
-//     const pedido = {
-//       itens: carrinho,
-//       parcelas: parseInt(parcelas),
-//       cupom: cupom,
-//       data: new Date().toISOString(),
-//       total: carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0)
-//     };
-    
-//     localStorage.setItem('pedidoAtual', JSON.stringify(pedido));
-//     window.location.href = '/finaliza_pedido';
-//   }
+   novaAvaliacao.innerHTML = `
+     <div class="usuario">
+       <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" />
+       <span><strong>${usuario}</strong></span>
+     </div>
+     <div class="estrelas">${'★'.repeat(nota)}${'☆'.repeat(5 - nota)}</div>
+     <button class="remover-avaliacao" data-index="${index}">Remover</button>
+   `;
   
-//   // ===== EVENT LISTENERS =====
+   areaAvaliacoes.appendChild(novaAvaliacao);
+ }
+
+ function carregarAvaliacoesSalvas() {
+   const avaliacoesSalvas = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
+   avaliacoesSalvas.forEach((avaliacao, index) => {
+     renderizarAvaliacao(avaliacao.usuario, avaliacao.nota, index);
+   });
+ }
+
+ function salvarAvaliacao(usuario, nota) {
+   const avaliacoes = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
+   avaliacoes.push({ usuario, nota });
+   localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
+ }
+
+ function removerAvaliacao(index) {
+   let avaliacoes = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
+   avaliacoes.splice(index, 1);
+   localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
+   atualizarAvaliacoesRemoviveis();
+ }
+
+ function atualizarAvaliacoesRemoviveis() {
+   const dinamicas = document.querySelectorAll('.card-avaliacoes.removivel');
+   dinamicas.forEach(el => el.remove());
+   carregarAvaliacoesSalvas();
+ }
+
+  //Event listeners das avaliações
+ btnAvaliar?.addEventListener('click', () => {
+   popupAvaliacao.style.display = 'block';
+ });
+
+ estrelas.forEach(estrela => {
+   estrela.addEventListener('click', () => {
+     avaliacaoSelecionada = parseInt(estrela.dataset.value);
+     estrelas.forEach(e => e.classList.remove('ativo'));
+     for (let i = 0; i < avaliacaoSelecionada; i++) {
+       estrelas[i].classList.add('ativo');
+     }
+   });
+ });
+
+ enviarAvaliacao?.addEventListener('click', () => {
+   if (avaliacaoSelecionada === 0) {
+     alert('Selecione pelo menos uma estrela!');
+     return;
+   }
   
-//   // Event listener para remover itens
-//   document.addEventListener('click', function(e) {
-//     if (e.target.classList.contains('remove-item')) {
-//       const index = parseInt(e.target.dataset.index);
-//       removerItem(index);
-//     }
-//   });
+   const usuario = "Carlinhos";
+   salvarAvaliacao(usuario, avaliacaoSelecionada);
+   atualizarAvaliacoesRemoviveis();
   
-//   // Event listener para botão finalizar
-//   const finishButton = document.querySelector('.finish-button');
-//   if (finishButton) {
-//     finishButton.addEventListener('click', finalizarPedido);
-//   }
+   popupAvaliacao.style.display = 'none';
+   estrelas.forEach(e => e.classList.remove('ativo'));
+   avaliacaoSelecionada = 0;
+ });
+
+ areaAvaliacoes?.addEventListener('click', (e) => {
+   if (e.target.classList.contains('remover-avaliacao')) {
+     const index = parseInt(e.target.dataset.index);
+     removerAvaliacao(index);
+   }
+ });
+
+  //===== FUNÇÃO ADICIONAR AO CARRINHO =====
+ const btnAdicionarCarrinho = document.querySelector('.botoes .carrinho');
+
+ btnAdicionarCarrinho?.addEventListener('click', () => {
+   const produto = {
+     nome: 'Colheitadeira John Deere S790',
+     imagem: '../../static/media/trator/colheitadera2.jpg',
+     preco: 4490.90,
+     quantidade: 1
+   };
   
-//   // ===== INICIALIZAÇÃO =====
+   const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+   const indexExistente = carrinho.findIndex(item => item.nome === produto.nome);
   
-//   carregarCarrinho();
-//   configurarParcelamento();
-// });
-
-// // ===== FUNÇÕES DAS MINIATURAS =====
-// const miniaturas = document.querySelectorAll('.miniaturas img');
-// const imagemPrincipal = document.querySelector('.imagem-principal img');
-
-// miniaturas.forEach(miniatura => {
-//   miniatura.addEventListener('click', () => {
-//     imagemPrincipal.src = miniatura.src;
-//   });
-// });
-
-// // ===== FUNÇÕES DAS AVALIAÇÕES =====
-// const btnAvaliar = document.querySelector('.deixe-sua button');
-// const popupAvaliacao = document.getElementById('popupAvaliacao');
-// const estrelas = document.querySelectorAll('#estrelas span');
-// const enviarAvaliacao = document.getElementById('enviarAvaliacao');
-// const areaAvaliacoes = document.querySelector('.avaliacoes');
-// let avaliacaoSelecionada = 0;
-
-// function renderizarAvaliacao(usuario, nota, index) {
-//   const novaAvaliacao = document.createElement('div');
-//   novaAvaliacao.classList.add('card-avaliacoes', 'removivel');
+   if (indexExistente !== -1) {
+     carrinho[indexExistente].quantidade += 1;
+   } else {
+     carrinho.push(produto);
+   }
   
-//   novaAvaliacao.innerHTML = `
-//     <div class="usuario">
-//       <img src="../../static/media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png" />
-//       <span><strong>${usuario}</strong></span>
-//     </div>
-//     <div class="estrelas">${'★'.repeat(nota)}${'☆'.repeat(5 - nota)}</div>
-//     <button class="remover-avaliacao" data-index="${index}">Remover</button>
-//   `;
-  
-//   areaAvaliacoes.appendChild(novaAvaliacao);
-// }
+   localStorage.setItem('carrinho', JSON.stringify(carrinho));
+   alert('Produto adicionado ao carrinho!');
+ });
 
-// function carregarAvaliacoesSalvas() {
-//   const avaliacoesSalvas = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
-//   avaliacoesSalvas.forEach((avaliacao, index) => {
-//     renderizarAvaliacao(avaliacao.usuario, avaliacao.nota, index);
-//   });
-// }
-
-// function salvarAvaliacao(usuario, nota) {
-//   const avaliacoes = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
-//   avaliacoes.push({ usuario, nota });
-//   localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
-// }
-
-// function removerAvaliacao(index) {
-//   let avaliacoes = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
-//   avaliacoes.splice(index, 1);
-//   localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
-//   atualizarAvaliacoesRemoviveis();
-// }
-
-// function atualizarAvaliacoesRemoviveis() {
-//   const dinamicas = document.querySelectorAll('.card-avaliacoes.removivel');
-//   dinamicas.forEach(el => el.remove());
-//   carregarAvaliacoesSalvas();
-// }
-
-// // Event listeners das avaliações
-// btnAvaliar?.addEventListener('click', () => {
-//   popupAvaliacao.style.display = 'block';
-// });
-
-// estrelas.forEach(estrela => {
-//   estrela.addEventListener('click', () => {
-//     avaliacaoSelecionada = parseInt(estrela.dataset.value);
-//     estrelas.forEach(e => e.classList.remove('ativo'));
-//     for (let i = 0; i < avaliacaoSelecionada; i++) {
-//       estrelas[i].classList.add('ativo');
-//     }
-//   });
-// });
-
-// enviarAvaliacao?.addEventListener('click', () => {
-//   if (avaliacaoSelecionada === 0) {
-//     alert('Selecione pelo menos uma estrela!');
-//     return;
-//   }
-  
-//   const usuario = "Carlinhos";
-//   salvarAvaliacao(usuario, avaliacaoSelecionada);
-//   atualizarAvaliacoesRemoviveis();
-  
-//   popupAvaliacao.style.display = 'none';
-//   estrelas.forEach(e => e.classList.remove('ativo'));
-//   avaliacaoSelecionada = 0;
-// });
-
-// areaAvaliacoes?.addEventListener('click', (e) => {
-//   if (e.target.classList.contains('remover-avaliacao')) {
-//     const index = parseInt(e.target.dataset.index);
-//     removerAvaliacao(index);
-//   }
-// });
-
-// // ===== FUNÇÃO ADICIONAR AO CARRINHO =====
-// const btnAdicionarCarrinho = document.querySelector('.botoes .carrinho');
-
-// btnAdicionarCarrinho?.addEventListener('click', () => {
-//   const produto = {
-//     nome: 'Colheitadeira John Deere S790',
-//     imagem: '../../static/media/trator/colheitadera2.jpg',
-//     preco: 4490.90,
-//     quantidade: 1
-//   };
-  
-//   const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-//   const indexExistente = carrinho.findIndex(item => item.nome === produto.nome);
-  
-//   if (indexExistente !== -1) {
-//     carrinho[indexExistente].quantidade += 1;
-//   } else {
-//     carrinho.push(produto);
-//   }
-  
-//   localStorage.setItem('carrinho', JSON.stringify(carrinho));
-//   alert('Produto adicionado ao carrinho!');
-// });
-
-// // ===== INICIALIZAÇÃO DAS AVALIAÇÕES =====
-// carregarAvaliacoesSalvas();
+  //===== INICIALIZAÇÃO DAS AVALIAÇÕES =====
+ carregarAvaliacoesSalvas();
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const productList = document.querySelector('.product-list');
-//     const subtotalEl = document.querySelector('.summary-row span:nth-child(2)');
-//     const totalEl = document.querySelector('.summary-row.bold span:nth-child(2)');
-//     const finishButton = document.querySelector('.finish-button');
+ document.addEventListener('DOMContentLoaded', () => {
+     const productList = document.querySelector('.product-list');
+     const subtotalEl = document.querySelector('.summary-row span:nth-child(2)');
+     const totalEl = document.querySelector('.summary-row.bold span:nth-child(2)');
+     const finishButton = document.querySelector('.finish-button');
 
-//     // Função para atualizar carrinho
-//     async function atualizarCarrinho() {
-//         try {
-//             const res = await fetch('/api/carrinho');
-//             const data = await res.json();
-//             if (!data.success) return;
+     // Função para atualizar carrinho
+     async function atualizarCarrinho() {
+         try {
+             const res = await fetch('/api/carrinho');
+             const data = await res.json();
+             if (!data.success) return;
 
-//             productList.innerHTML = '';
-//             let subtotal = 0;
+             productList.innerHTML = '';
+             let subtotal = 0;
 
-//             data.itens.forEach((item, index) => {
-//                 const totalItem = item.preco * item.quantidade;
-//                 subtotal += totalItem;
+             data.itens.forEach((item, index) => {
+                 const totalItem = item.preco * item.quantidade;
+                 subtotal += totalItem;
 
-//                 const div = document.createElement('div');
-//                 div.classList.add('product-item');
-//                 div.innerHTML = `
-//                     <img class="product-image" src="/${item.imagem_url}" alt="${item.nome}" />
-//                     <div class="product-info">
-//                         <div class="product-name">${item.nome}</div>
-//                     </div>
-//                     <div class="quantity-control">
-//                         <div class="quantity-buttons">
-//                             <button class="quantity-button" data-index="${index}" data-action="decrement">-</button>
-//                             <span class="quantity-value" id="quantity-${index}">${item.quantidade}</span>
-//                             <button class="quantity-button" data-index="${index}" data-action="increment">+</button>
-//                         </div>
-//                         <span class="quantity-label">${item.forma_aluguel}</span>
-//                     </div>
-//                     <div class="product-price">
-//                         ${item.quantidade}x R$ ${item.preco.toFixed(2)}<br/>
-//                         Total: <span class="price-total">R$ ${totalItem.toFixed(2)}</span>
-//                     </div>
-//                 `;
-//                 productList.appendChild(div);
+                 const div = document.createElement('div');
+                 div.classList.add('product-item');
+                 div.innerHTML = `
+                     <img class="product-image" src="/${item.imagem_url}" alt="${item.nome}" />
+                     <div class="product-info">
+                         <div class="product-name">${item.nome}</div>
+                     </div>
+                     <div class="quantity-control">
+                         <div class="quantity-buttons">
+                             <button class="quantity-button" data-index="${index}" data-action="decrement">-</button>
+                             <span class="quantity-value" id="quantity-${index}">${item.quantidade}</span>
+                             <button class="quantity-button" data-index="${index}" data-action="increment">+</button>
+                         </div>
+                         <span class="quantity-label">${item.forma_aluguel}</span>
+                     </div>
+                     <div class="product-price">
+                         ${item.quantidade}x R$ ${item.preco.toFixed(2)}<br/>
+                         Total: <span class="price-total">R$ ${totalItem.toFixed(2)}</span>
+                     </div>
+                 `;
+                 productList.appendChild(div);
 
-//                 // Eventos de incrementar/decrementar
-//                 div.querySelectorAll('.quantity-button').forEach(btn => {
-//                     btn.addEventListener('click', async () => {
-//                         let quantidade = item.quantidade;
-//                         if (btn.dataset.action === 'increment') quantidade++;
-//                         else if (btn.dataset.action === 'decrement' && quantidade > 1) quantidade--;
+                  //Eventos de incrementar/decrementar
+                 div.querySelectorAll('.quantity-button').forEach(btn => {
+                     btn.addEventListener('click', async () => {
+                         let quantidade = item.quantidade;
+                         if (btn.dataset.action === 'increment') quantidade++;
+                         else if (btn.dataset.action === 'decrement' && quantidade > 1) quantidade--;
 
-//                         // Atualiza no servidor
-//                         await fetch('/api/carrinho/adicionar', {
-//                             method: 'POST',
-//                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//                             body: `maquina_id=${item.maquina_id}&quantidade=${quantidade}&forma_aluguel=${item.forma_aluguel}`
-//                         });
-//                         atualizarCarrinho();
-//                     });
-//                 });
-//             });
+                          //Atualiza no servidor
+                         await fetch('/api/carrinho/adicionar', {
+                             method: 'POST',
+                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                             body: `maquina_id=${item.maquina_id}&quantidade=${quantidade}&forma_aluguel=${item.forma_aluguel}`
+                         });
+                         atualizarCarrinho();
+                     });
+                 });
+             });
 
-//             subtotalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
-//             totalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
+             subtotalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
+             totalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
 
-//         } catch (err) {
-//             console.error('Erro ao carregar carrinho:', err);
-//         }
-//     }
+         } catch (err) {
+             console.error('Erro ao carregar carrinho:', err);
+         }
+     }
 
-//     // Botão finalizar pedido
-//     finishButton.addEventListener('click', () => {
-//         window.location.href = '/finaliza_pedido';
-//     });
+      //Botão finalizar pedido
+     finishButton.addEventListener('click', () => {
+         window.location.href = '/finaliza_pedido';
+     });
 
-//     atualizarCarrinho();
-// });
+     atualizarCarrinho();
+ });

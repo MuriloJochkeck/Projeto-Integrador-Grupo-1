@@ -87,7 +87,10 @@ def login():
 @app.route('/carrinho') 
 @login_required
 def carrinho():
-    return render_template('pages/carrinho.html')
+    usuario_id = session['usuario_id']
+    itens = banco.listar_itens_carrinho(usuario_id)
+    total = sum(item['subtotal'] for item in itens)
+    return render_template('pages/carrinho.html', itens=itens, total=total)
 
 @app.route('/aluguel')
 def aluguel():
@@ -288,6 +291,208 @@ def list_maquinas():
 ####################### CARRINHO #########################
 
 
+
+@app.route('/api/carrinho/adicionar', methods=['POST'])
+@login_required
+def adicionar_ao_carrinho():
+    """Adiciona uma máquina ao carrinho"""
+    try:
+        usuario_id = session['usuario_id']
+        maquina_id = request.form.get('maquina_id')
+        quantidade = int(request.form.get('quantidade', 1))
+        forma_aluguel = request.form.get('forma_aluguel', 'DIA')
+        
+        if not maquina_id:
+            return jsonify({"success": False, "message": "ID da máquina é obrigatório"}), 400
+        
+        if quantidade <= 0:
+            return jsonify({"success": False, "message": "Quantidade deve ser maior que zero"}), 400
+        
+        # Verifica se a máquina existe
+        maquina = banco.obter_maquina_por_id(maquina_id)
+        if not maquina:
+            return jsonify({"success": False, "message": "Máquina não encontrada"}), 404
+        
+        # Adiciona ao carrinho
+        sucesso = banco.adicionar_ao_carrinho(usuario_id, maquina_id, quantidade, forma_aluguel)
+        
+        if sucesso:
+            return jsonify({
+                "success": True, 
+                "message": "Máquina adicionada ao carrinho com sucesso!",
+                "maquina": maquina
+            })
+        else:
+            return jsonify({"success": False, "message": "Erro ao adicionar ao carrinho"}), 500
+            
+    except Exception as e:
+        print(f"Erro ao adicionar ao carrinho: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/carrinho/adicionar', methods=['POST'])
+@login_required
+def carrinho_adicionar():
+    """Adiciona ou atualiza um item no carrinho (versão para formulário HTML)"""
+    try:
+        usuario_id = session['usuario_id']
+        maquina_id = request.form.get('maquina_id')
+        forma_aluguel = request.form.get('forma_aluguel', 'DIA')
+        acao = request.form.get('acao')
+        
+        # Obtém o item atual do carrinho para saber a quantidade
+        itens = banco.listar_itens_carrinho(usuario_id)
+        item_atual = next((item for item in itens if str(item['id']) == str(maquina_id)), None)
+        
+        if acao == 'increment':
+            # Incrementa a quantidade
+            if item_atual:
+                nova_quantidade = item_atual['quantidade'] + 1
+                banco.atualizar_quantidade_carrinho(usuario_id, maquina_id, nova_quantidade)
+            else:
+                # Se não existe, adiciona com quantidade 1
+                banco.adicionar_ao_carrinho(usuario_id, maquina_id, 1, forma_aluguel)
+        elif acao == 'decrement':
+            # Decrementa a quantidade
+            if item_atual and item_atual['quantidade'] > 1:
+                nova_quantidade = item_atual['quantidade'] - 1
+                banco.atualizar_quantidade_carrinho(usuario_id, maquina_id, nova_quantidade)
+            elif item_atual:
+                # Se a quantidade é 1, remove o item
+                banco.remover_do_carrinho(usuario_id, maquina_id)
+        
+        # Redireciona de volta para a página do carrinho
+        return redirect(url_for('carrinho'))
+        
+    except Exception as e:
+        print(f"Erro ao atualizar carrinho: {e}")
+        flash("Erro ao atualizar carrinho", "error")
+        return redirect(url_for('carrinho'))
+
+@app.route('/api/carrinho/remover', methods=['POST'])
+@login_required
+def remover_do_carrinho():
+    """Remove uma máquina do carrinho (API)"""
+    try:
+        usuario_id = session['usuario_id']
+        maquina_id = request.form.get('maquina_id')
+        
+        if not maquina_id:
+            return jsonify({"success": False, "message": "ID da máquina é obrigatório"}), 400
+        
+        sucesso = banco.remover_do_carrinho(usuario_id, maquina_id)
+        
+        if sucesso:
+            return jsonify({"success": True, "message": "Máquina removida do carrinho com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Erro ao remover do carrinho"}), 500
+            
+    except Exception as e:
+        print(f"Erro ao remover do carrinho: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/carrinho/remover/<int:item_id>', methods=['GET'])
+@login_required
+def carrinho_remover(item_id):
+    """Remove um item do carrinho (versão para link HTML)"""
+    try:
+        usuario_id = session['usuario_id']
+        sucesso = banco.remover_do_carrinho(usuario_id, item_id)
+        
+        if not sucesso:
+            flash("Erro ao remover item do carrinho", "error")
+            
+        return redirect(url_for('carrinho'))
+        
+    except Exception as e:
+        print(f"Erro ao remover do carrinho: {e}")
+        flash("Erro ao remover item do carrinho", "error")
+        return redirect(url_for('carrinho'))
+
+@app.route('/api/carrinho/atualizar', methods=['POST'])
+@login_required
+def atualizar_carrinho():
+    """Atualiza a quantidade de uma máquina no carrinho"""
+    try:
+        usuario_id = session['usuario_id']
+        maquina_id = request.form.get('maquina_id')
+        nova_quantidade = int(request.form.get('quantidade', 1))
+        
+        if not maquina_id:
+            return jsonify({"success": False, "message": "ID da máquina é obrigatório"}), 400
+        
+        if nova_quantidade < 0:
+            return jsonify({"success": False, "message": "Quantidade não pode ser negativa"}), 400
+        
+        sucesso = banco.atualizar_quantidade_carrinho(usuario_id, maquina_id, nova_quantidade)
+        
+        if sucesso:
+            if nova_quantidade == 0:
+                return jsonify({"success": True, "message": "Item removido do carrinho"})
+            else:
+                return jsonify({"success": True, "message": "Quantidade atualizada com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Erro ao atualizar carrinho"}), 500
+            
+    except Exception as e:
+        print(f"Erro ao atualizar carrinho: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/api/carrinho/limpar', methods=['POST'])
+@login_required
+def limpar_carrinho():
+    """Limpa todo o carrinho do usuário"""
+    try:
+        usuario_id = session['usuario_id']
+        
+        sucesso = banco.limpar_carrinho(usuario_id)
+        
+        if sucesso:
+            return jsonify({"success": True, "message": "Carrinho limpo com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Erro ao limpar carrinho"}), 500
+            
+    except Exception as e:
+        print(f"Erro ao limpar carrinho: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/api/carrinho/itens', methods=['GET'])
+@login_required
+def listar_itens_carrinho():
+    """Lista todos os itens do carrinho do usuário"""
+    try:
+        usuario_id = session['usuario_id']
+        itens = banco.listar_itens_carrinho(usuario_id)
+        
+        # Calcula o total do carrinho
+        total = sum(item['subtotal'] for item in itens)
+        
+        return jsonify({
+            "success": True,
+            "itens": itens,
+            "total": total,
+            "total_itens": len(itens)
+        })
+        
+    except Exception as e:
+        print(f"Erro ao listar itens do carrinho: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/api/carrinho/contador', methods=['GET'])
+@login_required
+def contador_carrinho():
+    """Retorna apenas o número de itens no carrinho"""
+    try:
+        usuario_id = session['usuario_id']
+        itens = banco.listar_itens_carrinho(usuario_id)
+        
+        return jsonify({
+            "success": True,
+            "total_itens": len(itens)
+        })
+        
+    except Exception as e:
+        print(f"Erro ao contar itens do carrinho: {e}")
+        return jsonify({"success": False, "total_itens": 0})
 
 if __name__ == '__main__':
     app.run(debug=True)
