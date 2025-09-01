@@ -11,6 +11,16 @@
   box-sizing: border-box;
 }
 
+.logout-btn {
+  background-color: #ff5252;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
 .logo img {
   height: 60px;
   margin-left: 0;

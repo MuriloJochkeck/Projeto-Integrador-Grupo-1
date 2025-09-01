@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamentos Máquinas</title>
+    <title>RentMac</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -19,25 +19,22 @@
 
         <div class="icons">
             <a id="img_header" href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
-            <a  href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
+            <a href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
+            {% if session.get('usuario_id') %}
+                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+            {% endif %}
         </div>
     </header>
 
     <div class="home-links">
-        {% if user %}
+        {% if session.get('usuario_id') %}
+            <span>Bem-vindo, {{ session.get('usuario_nome') }}!</span>
         {% else %}
+            <span>Bem-vindo, visitante!</span>
         {% endif %}
         <a href="{{ url_for('cadastro') }}">Cadastro</a>
         <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
         <a href="{{ url_for('endereço_user') }}">Endereço</a>
-            {% if session.get('usuario_id') %}
-                <!-- Botão de logout -->
-                <form action="{{ url_for('logout') }}" method="get">
-                    <button type="submit">Sair</button>
-                </form>
-            {% else %}
-                <a href="{{ url_for('login') }}">Login</a>
-            {% endif %}
         </div>
 
     <section class="carousel-section">

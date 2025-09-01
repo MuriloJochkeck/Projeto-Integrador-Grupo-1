@@ -1,452 +1,307 @@
-import psycopg2
-from acessodb import db_host, db_port, db_user, db_password, db_database, supabase_url, supabase_key, bucket_name
 from supabase import create_client, Client
-
-SUPABASE_URL = supabase_url
-SUPABASE_KEY = supabase_key
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-BUCKET_NAME = bucket_name
+from acessodb import supabase_url, supabase_key
 
 class Banco:
     def __init__(self):
-        self.host = db_host
-        self.port = db_port
-        self.database = db_database
-        self.user = db_user
-        self.password = db_password
-        sslmode = 'require'
-        self.connection = None
-
-    def conectar(self):
-        try:
-            self.connection = psycopg2.connect(
-                host=self.host,
-                port=self.port,
-                database=self.database,
-                user=self.user,
-                password=self.password,
-                sslmode='require'
-            )
-            print("Conectado!")
-            return True
-        except Exception as e:
-            print(f"Erro ao conectar: {e}")
-            return False
-
-    def criar_tabela(self):
-        "Criar tabelas"
-        try:
-            cursor = self.connection.cursor()
-            
-            # Usuários
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS usuarios (
-                    id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-                    nome VARCHAR(100) NOT NULL,
-                    telefone VARCHAR(20) NOT NULL,
-                    cpf VARCHAR(14) UNIQUE NOT NULL,
-                    email VARCHAR(120) UNIQUE NOT NULL,
-                    senha VARCHAR(40) NOT NULL,
-                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            
-            # Máquinas
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS maquinas (
-                    id SERIAL PRIMARY KEY,
-                    usuario_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
-                    cep VARCHAR(10) NOT NULL,
-                    uf CHAR(2) NOT NULL,
-                    numero INTEGER NOT NULL,
-                    cidade VARCHAR(50) NOT NULL,
-                    rua VARCHAR(100) NOT NULL,
-                    referencia VARCHAR(200),
-                    modelo_maquina VARCHAR(150) NOT NULL,
-                    equipamento VARCHAR(150) NOT NULL,
-                    preco DECIMAL(10,2) NOT NULL,
-                    forma_aluguel VARCHAR(5) NOT NULL,
-                    descricao TEXT,
-                    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            
-            # Imagens das máquinas
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS imagens_maquinas (
-                    id SERIAL PRIMARY KEY,
-                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
-                    imagem_url VARCHAR(200) NOT NULL
-                )
-            """)
-            
-            # Carrinhos
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS carrinhos (
-                    id SERIAL PRIMARY KEY,
-                    usuario_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-                    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    UNIQUE (usuario_id)
-                )
-            """)
-            
-            # Itens do carrinho
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS itens_carrinho (
-                    id SERIAL PRIMARY KEY,
-                    carrinho_id INTEGER NOT NULL REFERENCES carrinhos(id) ON DELETE CASCADE,
-                    maquina_id INTEGER NOT NULL REFERENCES maquinas(id) ON DELETE CASCADE,
-                    quantidade INTEGER NOT NULL CHECK (quantidade > 0),
-                    forma_aluguel VARCHAR(5) NOT NULL,
-                    UNIQUE (carrinho_id, maquina_id)
-                )
-            """)
-            
-            self.connection.commit()
-            cursor.close()
-            print("Tabelas criadas/verificadas!")
-            return True
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro ao criar tabela: {e}")
-            return False
+        self.supabase = create_client(supabase_url, supabase_key)
 
     # ----------------- Usuários -----------------
-
-   
-
-        
+    
     def listar_usuarios(self):
-        # try:
-        #     cursor = self.connection.cursor()
-        #     cursor.execute("SELECT id, nome, email, cpf, telefone FROM usuarios ORDER BY id")
-        #     usuarios = cursor.fetchall()
-        #     cursor.close()
-        #     return [{'id': u[0], 'nome': u[1], 'email': u[2], 'cpf': u[3], 'telefone': u[4]} for u in usuarios]
-        # except Exception as e:
-        #     print(f"Erro listar_usuarios: {e}")
-        #     return []
-        res = supabase.table("usuarios").select("*").execute()
-        return res.data
-            
-       
-    # def get_user_by_id(self, user_id):
-    #     try:
-    #         cursor = self.connection.cursor()
-    #         cursor.execute("SELECT id, nome, telefone, cpf, email FROM usuarios WHERE id=%s", (str(user_id),))
-    #         resultado = cursor.fetchone()
-    #         cursor.close()
-    #         if resultado:
-    #             return {'id': resultado[0], 'nome': resultado[1], 'telefone': resultado[2], 'cpf': resultado[3], 'email': resultado[4]}
-    #         return None
-    #     except Exception as e:
-    #         print(f"Erro get_user_by_id: {e}")
-    #         return None
+        try:
+            res = self.supabase.table("usuarios").select("*").execute()
+            return res.data
+        except Exception as e:
+            print(f"Erro listar_usuarios: {e}")
+            return []
     
     def get_user_by_id(self, user_id):
-        res = supabase.table("usuarios").select("*").eq("id", str(user_id)).execute()
-        if res.data:
-            return res.data[0]
-        return None
-
+        try:
+            res = self.supabase.table("usuarios").select("*").eq("id", str(user_id)).execute()
+            if res.data:
+                return res.data[0]
+            return None
+        except Exception as e:
+            print(f"Erro get_user_by_id: {e}")
+            return None
 
     # ----------------- Máquinas -----------------
 
     def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia,
                           modelo_maquina, equipamento, preco, forma_aluguel, descricao=None, usuario_id=None):
         try:
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                INSERT INTO maquinas (usuario_id, cep, uf, numero, cidade, rua, referencia,
-                                      modelo_maquina, equipamento, preco, forma_aluguel, descricao)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id
-            """, (usuario_id, cep, uf, numero, cidade, rua, referencia,
-                  modelo_maquina, equipamento, preco, forma_aluguel, descricao))
-            maquina_id = cursor.fetchone()[0]
-            self.connection.commit()
-            cursor.close()
-            print(f"Máquina cadastrada! ID: {maquina_id}")
-            return maquina_id
+            # Converte preco para float se for string
+            if isinstance(preco, str):
+                preco = float(preco.replace("R$", "").replace(".", "").replace(",", ".").strip())
+            
+            data = {
+                "usuario_id": usuario_id,
+                "cep": cep,
+                "uf": uf,
+                "numero": numero,
+                "cidade": cidade,
+                "rua": rua,
+                "referencia": referencia,
+                "modelo_maquina": modelo_maquina,
+                "equipamento": equipamento,
+                "preco": preco,
+                "forma_aluguel": forma_aluguel,
+                "descricao": descricao
+            }
+            
+            # Remove campos None
+            data = {k: v for k, v in data.items() if v is not None}
+            
+            res = self.supabase.table("maquinas").insert(data).execute()
+            if res.data:
+                print(f"Máquina cadastrada! ID: {res.data[0]['id']}")
+                return res.data[0]['id']
+            return None
         except Exception as e:
             print(f"Erro cadastrar_maquina: {e}")
             return None
 
     def cadastrar_imagens_maquina(self, maquina_id, imagens_public_urls):
         try:
-            cursor = self.connection.cursor()
+            data = []
             for url in imagens_public_urls:
-                cursor.execute(
-                    "INSERT INTO imagens_maquinas (maquina_id, imagem_url) VALUES (%s, %s)",
-                    (maquina_id, url)
-                )
-            self.connection.commit()
-            cursor.close()
+                data.append({
+                    "maquina_id": maquina_id,
+                    "imagem_url": url
+                })
+            
+            res = self.supabase.table("imagens_maquinas").insert(data).execute()
             print(f"URLs de imagens cadastradas para máquina ID: {maquina_id}")
             return True
         except Exception as e:
-            self.connection.rollback()
             print(f"Erro cadastrar_imagens_maquina: {e}")
             return False
-        
-                
 
     def listar_maquinas(self):
-        # try:
-        #     cursor = self.connection.cursor()
-        #     cursor.execute("""
-        #         SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel,
-        #                m.descricao, u.nome AS usuario_nome,
-        #                COALESCE(array_agg(i.imagem_url) FILTER (WHERE i.imagem_url IS NOT NULL), '{}') AS imagens
-        #         FROM maquinas m
-        #         LEFT JOIN usuarios u ON m.usuario_id = u.id
-        #         LEFT JOIN imagens_maquinas i ON m.id = i.maquina_id
-        #         GROUP BY m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel, m.descricao, u.nome
-        #         ORDER BY m.id
-        #     """)
-        #     maquinas = cursor.fetchall()
-        #     cursor.close()
-        #     return [{
-        #         'id': m[0],
-        #         'modelo_maquina': m[1],
-        #         'equipamento': m[2],
-        #         'preco': float(m[3]),
-        #         'forma_aluguel': m[4],
-        #         'descricao': m[5],
-        #         'usuario_nome': m[6] if m[6] else "Desconhecido",
-        #         'imagens': m[7]
-        #     } for m in maquinas]
-        # except Exception as e:
-        #     print(f"Erro listar_maquinas: {e}")
-        #     return []
         try:
             res = self.supabase.table("maquinas")\
-                .select("id, modelo_maquina, equipamento, preco, forma_aluguel, descricao, usuario_id, imagens_maquinas(imagem_url)")\
-                .execute()
-            return res.data if res.data else []
+            .select("""
+                id, modelo_maquina, equipamento, preco, forma_aluguel, 
+                descricao, usuario_id, usuarios(nome),
+                imagens_maquinas(imagem_url)
+            """)\
+            .execute()
+
+            
+            maquinas = []
+            for maquina in res.data:
+                imagens = [img['imagem_url'] for img in maquina.get('imagens_maquinas', [])]
+                usuario_nome = maquina.get('usuarios', {}).get('nombre') if maquina.get('usuarios') else "Desconhecido"
+                
+                maquinas.append({
+                    'id': maquina['id'],
+                    'modelo_maquina': maquina['modelo_maquina'],
+                    'equipamento': maquina['equipamento'],
+                    'preco': float(maquina['preco']),
+                    'forma_aluguel': maquina['forma_aluguel'],
+                    'descricao': maquina['descricao'],
+                    'usuario_nome': usuario_nome,
+                    'imagens': imagens
+                })
+            
+            return maquinas
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
-            
 
-    # ----------------- Carrinho -----------------
-    def obter_carrinho(self, usuario_id):
-        """Obtém ou cria um carrinho para o usuário"""
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute("SELECT id FROM carrinhos WHERE usuario_id = %s", (usuario_id,))
-            resultado = cursor.fetchone()
-            
-            if resultado:
-                carrinho_id = resultado[0]
-            else:
-                # Cria um novo carrinho para o usuário
-                cursor.execute("INSERT INTO carrinhos (usuario_id) VALUES (%s) RETURNING id", (usuario_id,))
-                carrinho_id = cursor.fetchone()[0]
-                self.connection.commit()
-                
-            cursor.close()
-            return carrinho_id
-        except Exception as e:
-            print(f"Erro obter_carrinho: {e}")
-            return None
-    
-    def adicionar_ao_carrinho(self, usuario_id, maquina_id, quantidade, forma_aluguel):
-        """Adiciona um item ao carrinho do usuário"""
-        try:
-            # Primeiro obtém ou cria o carrinho
-            carrinho_id = self.obter_carrinho(usuario_id)
-            if not carrinho_id:
-                return False
-                
-            cursor = self.connection.cursor()
-            
-            # Verifica se o item já existe no carrinho
-            cursor.execute(
-                "SELECT id, quantidade FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
-                (carrinho_id, maquina_id)
-            )
-            item_existente = cursor.fetchone()
-            
-            if item_existente:
-                # Atualiza a quantidade do item existente
-                item_id, qtd_atual = item_existente
-                nova_qtd = qtd_atual + quantidade
-                cursor.execute(
-                    "UPDATE itens_carrinho SET quantidade = %s WHERE id = %s",
-                    (nova_qtd, item_id)
-                )
-            else:
-                # Insere um novo item no carrinho
-                cursor.execute(
-                    "INSERT INTO itens_carrinho (carrinho_id, maquina_id, quantidade, forma_aluguel) VALUES (%s, %s, %s, %s)",
-                    (carrinho_id, maquina_id, quantidade, forma_aluguel)
-                )
-                
-            self.connection.commit()
-            cursor.close()
-            print(f"Item adicionado ao carrinho! ID: {maquina_id}")
-            return True
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro adicionar_ao_carrinho: {e}")
-            return False
-            
-
-    def remover_do_carrinho(self, usuario_id, maquina_id):
-        """Remove um item do carrinho do usuário"""
-        try:
-            carrinho_id = self.obter_carrinho(usuario_id)
-            if not carrinho_id:
-                return False
-                
-            cursor = self.connection.cursor()
-            cursor.execute(
-                "DELETE FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
-                (carrinho_id, maquina_id)
-            )
-            self.connection.commit()
-            cursor.close()
-            return True
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro remover_do_carrinho: {e}")
-            return False
-    
-    def atualizar_quantidade_carrinho(self, usuario_id, maquina_id, nova_quantidade):
-        """Atualiza a quantidade de um item no carrinho"""
-        try:
-            carrinho_id = self.obter_carrinho(usuario_id)
-            if not carrinho_id:
-                return False
-                
-            cursor = self.connection.cursor()
-            
-            if nova_quantidade <= 0:
-                # Se a quantidade for zero ou negativa, remove o item
-                cursor.execute(
-                    "DELETE FROM itens_carrinho WHERE carrinho_id = %s AND maquina_id = %s",
-                    (carrinho_id, maquina_id)
-                )
-            else:
-                # Atualiza a quantidade
-                cursor.execute(
-                    "UPDATE itens_carrinho SET quantidade = %s WHERE carrinho_id = %s AND maquina_id = %s",
-                    (nova_quantidade, carrinho_id, maquina_id)
-                )
-                
-            self.connection.commit()
-            cursor.close()
-            return True
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro atualizar_quantidade_carrinho: {e}")
-            return False
-    
-    def limpar_carrinho(self, usuario_id):
-        """Remove todos os itens do carrinho do usuário"""
-        try:
-            carrinho_id = self.obter_carrinho(usuario_id)
-            if not carrinho_id:
-                return False
-                
-            cursor = self.connection.cursor()
-            cursor.execute("DELETE FROM itens_carrinho WHERE carrinho_id = %s", (carrinho_id,))
-            self.connection.commit()
-            cursor.close()
-            return True
-        except Exception as e:
-            self.connection.rollback()
-            print(f"Erro limpar_carrinho: {e}")
-            return False
-    
-    def listar_itens_carrinho(self, usuario_id):
-        """Lista todos os itens do carrinho do usuário com detalhes das máquinas"""
-        try:
-            carrinho_id = self.obter_carrinho(usuario_id)
-            if not carrinho_id:
-                return []
-                
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                SELECT i.id, i.maquina_id, i.quantidade, i.forma_aluguel,
-                       m.modelo_maquina, m.preco, m.equipamento,
-                       COALESCE((SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 'media/default.jpg') AS imagem
-                FROM itens_carrinho i
-                JOIN maquinas m ON i.maquina_id = m.id
-                WHERE i.carrinho_id = %s
-            """, (carrinho_id,))
-            
-            itens = cursor.fetchall()
-            cursor.close()
-            
-            resultado = []
-            for item in itens:
-                item_id, maquina_id, quantidade, forma_aluguel, modelo_maquina, preco, equipamento, imagem = item
-                preco_float = float(preco)
-                resultado.append({
-                    'id': maquina_id,  # ID da máquina para facilitar remoção
-                    'item_id': item_id,  # ID do item no carrinho
-                    'modelo_maquina': modelo_maquina,
-                    'equipamento': equipamento,
-                    'preco': preco_float,
-                    'quantidade': quantidade,
-                    'forma_aluguel': forma_aluguel,
-                    'subtotal': preco_float * quantidade,
-                    'imagem': imagem
-                })
-                
-            return resultado
-        except Exception as e:
-            print(f"Erro listar_itens_carrinho: {e}")
-            return []
-    
     def obter_maquina_por_id(self, maquina_id):
-        """Obtém os detalhes de uma máquina pelo ID"""
         try:
-            cursor = self.connection.cursor()
-            cursor.execute("""
-                SELECT m.id, m.modelo_maquina, m.equipamento, m.preco, m.forma_aluguel, m.descricao,
-                       COALESCE((SELECT imagem_url FROM imagens_maquinas WHERE maquina_id = m.id LIMIT 1), 'media/default.jpg') AS imagem
-                FROM maquinas m
-                WHERE m.id = %s
-            """, (maquina_id,))
+            res = self.supabase.table("maquinas")\
+                .select("""
+                    id, modelo_maquina, equipamento, preco, forma_aluguel, 
+                    descricao, imagens_maquinas(imagem_url)
+                """)\
+                .eq("id", maquina_id)\
+                .execute()
             
-            resultado = cursor.fetchone()
-            cursor.close()
-            
-            if resultado:
-                id, modelo_maquina, equipamento, preco, forma_aluguel, descricao, imagem = resultado
+            if res.data:
+                maquina = res.data[0]
+                imagens = [img['imagem_url'] for img in maquina.get('imagens_maquinas', [])]
+                primeira_imagem = imagens[0] if imagens else 'media/default.jpg'
+                
                 return {
-                    'id': id,
-                    'modelo_maquina': modelo_maquina,
-                    'equipamento': equipamento,
-                    'preco': float(preco),
-                    'forma_aluguel': forma_aluguel,
-                    'descricao': descricao,
-                    'imagem': imagem
+                    'id': maquina['id'],
+                    'modelo_maquina': maquina['modelo_maquina'],
+                    'equipamento': maquina['equipamento'],
+                    'preco': float(maquina['preco']),
+                    'forma_aluguel': maquina['forma_aluguel'],
+                    'descricao': maquina['descricao'],
+                    'imagem': primeira_imagem
                 }
             return None
         except Exception as e:
             print(f"Erro obter_maquina_por_id: {e}")
             return None
-    
-    # ----------------- Conexão -----------------
 
-    def fechar(self):
-        if self.connection:
-            self.connection.close()
-            print("Conexão fechada")
+    # ----------------- Carrinho -----------------
+
+    def obter_carrinho_id(self, usuario_id):
+        """Obtém ou cria um carrinho para o usuário"""
+        try:
+            # Verifica se o usuário já tem um carrinho
+            res = self.supabase.table("carrinhos")\
+                .select("id")\
+                .eq("usuario_id", usuario_id)\
+                .execute()
+            
+            if res.data:
+                return res.data[0]['id']
+            else:
+                # Cria um novo carrinho
+                res = self.supabase.table("carrinhos")\
+                    .insert({"usuario_id": usuario_id})\
+                    .execute()
+                return res.data[0]['id']
+        except Exception as e:
+            print(f"Erro obter_carrinho_id: {e}")
+            return None
+
+    def adicionar_ao_carrinho(self, usuario_id, maquina_id, quantidade, forma_aluguel):
+        """Adiciona um item ao carrinho do usuário"""
+        try:
+            carrinho_id = self.obter_carrinho_id(usuario_id)
+            if not carrinho_id:
+                return False
+            
+            # Verifica se o item já existe no carrinho
+            res = self.supabase.table("itens_carrinho")\
+                .select("id, quantidade")\
+                .eq("carrinho_id", carrinho_id)\
+                .eq("maquina_id", maquina_id)\
+                .execute()
+            
+            if res.data:
+                # Atualiza a quantidade
+                item = res.data[0]
+                nova_quantidade = item['quantidade'] + quantidade
+                
+                self.supabase.table("itens_carrinho")\
+                    .update({"quantidade": nova_quantidade})\
+                    .eq("id", item['id'])\
+                    .execute()
+            else:
+                # Adiciona novo item
+                self.supabase.table("itens_carrinho")\
+                    .insert({
+                        "carrinho_id": carrinho_id,
+                        "maquina_id": maquina_id,
+                        "quantidade": quantidade,
+                        "forma_aluguel": forma_aluguel
+                    })\
+                    .execute()
+            
+            print(f"Item adicionado ao carrinho! ID: {maquina_id}")
+            return True
+        except Exception as e:
+            print(f"Erro adicionar_ao_carrinho: {e}")
+            return False
+
+    def remover_do_carrinho(self, usuario_id, maquina_id):
+        """Remove um item do carrinho do usuário"""
+        try:
+            carrinho_id = self.obter_carrinho_id(usuario_id)
+            if not carrinho_id:
+                return False
+            
+            self.supabase.table("itens_carrinho")\
+                .delete()\
+                .eq("carrinho_id", carrinho_id)\
+                .eq("maquina_id", maquina_id)\
+                .execute()
+            
+            return True
+        except Exception as e:
+            print(f"Erro remover_do_carrinho: {e}")
+            return False
+
+    def atualizar_quantidade_carrinho(self, usuario_id, maquina_id, nova_quantidade):
+        """Atualiza a quantidade de um item no carrinho"""
+        try:
+            carrinho_id = self.obter_carrinho_id(usuario_id)
+            if not carrinho_id:
+                return False
+            
+            if nova_quantidade <= 0:
+                # Remove o item se a quantidade for zero ou negativa
+                return self.remover_do_carrinho(usuario_id, maquina_id)
+            else:
+                # Atualiza a quantidade
+                self.supabase.table("itens_carrinho")\
+                    .update({"quantidade": nova_quantidade})\
+                    .eq("carrinho_id", carrinho_id)\
+                    .eq("maquina_id", maquina_id)\
+                    .execute()
+                
+                return True
+        except Exception as e:
+            print(f"Erro atualizar_quantidade_carrinho: {e}")
+            return False
+
+    def limpar_carrinho(self, usuario_id):
+        """Remove todos os itens do carrinho do usuário"""
+        try:
+            carrinho_id = self.obter_carrinho_id(usuario_id)
+            if not carrinho_id:
+                return False
+            
+            self.supabase.table("itens_carrinho")\
+                .delete()\
+                .eq("carrinho_id", carrinho_id)\
+                .execute()
+            
+            return True
+        except Exception as e:
+            print(f"Erro limpar_carrinho: {e}")
+            return False
+
+    def listar_itens_carrinho(self, usuario_id):
+        """Lista todos os itens do carrinho do usuário com detalhes das máquinas"""
+        try:
+            carrinho_id = self.obter_carrinho_id(usuario_id)
+            if not carrinho_id:
+                return []
+            
+            res = self.supabase.table("itens_carrinho")\
+                .select("""
+                    id, maquina_id, quantidade, forma_aluguel,
+                    maquinas!inner(modelo_maquina, preco, equipamento),
+                    maquinas(imagens_maquinas(imagem_url))
+                """)\
+                .eq("carrinho_id", carrinho_id)\
+                .execute()
+            
+            itens = []
+            for item in res.data:
+                maquina = item['maquinas']
+                imagens = maquina.get('imagens_maquinas', [])
+                primeira_imagem = imagens[0]['imagem_url'] if imagens else 'media/default.jpg'
+                
+                preco_float = float(maquina['preco'])
+                itens.append({
+                    'id': item['maquina_id'],
+                    'item_id': item['id'],
+                    'modelo_maquina': maquina['modelo_maquina'],
+                    'equipamento': maquina['equipamento'],
+                    'preco': preco_float,
+                    'quantidade': item['quantidade'],
+                    'forma_aluguel': item['forma_aluguel'],
+                    'subtotal': preco_float * item['quantidade'],
+                    'imagem': primeira_imagem
+                })
+            
+            return itens
+        except Exception as e:
+            print(f"Erro listar_itens_carrinho: {e}")
+            return []
 
 # ----------------- Instância global -----------------
-
 banco = Banco()
 
 def inicializar_banco():
-    """Inicializa banco de dados"""
-    if not banco.conectar():
-        return False
-    if not banco.criar_tabela():
-        return False
+    """Função mantida para compatibilidade"""
     return True
-    
-
