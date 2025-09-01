@@ -80,18 +80,16 @@ class Banco:
     def listar_maquinas(self):
         try:
             res = self.supabase.table("maquinas")\
-            .select("""
-                id, modelo_maquina, equipamento, preco, forma_aluguel, 
-                descricao, usuario_id, usuarios(nome),
-                imagens_maquinas(imagem_url)
-            """)\
-            .execute()
-
+                .select("""
+                    id, modelo_maquina, equipamento, preco, forma_aluguel, 
+                    descricao, imagens_maquinas(imagem_url)
+                """)\
+                .execute()
             
             maquinas = []
             for maquina in res.data:
-                imagens = [img['imagem_url'] for img in maquina.get('imagens_maquinas', [])]
-                usuario_nome = maquina.get('usuarios', {}).get('nombre') if maquina.get('usuarios') else "Desconhecido"
+                imagens = [img['imagem_url'].rstrip('?') for img in maquina.get('imagens_maquinas', [])]
+                primeira_imagem = imagens[0] if imagens else 'media/default.jpg'
                 
                 maquinas.append({
                     'id': maquina['id'],
@@ -100,14 +98,15 @@ class Banco:
                     'preco': float(maquina['preco']),
                     'forma_aluguel': maquina['forma_aluguel'],
                     'descricao': maquina['descricao'],
-                    'usuario_nome': usuario_nome,
-                    'imagens': imagens
+                    'imagens': imagens,
+                    'imagem': primeira_imagem
                 })
             
-            return maquinas
+            return maquinas 
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
+        
 
     def obter_maquina_por_id(self, maquina_id):
         try:

@@ -3,6 +3,7 @@ from banco import banco, inicializar_banco
 from functools import wraps
 from supabase import create_client, Client
 from acessodb import supabase_url, supabase_key
+import re
 import base64
 
 SUPABASE_URL = supabase_url
@@ -191,7 +192,6 @@ def listar_usuarios():
 
 ################# MAQUINAS #######################
 
-
 @app.route('/api/cadastro_maquinas', methods=['POST'])
 @login_required
 def cadastrar_maquinas():
@@ -200,20 +200,24 @@ def cadastrar_maquinas():
         return jsonify({"success": False, "message": "Usuário não logado"}), 401
 
     try:
-        # ----------------- Cadastro da máquina -----------------
+        data = request.get_json()
+        if not data:
+            return jsonify({"success": False, "message": "Dados JSON inválidos"}), 400
+
+        # Dados da máquina
         data_maquina = {
             "usuario_id": usuario_id,
-            "cep": request.form["cep"],
-            "uf": request.form["uf"],
-            "numero": request.form["numero"],
-            "cidade": request.form["cidade"],
-            "rua": request.form["rua"],
-            "referencia": request.form.get("referencia"),
-            "modelo_maquina": request.form["modelo"],
-            "equipamento": request.form["equipamento"],
-            "preco": float(request.form["preco"].replace("R$", "").replace(".", "").replace(",", ".").strip()),
-            "forma_aluguel": request.form.get("forma_aluguel"),
-            "descricao": request.form.get("descricao")
+            "cep": data.get("cep"),
+            "uf": data.get("uf"),
+            "numero": data.get("numero"),
+            "cidade": data.get("cidade"),
+            "rua": data.get("rua"),
+            "referencia": data.get("referencia"),
+            "modelo_maquina": data.get("modelo"),
+            "equipamento": data.get("equipamento"),
+            "preco": float(data.get("preco", "0").replace("R$", "").replace(".", "").replace(",", ".").strip()),
+            "forma_aluguel": data.get("forma_aluguel"),
+            "descricao": data.get("descricao")
         }
 
         # Inserir máquina no Supabase
@@ -223,21 +227,20 @@ def cadastrar_maquinas():
 
         maquina_id = res.data[0]["id"]
 
-        # ----------------- Upload das imagens -----------------
-        imagens_base64 = request.form.getlist("imagens")  # Lista de Base64
+        imagens_base64 = data.get("imagens_base64", [])
         uploaded_image_urls = []
 
         for idx, img_b64 in enumerate(imagens_base64):
-            if not img_b64.strip():
+            if not img_b64 or not isinstance(img_b64, str):
                 continue
 
-            # Separar header se existir
-            if ',' in img_b64 and img_b64.lower().startswith('data:'):
-                header, raw_b64 = img_b64.split(',', 1)
-                mime_type = header.split(';')[0].split(':')[1]
-            else:
-                raw_b64 = img_b64
-                mime_type = 'image/jpeg'
+            # Extrair o tipo mime e o conteúdo base64
+            match = re.match(r'data:(image/\w+);base64,(.+)', img_b64)
+            if not match:
+                continue
+
+            mime_type = match.group(1)
+            base64_data = match.group(2)
 
             ext_map = {
                 'image/jpeg': 'jpg',
@@ -248,15 +251,22 @@ def cadastrar_maquinas():
             }
             ext = ext_map.get(mime_type.lower(), 'jpg')
 
-            file_bytes = base64.b64decode(raw_b64)
-            path = f"maquinas/{maquina_id}/img_{idx}.{ext}"
+            try:
+                file_bytes = base64.b64decode(base64_data)
+            except Exception as e:
+                print(f"Erro ao decodificar base64: {e}")
+                continue
 
-            # Upload para o Supabase Storage
-            supabase.storage.from_("imagens-maquinas").upload(path, file_bytes, content_type=mime_type)
-            url = supabase.storage.from_("imagens-maquinas").get_public_url(path).public_url
+            filename = f"{maquina_id}_{idx}.{ext}"
+            path_in_storage = f"maquinas/{maquina_id}/{filename}"
+
+            # Upload para Supabase Storage
+            supabase.storage.from_("imagens-maquinas").upload(path_in_storage, file_bytes, {'content-type': mime_type})
+
+            url = supabase.storage.from_("imagens-maquinas").get_public_url(path_in_storage)
             uploaded_image_urls.append(url)
 
-        # ----------------- Inserir URLs na tabela imagens_maquinas -----------------
+        # Salvar URLs no banco
         if uploaded_image_urls:
             urls_data = [{"maquina_id": maquina_id, "imagem_url": url} for url in uploaded_image_urls]
             supabase.table("imagens_maquinas").insert(urls_data).execute()
@@ -274,6 +284,13 @@ def cadastrar_maquinas():
         traceback.print_exc()
         return jsonify({"success": False, "message": f"Erro ao cadastrar máquina: {str(e)}"}), 500
 
+
+@app.route('/search_maquinas')
+def search_maquinas():
+    query = request.args.get('q', '').lower()
+    todas_maquinas = banco.listar_maquinas()
+    maquinas_filtradas = [m for m in todas_maquinas if query in m['modelo_maquina'].lower() or query in m['equipamento'].lower()]
+    return render_template('pages/index.html', maquinas=maquinas_filtradas, search_query=query)
 
         
 @app.route('/api/maquinas', methods=['GET'])

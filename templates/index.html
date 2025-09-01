@@ -17,6 +17,8 @@
             <span class="search-icon">&#128269;</span> 
         </div>
 
+        <div id="resultado-busca"></div>
+
         <div class="icons">
             <a id="img_header" href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
             <a href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
@@ -49,9 +51,8 @@
                         {% if loop.index <= 6 %}
                         <div class="card-inicial">
                             <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
-                                {% if maquina['imagens'] %}
-                                    <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" 
-                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% if maquina['imagem'] %}
+                                    <img src="{{ maquina['imagem'] }}" alt="{{ maquina['modelo_maquina'] }}">
                                 {% endif %}
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}
                                     <span>/{{ maquina['forma_aluguel'] }}</span></p>
