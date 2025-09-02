@@ -335,45 +335,6 @@ def list_maquinas():
         'total': len(maquinas)
     })
 
-@app.route('/api/test-storage', methods=['GET'])
-def test_storage():
-    try:
-        print('=== TESTE DE STORAGE ===')
-        
-        # Listar buckets
-        buckets = supabase.storage.list_buckets()
-        print(f'Buckets: {[bucket.name for bucket in buckets]}')
-        
-        # Verificar se bucket "imagens" existe
-        bucket_names = [bucket.name for bucket in buckets]
-        if 'imagens' not in bucket_names:
-            return jsonify({
-                'success': False,
-                'message': 'Bucket "imagens" não encontrado',
-                'buckets_available': bucket_names
-            })
-        
-        # Tentar listar arquivos no bucket imagens
-        try:
-            files = supabase.storage.from_("imagens").list()
-            print(f'Arquivos no bucket imagens: {files}')
-        except Exception as e:
-            print(f'Erro ao listar arquivos: {e}')
-        
-        return jsonify({
-            'success': True,
-            'message': 'Storage funcionando',
-            'buckets': bucket_names,
-            'imagens_bucket_exists': 'imagens' in bucket_names
-        })
-        
-    except Exception as e:
-        print(f'Erro no teste de storage: {e}')
-        return jsonify({
-            'success': False,
-            'message': f'Erro: {str(e)}'
-        })
-
 ####################### CARRINHO #########################
 
 @app.route('/api/carrinho/adicionar', methods=['POST'])
@@ -398,11 +359,7 @@ def adicionar_ao_carrinho():
         sucesso = banco.adicionar_ao_carrinho(usuario_id, maquina_id, quantidade, forma_aluguel)
         
         if sucesso:
-            return jsonify({
-                "success": True, 
-                "message": "Máquina adicionada ao carrinho com sucesso!",
-                "maquina": maquina
-            })
+            return redirect(url_for('index'))
         else:
             return jsonify({"success": False, "message": "Erro ao adicionar ao carrinho"}), 500
             
@@ -455,7 +412,7 @@ def remover_do_carrinho():
         sucesso = banco.remover_do_carrinho(usuario_id, maquina_id)
         
         if sucesso:
-            return jsonify({"success": True, "message": "Máquina removida do carrinho com sucesso!"})
+            return render_template('pages/carrinho.html')
         else:
             return jsonify({"success": False, "message": "Erro ao remover do carrinho"}), 500
             
@@ -467,16 +424,26 @@ def remover_do_carrinho():
 @login_required
 def carrinho_remover(item_id):
     try:
+        print(f"=== DEBUG carrinho_remover ===")
+        print(f"item_id recebido: {item_id}")
+        
         usuario_id = session['usuario_id']
+        print(f"usuario_id: {usuario_id}")
+        
         sucesso = banco.remover_do_carrinho(usuario_id, item_id)
+        print(f"Resultado da remoção: {sucesso}")
         
         if not sucesso:
             flash("Erro ao remover item do carrinho", "error")
+        else:
+            flash("Item removido do carrinho com sucesso!", "success")
             
         return redirect(url_for('carrinho'))
         
     except Exception as e:
         print(f"Erro ao remover do carrinho: {e}")
+        import traceback
+        traceback.print_exc()
         flash("Erro ao remover item do carrinho", "error")
         return redirect(url_for('carrinho'))
 
@@ -638,6 +605,30 @@ def contador_carrinho():
     except Exception as e:
         print(f"Erro ao contar itens do carrinho: {e}")
         return jsonify({"success": False, "total_itens": 0})
+
+@app.route('/debug/carrinho', methods=['GET'])
+@login_required
+def debug_carrinho():
+    try:
+        usuario_id = session['usuario_id']
+        print(f"=== DEBUG ROTA /debug/carrinho ===")
+        print(f"usuario_id: {usuario_id}")
+        
+        # Lista itens do carrinho
+        itens = banco.listar_itens_carrinho(usuario_id)
+        
+        return jsonify({
+            "success": True,
+            "usuario_id": usuario_id,
+            "itens": itens,
+            "total_itens": len(itens)
+        })
+        
+    except Exception as e:
+        print(f"Erro no debug do carrinho: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)})
 
 if __name__ == '__main__':
     app.run(debug=True)

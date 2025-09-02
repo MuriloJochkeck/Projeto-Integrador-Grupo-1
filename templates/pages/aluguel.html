@@ -58,11 +58,11 @@
               <form action="/finaliza_pedido" method="get">
                 <button type="submit" class="alugar">Alugar agora</button>
               </form>
-              <form action="/api/carrinho/adicionar" method="post">
+              <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
                 <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
                 <input type="hidden" name="quantidade" value="1">
                 <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
-                <button type="submit" class="carrinho">Adicionar ao carrinho</button>
+                <button type="submit" class="carrinho add-to-cart-btn">Adicionar ao carrinho</button>
               </form>
             </div>
             <p class="locado">Locado por <a href="#">{{ maquina['locador'] }}</a></p>
@@ -135,12 +135,12 @@
   </main>
 
 
+  <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
   <script src="{{url_for('static', filename='js/aluguel.js') }}"> </script>
 
   {% block footer %}
   {% include 'pages/footer.html' %}
   {% endblock %}
-
 
 </body>
 

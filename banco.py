@@ -26,41 +26,7 @@ class Banco:
             return None
 
     # ----------------- Máquinas -----------------
-
-    # def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia,
-    #                       modelo_maquina, equipamento, preco, forma_aluguel, descricao=None, usuario_id=None):
-    #     try:
-    #         # Converte preco para float se for string
-    #         if isinstance(preco, str):
-    #             preco = float(preco.replace("R$", "").replace(".", "").replace(",", ".").strip())
-            
-    #         data = {
-    #             "usuario_id": usuario_id,
-    #             "cep": cep,
-    #             "uf": uf,
-    #             "numero": numero,
-    #             "cidade": cidade,
-    #             "rua": rua,
-    #             "referencia": referencia,
-    #             "modelo_maquina": modelo_maquina,
-    #             "equipamento": equipamento,
-    #             "preco": preco,
-    #             "forma_aluguel": forma_aluguel,
-    #             "descricao": descricao
-    #         }
-            
-    #         # Remove campos None
-    #         data = {k: v for k, v in data.items() if v is not None}
-            
-    #         res = self.supabase.table("maquinas").insert(data).execute()
-    #         if res.data:
-    #             print(f"Máquina cadastrada! ID: {res.data[0]['id']}")
-    #             return res.data[0]['id']
-    #         return None
-    #     except Exception as e:
-    #         print(f"Erro cadastrar_maquina: {e}")
-    #         return None
-
+    
     def cadastrar_imagens_maquina(self, maquina_id, imagens_public_urls):
         try:
             print(f'=== CADASTRANDO IMAGENS PARA MÁQUINA {maquina_id} ===')
@@ -177,8 +143,17 @@ class Banco:
     def adicionar_ao_carrinho(self, usuario_id, maquina_id, quantidade, forma_aluguel):
         """Adiciona um item ao carrinho do usuário"""
         try:
+            print(f"=== DEBUG adicionar_ao_carrinho ===")
+            print(f"usuario_id: {usuario_id}")
+            print(f"maquina_id: {maquina_id}")
+            print(f"quantidade: {quantidade}")
+            print(f"forma_aluguel: {forma_aluguel}")
+            
             carrinho_id = self.obter_carrinho_id(usuario_id)
+            print(f"carrinho_id: {carrinho_id}")
+            
             if not carrinho_id:
+                print("Erro: Não foi possível obter carrinho_id")
                 return False
             
             # Verifica se o item já existe no carrinho
@@ -188,48 +163,84 @@ class Banco:
                 .eq("maquina_id", maquina_id)\
                 .execute()
             
+            print(f"Item existente no carrinho: {res.data}")
+            
             if res.data:
                 # Atualiza a quantidade
                 item = res.data[0]
                 nova_quantidade = item['quantidade'] + quantidade
+                print(f"Atualizando quantidade para: {nova_quantidade}")
                 
-                self.supabase.table("itens_carrinho")\
+                update_res = self.supabase.table("itens_carrinho")\
                     .update({"quantidade": nova_quantidade})\
                     .eq("id", item['id'])\
                     .execute()
+                print(f"Resultado da atualização: {update_res.data}")
             else:
                 # Adiciona novo item
-                self.supabase.table("itens_carrinho")\
-                    .insert({
-                        "carrinho_id": carrinho_id,
-                        "maquina_id": maquina_id,
-                        "quantidade": quantidade,
-                        "forma_aluguel": forma_aluguel
-                    })\
+                print("Adicionando novo item ao carrinho")
+                insert_data = {
+                    "carrinho_id": carrinho_id,
+                    "maquina_id": maquina_id,
+                    "quantidade": quantidade,
+                    "forma_aluguel": forma_aluguel
+                }
+                print(f"Dados para inserir: {insert_data}")
+                
+                insert_res = self.supabase.table("itens_carrinho")\
+                    .insert(insert_data)\
                     .execute()
+                print(f"Resultado da inserção: {insert_res.data}")
             
-            print(f"Item adicionado ao carrinho! ID: {maquina_id}")
+            print(f"Item adicionado ao carrinho com sucesso! ID: {maquina_id}")
             return True
         except Exception as e:
             print(f"Erro adicionar_ao_carrinho: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def remover_do_carrinho(self, usuario_id, maquina_id):
         """Remove um item do carrinho do usuário"""
         try:
+            print(f"=== DEBUG remover_do_carrinho ===")
+            print(f"usuario_id: {usuario_id}")
+            print(f"maquina_id: {maquina_id}")
+            
             carrinho_id = self.obter_carrinho_id(usuario_id)
+            print(f"carrinho_id: {carrinho_id}")
+            
             if not carrinho_id:
+                print("Erro: Não foi possível obter carrinho_id")
                 return False
             
-            self.supabase.table("itens_carrinho")\
+            # Verificar se o item existe antes de remover
+            res_check = self.supabase.table("itens_carrinho")\
+                .select("*")\
+                .eq("carrinho_id", carrinho_id)\
+                .eq("maquina_id", maquina_id)\
+                .execute()
+            
+            print(f"Itens encontrados para remoção: {res_check.data}")
+            
+            if not res_check.data:
+                print("Nenhum item encontrado para remover")
+                return False
+            
+            # Remover o item
+            delete_res = self.supabase.table("itens_carrinho")\
                 .delete()\
                 .eq("carrinho_id", carrinho_id)\
                 .eq("maquina_id", maquina_id)\
                 .execute()
             
+            print(f"Resultado da remoção: {delete_res.data}")
+            print("Item removido com sucesso!")
             return True
         except Exception as e:
             print(f"Erro remover_do_carrinho: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def atualizar_quantidade_carrinho(self, usuario_id, maquina_id, nova_quantidade):
@@ -275,41 +286,77 @@ class Banco:
     def listar_itens_carrinho(self, usuario_id):
         """Lista todos os itens do carrinho do usuário com detalhes das máquinas"""
         try:
+            print(f"=== DEBUG listar_itens_carrinho ===")
+            print(f"usuario_id: {usuario_id}")
+            
             carrinho_id = self.obter_carrinho_id(usuario_id)
+            print(f"carrinho_id: {carrinho_id}")
+            
             if not carrinho_id:
+                print("Nenhum carrinho encontrado para o usuário")
                 return []
             
-            res = self.supabase.table("itens_carrinho")\
-                .select("""
-                    id, maquina_id, quantidade, forma_aluguel,
-                    maquinas!inner(modelo_maquina, preco, equipamento),
-                    maquinas(imagens_maquinas(imagem_url))
-                """)\
+            # Primeiro, vamos verificar se há itens no carrinho
+            res_itens = self.supabase.table("itens_carrinho")\
+                .select("*")\
                 .eq("carrinho_id", carrinho_id)\
                 .execute()
             
+            print(f"Itens encontrados no carrinho: {len(res_itens.data)}")
+            print(f"Dados dos itens: {res_itens.data}")
+            
+            if not res_itens.data:
+                print("Nenhum item encontrado no carrinho")
+                return []
+            
+            # Vamos fazer uma abordagem mais simples - buscar os dados separadamente
             itens = []
-            for item in res.data:
-                maquina = item['maquinas']
-                imagens = maquina.get('imagens_maquinas', [])
+            for item_carrinho in res_itens.data:
+                print(f"Processando item do carrinho: {item_carrinho}")
+                
+                # Buscar dados da máquina
+                maquina_res = self.supabase.table("maquinas")\
+                    .select("id, modelo_maquina, preco, equipamento")\
+                    .eq("id", item_carrinho['maquina_id'])\
+                    .execute()
+                
+                if not maquina_res.data:
+                    print(f"Máquina não encontrada para ID: {item_carrinho['maquina_id']}")
+                    continue
+                
+                maquina = maquina_res.data[0]
+                print(f"Dados da máquina: {maquina}")
+                
+                # Buscar imagens da máquina
+                imagens_res = self.supabase.table("imagens_maquinas")\
+                    .select("imagem_url")\
+                    .eq("maquina_id", item_carrinho['maquina_id'])\
+                    .execute()
+                
+                imagens = imagens_res.data
                 primeira_imagem = imagens[0]['imagem_url'] if imagens else 'media/default.jpg'
                 
                 preco_float = float(maquina['preco'])
-                itens.append({
-                    'id': item['maquina_id'],
-                    'item_id': item['id'],
+                item_data = {
+                    'id': item_carrinho['maquina_id'],
+                    'item_id': item_carrinho['id'],
                     'modelo_maquina': maquina['modelo_maquina'],
                     'equipamento': maquina['equipamento'],
                     'preco': preco_float,
-                    'quantidade': item['quantidade'],
-                    'forma_aluguel': item['forma_aluguel'],
-                    'subtotal': preco_float * item['quantidade'],
+                    'quantidade': item_carrinho['quantidade'],
+                    'forma_aluguel': item_carrinho['forma_aluguel'],
+                    'subtotal': preco_float * item_carrinho['quantidade'],
                     'imagem': primeira_imagem
-                })
+                }
+                print(f"Item processado: {item_data}")
+                itens.append(item_data)
             
+            print(f"Total de itens retornados: {len(itens)}")
             return itens
         except Exception as e:
             print(f"Erro listar_itens_carrinho: {e}")
+            import traceback
+            traceback.print_exc()
             return []
 
 # ----------------- Instância global -----------------

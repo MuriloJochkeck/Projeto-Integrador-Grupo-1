@@ -36,17 +36,20 @@
             {% if itens %}
                 {% for item in itens %}
                 <div class="product-item">
+                  <!-- Imagem da máquina -->
                   <img class="product-image" 
-                       src="{{ url_for('static', filename=item['imagem']) }}" 
+                       src="{{ item['imagem'] }}" 
                        alt="{{ item['modelo_maquina'] }}" />
+
                   <div class="product-info">
                     <div class="product-name">{{ item['modelo_maquina'] }}</div>
                   </div>
+
+                  <!-- Controle de quantidade -->
                   <div class="quantity-control">
                     <div class="quantity-buttons">
                       <form method="POST" action="{{ url_for('carrinho_adicionar') }}">
                           <input type="hidden" name="maquina_id" value="{{ item['id'] }}">
-                          <input type="hidden" name="forma_aluguel" value="{{ item['forma_aluguel'] }}">
                           <button type="submit" name="acao" value="decrement">-</button>
                           <span class="quantity-value">{{ item['quantidade'] }}</span>
                           <button type="submit" name="acao" value="increment">+</button>
@@ -54,12 +57,19 @@
                     </div>
                     <span class="quantity-label">Horas</span>
                   </div>
+
+                  <!-- Preço e subtotal -->
                   <div class="product-price">
                     {{ item['quantidade'] }}x R$ {{ '%.2f'|format(item['preco']) }}<br/>
                     Total: <span class="price-total">R$ {{ '%.2f'|format(item['preco']*item['quantidade']) }}</span>
                   </div>
+
+                  <!-- Remover item -->
                   <div class="remove-item">
-                    <a href="{{ url_for('carrinho_remover', item_id=item['id']) }}">Remover</a>
+                    <form method="POST" action="{{ url_for('remover_do_carrinho') }}">
+                      <input type="hidden" name="maquina_id" value="{{ item['item_id'] }}"> 
+                      <button class="remove-item-btn" data-item-id="{{ item['item_id'] }}">Remover</button>
+                    </form>
                   </div>
                 </div>
                 {% endfor %}
@@ -89,6 +99,7 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
   {% block footer %}
     {% include 'pages/footer.html' %}
   {% endblock %}

@@ -36,8 +36,8 @@
                         <p class="price">R$4.900,00<span>/dia</span></p>
                         <p class="desc">VALTRA BC7500</p>
                     </a>
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="VALTRA BC7500">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="1">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -49,8 +49,8 @@
                         <p class="price">R$6.300,00<span>/dia</span></p>
                         <p class="desc">CR5 NEW HOLLAND</p>
                     </a>
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="CR5 NEW HOLLAND">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="2">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -62,8 +62,8 @@
                         <p class="price">R$3.500,00<span>/dia</span></p>
                         <p class="desc">SLC 6200</p>
                     </a>    
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="SLC 6200">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="3">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -97,8 +97,8 @@
                         <p class="price">R$4.900,00<span>/dia</span></p>
                         <p class="desc">VALTRA BC7500</p>
                     </a>
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="VALTRA BC7500">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="1">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -111,8 +111,8 @@
                         <p class="price">R$6.300,00<span>/dia</span></p>
                         <p class="desc">CR5 NEW HOLLAND</p>
                     </a>
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="CR5 NEW HOLLAND">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="2">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -124,8 +124,8 @@
                         <p class="price">R$3.500,00<span>/dia</span></p>
                         <p class="desc">SLC 6200</p>
                     </a>    
-                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="SLC 6200">
+                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="3">
                         <input type="hidden" name="quantidade" value="1">
                         <input type="hidden" name="forma_aluguel" value="dia">
                         <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
@@ -137,5 +137,7 @@
     {% block footer %}
     {% include 'pages/footer.html' %}
     {% endblock %}
+    
+    <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
 </body>
 </html>

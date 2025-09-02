@@ -35,9 +35,7 @@
         {% else %}
             <span>Bem-vindo, visitante!</span>
         {% endif %}
-        <a href="{{ url_for('cadastro') }}">Cadastro</a>
-        <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
-        <a href="{{ url_for('endereço_user') }}">Endereço</a>
+        <a href="{{ url_for('cadastro_maquinas') }}">Anunciar Máquina</a>
         </div>
     
     <section class="carousel-section">
@@ -59,7 +57,12 @@
                                     <span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina']}}</p>
                             </a>
-                            
+                            <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
+                                <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
+                                <input type="hidden" name="quantidade" value="1">
+                                <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
+                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                            </form>
                         </div>
                         {% endif %}
                     {% endfor %}
@@ -166,6 +169,7 @@
     </section>
 
     <script src="{{ url_for('static', filename='js/inicial.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
     
 
     {% block footer %}
