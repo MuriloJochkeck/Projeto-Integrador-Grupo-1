@@ -89,7 +89,24 @@ def carrinho():
     usuario_id = session['usuario_id']
     itens = banco.listar_itens_carrinho(usuario_id)
     total = sum(item['subtotal'] for item in itens)
-    return render_template('pages/carrinho.html', itens=itens, total=total)
+    
+    # Aplicar desconto se houver cupom
+    desconto = 0
+    cupom_aplicado = session.get('cupom_aplicado')
+    if cupom_aplicado:
+        if cupom_aplicado['dados']['tipo'] == 'percentual':
+            desconto = (total * cupom_aplicado['dados']['valor']) / 100
+        else:
+            desconto = min(cupom_aplicado['dados']['valor'], total)
+    
+    total_final = total - desconto
+    
+    return render_template('pages/carrinho.html', 
+                         itens=itens, 
+                         total=total_final,
+                         subtotal=total,
+                         desconto=desconto,
+                         cupom_aplicado=cupom_aplicado)
 
 @app.route('/aluguel')
 def aluguel():
@@ -125,8 +142,25 @@ def ver_mais_trator():
 def finaliza_pedido():
     usuario_id = session['usuario_id']
     carrinho = banco.listar_itens_carrinho(usuario_id)
-    total = sum(item['preco'] * item['quantidade'] for item in carrinho)
-    return render_template('pages/finaliza_pedido.html', total=total)
+    subtotal = sum(item['preco'] * item['quantidade'] for item in carrinho)
+    
+    # Aplicar desconto se houver cupom
+    desconto = 0
+    cupom_aplicado = session.get('cupom_aplicado')
+    if cupom_aplicado:
+        if cupom_aplicado['dados']['tipo'] == 'percentual':
+            desconto = (subtotal * cupom_aplicado['dados']['valor']) / 100
+        else:
+            desconto = min(cupom_aplicado['dados']['valor'], subtotal)
+    
+    total = subtotal - desconto
+    
+    return render_template('pages/finaliza_pedido.html', 
+                         carrinho=carrinho,
+                         total=total,
+                         subtotal=subtotal,
+                         desconto=desconto,
+                         cupom_aplicado=cupom_aplicado)
 
 @app.route('/sobrenos')
 def sobrenos():

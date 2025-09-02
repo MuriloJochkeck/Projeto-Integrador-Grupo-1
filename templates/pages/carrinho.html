@@ -85,13 +85,26 @@
         <div class="summary-title">Resumo</div>
         <div class="summary-row">
           <span>Subtotal</span>
-          <span>R$ {{ '%.2f'|format(total) }}</span>
+          <span>R$ {{ '%.2f'|format(subtotal) }}</span>
         </div>
+        {% if desconto > 0 %}
+        <div class="summary-row discount">
+          <span>Desconto ({{ cupom_aplicado.codigo }})</span>
+          <span>- R$ {{ '%.2f'|format(desconto) }}</span>
+        </div>
+        {% endif %}
         <div class="summary-row bold">
           <span>Total</span>
           <span>R$ {{ '%.2f'|format(total) }}</span>
         </div>
+        {% if not cupom_aplicado %}
         <input class="coupon-input" placeholder="Cupom de desconto" />
+        {% else %}
+        <div class="applied-coupon">
+          <span>Cupom aplicado: {{ cupom_aplicado.codigo }}</span>
+          <button onclick="removerCupom()" class="remove-coupon">Remover</button>
+        </div>
+        {% endif %}
         <button class="finish-button" data-url="{{ url_for('finaliza_pedido') }}">Finalizar Pedido</button>
       </div>
 
