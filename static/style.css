@@ -329,7 +329,7 @@ body {
 
 /* ------- página inicial ------- */
 .container {
-  padding: 20px;
+  padding: 2.7%;
   max-width: 1200px;
   margin: auto;
 }
@@ -884,7 +884,7 @@ body {
 /* ====== cadastro_maquinas.css ====== */
 .form-container {
   background-color: #f3f3f3;
-  padding: 40px;
+  padding: 3%;
   border-radius: 10px;
   width: 100%;
   max-width: 400px;
@@ -4340,9 +4340,6 @@ body {
 
 /* Estilos específicos para a página de login */
 .login-page .container {
-  margin-top: 100px; /* Espaço para o header */
-  margin-bottom: 100px; /* Espaço para o footer */
-  min-height: calc(100vh - 200px); /* Altura mínima considerando header e footer */
   padding: 20px;
 }
 
@@ -4438,9 +4435,6 @@ body {
 
 /* Estilos específicos para a página de cadastro */
 .cadastro-page .container {
-  margin-top: 100px; /* Espaço para o header */
-  margin-bottom: 100px; /* Espaço para o footer */
-  min-height: calc(100vh - 200px); /* Altura mínima considerando header e footer */
   padding: 20px;
 }
 
