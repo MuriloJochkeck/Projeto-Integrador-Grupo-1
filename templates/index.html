@@ -25,9 +25,7 @@
 
     <div class="home-links">
         {% if user %}
-            <span>Bem-vindo, {{ user[0]['nome'] }}!</span>
         {% else %}
-            <span>Bem-vindo, visitante!</span>
         {% endif %}
         <a href="{{ url_for('cadastro') }}">Cadastro</a>
         <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>

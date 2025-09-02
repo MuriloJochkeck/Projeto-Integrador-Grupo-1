@@ -3,6 +3,7 @@ from banco import banco, inicializar_banco
 from functools import wraps
 from supabase import create_client, Client
 from acessodb import supabase_url, supabase_key, bucket_name
+import base64
 
 SUPABASE_URL = supabase_url
 SUPABASE_KEY = supabase_key
@@ -408,6 +409,94 @@ def carrinho_remover(item_id):
         flash("Erro ao remover item do carrinho", "error")
         return redirect(url_for('carrinho'))
 
+
+@app.route('/salvarImagens', methods=['POST'])
+@login_required
+def salvar_imagens():
+    try:
+        if not request.is_json:
+            return jsonify({"success": False, "message": "Requisição deve ser JSON"}), 400
+
+        data = request.get_json(silent=True) or {}
+        maquina_id = data.get('maquina_id')
+        imagens = data.get('imagens') or data.get('imagens_base64') or []
+
+        if not maquina_id:
+            return jsonify({"success": False, "message": "maquina_id é obrigatório"}), 400
+        if not isinstance(imagens, list) or len(imagens) == 0:
+            return jsonify({"success": False, "message": "Lista de imagens (base64) é obrigatória"}), 400
+
+        uploaded_image_urls = []
+        for idx, img_b64 in enumerate(imagens):
+            if not isinstance(img_b64, str) or len(img_b64.strip()) == 0:
+                continue
+
+            # Suporta data URL (ex: data:image/png;base64,....) e base64 puro
+            mime_type = 'image/jpeg'
+            raw_b64 = img_b64
+            if ',' in img_b64 and img_b64.lower().startswith('data:'):
+                header, raw_b64 = img_b64.split(',', 1)
+                # tenta extrair mime
+                try:
+                    mime_type = header.split(';')[0].split(':')[1]
+                except Exception:
+                    mime_type = 'image/jpeg'
+
+            # Define extensão pela mime
+            ext_map = {
+                'image/jpeg': 'jpg',
+                'image/jpg': 'jpg',
+                'image/png': 'png',
+                'image/gif': 'gif',
+                'image/webp': 'webp'
+            }
+            ext = ext_map.get(mime_type.lower(), 'jpg')
+
+            try:
+                file_bytes = base64.b64decode(raw_b64)
+            except Exception:
+                # base64 inválido, ignora
+                continue
+
+            file_path = f"{maquina_id}/b64_{idx}.{ext}"
+            try:
+                resp = supabase.storage.from_(bucket_name).upload(file_path, file_bytes)
+                # Supabase retorna 200 para sucesso
+                status_ok = getattr(resp, 'status_code', None) == 200 or (isinstance(resp, dict) and resp.get('Key'))
+                if status_ok:
+                    public_url = supabase.storage.from_(bucket_name).get_public_url(file_path)
+                    uploaded_image_urls.append(public_url)
+                else:
+                    # tenta obter erro textual
+                    try:
+                        err = resp.json()
+                        print(f"Erro upload Supabase: {err}")
+                    except Exception:
+                        print(f"Erro upload Supabase: {resp}")
+                    continue
+            except Exception as storage_e:
+                print(f"Exceção upload Supabase: {storage_e}")
+                continue
+
+        if uploaded_image_urls:
+            banco.cadastrar_imagens_maquina(maquina_id, uploaded_image_urls)
+            return jsonify({
+                "success": True,
+                "message": "Imagens salvas com sucesso",
+                "total_imagens": len(uploaded_image_urls),
+                "urls": uploaded_image_urls
+            })
+        else:
+            return jsonify({"success": False, "message": "Nenhuma imagem válida foi processada"}), 400
+
+    except Exception as e:
+        print(f"Erro em /salvarImagens: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+            
+    
+# Remove the duplicate set of routes at the bottom of the file to avoid overwriting endpoints
+# The unique definitions already exist earlier in the file.
+# Keeping only the first definitions, removing the duplicated block below:
 @app.route('/api/carrinho/atualizar', methods=['POST'])
 @login_required
 def atualizar_carrinho():

@@ -9,7 +9,7 @@ BUCKET_NAME = bucket_name
 
 class Banco:
     def __init__(self):
-        self.host = 5432
+        self.host = db_host
         self.port = db_port
         self.database = db_database
         self.user = db_user
@@ -24,7 +24,8 @@ class Banco:
                 port=self.port,
                 database=self.database,
                 user=self.user,
-                password=self.password  
+                password=self.password,
+                sslmode='require'
             )
             print("Conectado!")
             return True
