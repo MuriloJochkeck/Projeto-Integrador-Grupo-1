@@ -207,13 +207,21 @@ async function finalizarPedido() {
     if (!confirmacao) return;
     
     try {
+        // Obter valores do resumo
+        const subtotalElement = document.querySelector('.summary-row:not(.total):not(.discount) span');
+        const totalElement = document.querySelector('.summary-row.total span');
+        
+        const subtotal = parseFloat(subtotalElement.textContent.replace('R$ ', '').replace(',', '.'));
+        const total = parseFloat(totalElement.textContent.replace('R$ ', '').replace(',', '.'));
+        const desconto = subtotal - total;
+        
         // Dados do pedido
         const dadosPedido = {
             metodo_pagamento: metodoPagamento.parentElement.textContent.includes('PIX') ? 'PIX' : 'CARTAO',
             parcelas: parcelas ? parseInt(parcelas.value) : 1,
-            cupom: cupomAplicado ? cupomAplicado : null,
-            desconto: descontoAplicado,
-            total: totalOriginal - descontoAplicado
+            subtotal: subtotal,
+            desconto: desconto,
+            total: total
         };
         
         // Enviar para o servidor

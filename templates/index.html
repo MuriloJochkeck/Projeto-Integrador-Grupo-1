@@ -36,6 +36,7 @@
             <span>Bem-vindo, visitante!</span>
         {% endif %}
         <a href="{{ url_for('cadastro_maquinas') }}">Anunciar Máquina</a>
+        <a href="{{ url_for('meus_pedidos') }}">Meus Pedidos</a>
         </div>
     
     <section class="carousel-section">
@@ -169,9 +170,6 @@
     </section>
 
     <script src="{{ url_for('static', filename='js/inicial.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
-    
-
     {% block footer %}
     {% include 'pages/footer.html' %}
     {% endblock %}

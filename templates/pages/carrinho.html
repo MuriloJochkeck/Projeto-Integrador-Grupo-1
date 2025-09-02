@@ -9,7 +9,7 @@
   <header class="top-header">
       <div class="logo">
         <a href="{{ url_for('index') }}">
-          <img src="{{ url_for('static', filename='imgs/download.jfif') }}" alt="Logo">
+          <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
         </a>
       </div>
   
@@ -20,7 +20,7 @@
   
       <div class="icons"> 
         <a href="{{ url_for('login') }}">
-          <img src="{{ url_for('static', filename='imgs/download.jfif') }}" alt="Login">
+          <img src="../static/media/login/usuario.png" alt="">
         </a>
       </div>
   </header>
@@ -55,7 +55,7 @@
                           <button type="submit" name="acao" value="increment">+</button>
                       </form>
                     </div>
-                    <span class="quantity-label">Horas</span>
+                    <span class="quantity-label">{{ item['forma_aluguel']|capitalize }}</span>
                   </div>
 
                   <!-- Preço e subtotal -->

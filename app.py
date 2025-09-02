@@ -3,8 +3,6 @@ from banco import banco, inicializar_banco
 from functools import wraps
 from supabase import create_client, Client
 from acessodb import supabase_url, supabase_key
-import re
-import base64
 
 SUPABASE_URL = supabase_url
 SUPABASE_KEY = supabase_key
@@ -129,13 +127,17 @@ def endereço_user():
 def cadastro_maquinas():
     return render_template('pages/cadastro_maquinas.html')
 
+
 @app.route('/ver_mais_colheitadeira')
 def ver_mais_colheitadeira():
-    return render_template('pages/ver_mais_colheitadeira.html')
+    maquinas = [m for m in banco.listar_maquinas() if m['equipamento'].lower() == 'colheitadeira']
+    return render_template('pages/ver_mais_colheitadeira.html', maquinas=maquinas)
+
 
 @app.route('/ver_mais_trator')
 def ver_mais_trator():
-    return render_template('pages/ver_mais_trator.html')
+    maquinas = [m for m in banco.listar_maquinas() if m['equipamento'].lower() == 'trator']
+    return render_template('pages/ver_mais_trator.html', maquinas=maquinas)
 
 @app.route('/finaliza_pedido')
 @login_required
@@ -663,6 +665,117 @@ def debug_carrinho():
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "error": str(e)})
+
+####################### PEDIDOS #########################
+
+@app.route('/api/pedido/finalizar', methods=['POST'])
+@login_required
+def finalizar_pedido():
+    try:
+        usuario_id = session['usuario_id']
+        data = request.get_json()
+        
+        # ... (código existente para obter itens do carrinho e calcular totais)
+        
+        # Dados do pedido
+        dados_pedido = {
+            "usuario_id": usuario_id,
+            "subtotal": subtotal,
+            "desconto": desconto,
+            "total": total,
+            "metodo_pagamento": data.get('metodo_pagamento', 'PIX'),
+            "parcelas": data.get('parcelas', 1), # <-- Certifique-se que este valor está sendo passado corretamente do frontend
+            "status": "PENDENTE",
+            "data_pedido": "now()"
+        }
+        
+        # Inserir pedido no banco
+        pedido_id = banco.criar_pedido(dados_pedido)
+        if not pedido_id:
+            return jsonify({"success": False, "message": "Erro ao criar pedido"}), 500
+        
+        # Inserir itens do pedido
+        for item in itens_carrinho:
+            item_pedido = {
+                "pedido_id": pedido_id,
+                "maquina_id": item['id'],
+                "quantidade": item['quantidade'],
+                "preco_unitario": item['preco'],
+                "subtotal": item['subtotal']
+            }
+            banco.adicionar_item_pedido(item_pedido)
+
+        # Se o pagamento for por cartão, adicione os dados (apenas os últimos 4 dígitos e nome)
+        if dados_pedido['metodo_pagamento'] == 'CARTAO':
+            nome_cartao = data.get('nome_cartao')
+            numero_cartao_completo = data.get('numero_cartao') # NÃO ARMAZENAR ISSO EM PRODUÇÃO!
+            ultimos_digitos = numero_cartao_completo[-4:] if numero_cartao_completo else None
+            
+            if nome_cartao and ultimos_digitos:
+                banco.adicionar_cartao(usuario_id, nome_cartao, ultimos_digitos)
+            else:
+                print("Aviso: Dados incompletos do cartão para armazenamento.")
+        
+        # Limpar carrinho
+        banco.limpar_carrinho(usuario_id)
+        
+        # Limpar cupom da sessão
+        session.pop('cupom_aplicado', None)
+        
+        print(f"Pedido criado com sucesso! ID: {pedido_id}")
+        
+        return jsonify({
+            "success": True,
+            "message": "Pedido finalizado com sucesso!",
+            "pedido_id": pedido_id
+        })
+        
+    except Exception as e:
+        print(f"Erro ao finalizar pedido: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+    
+
+####################### CARTÕES #########################
+
+@app.route('/meus_pedidos')
+@login_required
+def meus_pedidos():
+    usuario_id = session['usuario_id']
+    pedidos = banco.listar_pedidos_usuario(usuario_id)
+    return render_template('pages/pedidos.html', pedidos=pedidos)
+
+# Nova rota para adicionar cartão (para demonstração)
+@app.route('/api/cartao/adicionar', methods=['POST'])
+@login_required
+def api_adicionar_cartao():
+    try:
+        usuario_id = session['usuario_id']
+        data = request.get_json()
+        
+        nome_cartao = data.get('nome_cartao')
+        numero_cartao = data.get('numero_cartao') # Lembre-se: NÃO SEGURO PARA PRODUÇÃO!
+        
+        if not nome_cartao or not numero_cartao:
+            return jsonify({"success": False, "message": "Nome e número do cartão são obrigatórios."}), 400
+        
+        ultimos_digitos = numero_cartao[-4:]
+        
+        cartao_id = banco.adicionar_cartao(usuario_id, nome_cartao, ultimos_digitos)
+        
+        if cartao_id:
+            return jsonify({"success": True, "message": "Cartão adicionado com sucesso!", "cartao_id": str(cartao_id)})
+        else:
+            return jsonify({"success": False, "message": "Erro ao adicionar cartão."}), 500
+            
+    except Exception as e:
+        print(f"Erro na API de adicionar cartão: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor."}), 500
+
+# ... (restante do código)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -359,6 +359,65 @@ class Banco:
             traceback.print_exc()
             return []
 
+    # ----------------- Pedidos -----------------
+    
+    def criar_pedido(self, dados_pedido):
+        """Cria um novo pedido no banco"""
+        try:
+            print(f"=== DEBUG criar_pedido ===")
+            print(f"dados_pedido: {dados_pedido}")
+            
+            res = self.supabase.table("pedidos").insert(dados_pedido).execute()
+            
+            if res.data:
+                pedido_id = res.data[0]['id']
+                print(f"Pedido criado com ID: {pedido_id}")
+                return pedido_id
+            else:
+                print("Erro: Nenhum dado retornado ao criar pedido")
+                return None
+                
+        except Exception as e:
+            print(f"Erro criar_pedido: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def adicionar_item_pedido(self, item_pedido):
+        """Adiciona um item ao pedido"""
+        try:
+            print(f"=== DEBUG adicionar_item_pedido ===")
+            print(f"item_pedido: {item_pedido}")
+            
+            res = self.supabase.table("itens_pedido").insert(item_pedido).execute()
+            
+            if res.data:
+                print(f"Item adicionado ao pedido: {res.data[0]['id']}")
+                return True
+            else:
+                print("Erro: Nenhum dado retornado ao adicionar item")
+                return False
+                
+        except Exception as e:
+            print(f"Erro adicionar_item_pedido: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def listar_pedidos_usuario(self, usuario_id):
+        """Lista todos os pedidos de um usuário"""
+        try:
+            res = self.supabase.table("pedidos")\
+                .select("*")\
+                .eq("usuario_id", usuario_id)\
+                .order("data_pedido", desc=True)\
+                .execute()
+            
+            return res.data
+        except Exception as e:
+            print(f"Erro listar_pedidos_usuario: {e}")
+            return []
+
 # ----------------- Instância global -----------------
 banco = Banco()
 

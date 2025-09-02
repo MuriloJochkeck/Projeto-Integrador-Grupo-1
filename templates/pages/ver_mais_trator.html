@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Colheitadeiras</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header class="top-header">
         <div class="logo">
-            <a href="{{ url_for('index') }}"><img src="../static/media/login/logo.png" alt="Logo"></a>
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='media/login/logo.png') }}" alt="Logo">
+            </a>
         </div>
 
         <div class="search-bar">
@@ -18,126 +20,41 @@
         </div>
 
         <div class="icons">
-            <a href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
-            <a href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
+            <a href="{{ url_for('carrinho') }}">
+                <img src="{{ url_for('static', filename='media/login/carrinho.png') }}" alt="Carrinho">
+            </a>
+            <a href="{{ url_for('login') }}">
+                <img src="{{ url_for('static', filename='media/login/7407992-pessoa-icone-cliente-simbolo-vetor-removebg-preview.png') }}" alt="Login">
+            </a>
         </div>
     </header>
-        <section class="carousel-section">
-        <div class="section-header">
-            <h2>Trator</h2>     
-        </div>
-        <div class="carousel">
-            <div class="carousel-track">
 
-            <div class="carousel-track">
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator1.jpg" alt="VALTRA BC7500">
-                        <p class="price">R$4.900,00<span>/dia</span></p>
-                        <p class="desc">VALTRA BC7500</p>
-                    </a>
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="1">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator2.jpg" alt="CR5 NEW HOLLAND">
-                        <p class="price">R$6.300,00<span>/dia</span></p>
-                        <p class="desc">CR5 NEW HOLLAND</p>
-                    </a>
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="2">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator3.jpg" alt="SLC 6200">
-                        <p class="price">R$3.500,00<span>/dia</span></p>
-                        <p class="desc">SLC 6200</p>
-                    </a>    
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="3">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="carousel-section">
         <div class="section-header">
+            <h2>Colheitadeiras</h2>     
         </div>
         <div class="carousel">
-            <div class="carousel-track">
             {% for maquina in maquinas %}
-            <div class="card-inicial">
-                <a href="{{ url_for('aluguel') }}" class="card-link">
-                    {% if maquina['imagem_url'] %}
-                        <img src="{{ url_for('static', filename=maquina.imagem_url) }}" 
-                            alt="{{ maquina['modelo_maquina'] }}">
-                    {% endif %}
-                    <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
-                </a>
-                <p>Total de máquinas: {{ maquinas|length }}</p>
-            </div>
+                <div class="card-inicial">
+                    <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
+                        {% if maquina['imagem'] %}
+                            <img src="{{ maquina['imagem'] }}" alt="{{ maquina['modelo_maquina'] }}">
+                        {% endif %}
+                        <p class="price">
+                            R${{ '%.2f'|format(maquina['preco']) }}
+                            <span>/{{ maquina['forma_aluguel'] }}</span>
+                        </p>
+                        <p class="desc">{{ maquina['modelo_maquina'] }}</p>
+                    </a>
+                </div>
             {% endfor %}
         </div>
-            <div class="carousel-track">
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator1.jpg" alt="VALTRA BC7500">
-                        <p class="price">R$4.900,00<span>/dia</span></p>
-                        <p class="desc">VALTRA BC7500</p>
-                    </a>
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="1">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator2.jpg" alt="CR5 NEW HOLLAND">
-                        <p class="price">R$6.300,00<span>/dia</span></p>
-                        <p class="desc">CR5 NEW HOLLAND</p>
-                    </a>
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="2">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-                <div class="card-inicial">
-                    <a href="{{ url_for('aluguel') }}" class="card-link">
-                        <img src="../static/media/trator/trator3.jpg" alt="SLC 6200">
-                        <p class="price">R$3.500,00<span>/dia</span></p>
-                        <p class="desc">SLC 6200</p>
-                    </a>    
-                    <form class="add-to-cart-form" action="/api/carrinho/adicionar" method="POST">
-                        <input type="hidden" name="maquina_id" value="3">
-                        <input type="hidden" name="quantidade" value="1">
-                        <input type="hidden" name="forma_aluguel" value="dia">
-                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
-                    </form>
-                </div>
-            </div>
-        </div>
     </section>
+
     {% block footer %}
-    {% include 'pages/footer.html' %}
+        {% include 'pages/footer.html' %}
     {% endblock %}
-    
+
     <script src="{{ url_for('static', filename='js/carrinho-ajax.js') }}"></script>
 </body>
 </html>
