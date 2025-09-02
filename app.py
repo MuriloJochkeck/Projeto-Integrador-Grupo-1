@@ -236,7 +236,6 @@ def cadastrar_maquinas():
             "descricao": descricao
         }
 
-
         # Inserir máquina no Supabase
         print('Inserindo máquina no banco...')
         res = supabase.table("maquinas").insert(data_maquina).execute()
@@ -257,63 +256,51 @@ def cadastrar_maquinas():
         # Processar imagens se existirem
         imagens_files = request.files.getlist("imagens")
         print(f'Imagens recebidas: {len(imagens_files)}')
-        
+
+        uploaded_image_urls = []
+
         if imagens_files and imagens_files[0].filename:  # Verifica se há arquivos
             print('Processando imagens...')
-            uploaded_image_urls = []
-            
             for idx, imagem_file in enumerate(imagens_files):
                 print(f'Processando imagem {idx}: {imagem_file.filename}')
                 if imagem_file.filename:  # Verifica se o arquivo tem nome
                     try:
-                        # Determinar extensão do arquivo
                         filename = imagem_file.filename
                         ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else 'jpg'
-                        
-                        # Criar nome único para o arquivo
+
                         file_path = f"maquinas/{maquina_id}/imagem_{idx}_{filename}"
                         print(f'Caminho do arquivo: {file_path}')
-                        
-                        # Ler o conteúdo do arquivo
+
                         file_content = imagem_file.read()
                         print(f'Tamanho do arquivo: {len(file_content)} bytes')
-                        
-                        # Fazer upload para o Supabase Storage
+
+                        # Upload
                         print('Fazendo upload para Supabase Storage...')
                         try:
                             upload_result = supabase.storage.from_("imagens").upload(
-                                file_path, 
+                                file_path,
                                 file_content,
                                 file_options={"content-type": imagem_file.content_type}
                             )
                             print(f'Resultado do upload: {upload_result}')
-                            
+
                             if upload_result:
-                                # Obter URL pública da imagem
                                 public_url = supabase.storage.from_("imagens").get_public_url(file_path)
                                 print(f'URL pública gerada: {public_url}')
                                 uploaded_image_urls.append(public_url)
-                            else:
-                                print(f'Upload falhou para imagem {idx}')
-                                
                         except Exception as upload_error:
-                            print(f'Erro específico no upload: {upload_error}')
-                            # Tentar upload sem file_options
-                            try:
-                                upload_result = supabase.storage.from_("imagens").upload(
-                                    file_path, 
-                                    file_content
-                                )
-                                print(f'Resultado do upload (sem options): {upload_result}')
-                                
-                                if upload_result:
-                                    public_url = supabase.storage.from_("imagens").get_public_url(file_path)
-                                    print(f'URL pública gerada (sem options): {public_url}')
-                                    uploaded_image_urls.append(public_url)
-                            except Exception as upload_error2:
-                                print(f'Erro no upload sem options: {upload_error2}')
-                                raise upload_error2
-                            
+                            print(f'Erro no upload com options: {upload_error}')
+                            # Tentar upload sem options
+                            upload_result = supabase.storage.from_("imagens").upload(
+                                file_path,
+                                file_content
+                            )
+                            print(f'Resultado do upload (sem options): {upload_result}')
+                            if upload_result:
+                                public_url = supabase.storage.from_("imagens").get_public_url(file_path)
+                                print(f'URL pública gerada (sem options): {public_url}')
+                                uploaded_image_urls.append(public_url)
+
                     except Exception as e:
                         print(f"Erro ao fazer upload da imagem {idx}: {e}")
                         import traceback
@@ -321,11 +308,11 @@ def cadastrar_maquinas():
                         continue
         else:
             print('Nenhuma imagem encontrada ou arquivo vazio')
-            
-            # Salvar URLs das imagens na tabela imagens_maquinas
-            if uploaded_image_urls:
-                print(f'Salvando {len(uploaded_image_urls)} URLs de imagens...')
-                banco.cadastrar_imagens_maquina(maquina_id, uploaded_image_urls)
+
+        # Sempre salvar as URLs das imagens no banco se houver
+        if uploaded_image_urls:
+            print(f'Salvando {len(uploaded_image_urls)} URLs de imagens...')
+            banco.cadastrar_imagens_maquina(maquina_id, uploaded_image_urls)
 
         print('=== CADASTRO CONCLUÍDO COM SUCESSO ===')
         return redirect(url_for('index'))
@@ -335,6 +322,7 @@ def cadastrar_maquinas():
         import traceback
         traceback.print_exc()
         return jsonify({"success": False, "message": f"Erro ao cadastrar máquina: {str(e)}"}), 500
+
 
 
         
