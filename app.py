@@ -285,13 +285,6 @@ def cadastrar_maquinas():
         return jsonify({"success": False, "message": f"Erro ao cadastrar máquina: {str(e)}"}), 500
 
 
-@app.route('/search_maquinas')
-def search_maquinas():
-    query = request.args.get('q', '').lower()
-    todas_maquinas = banco.listar_maquinas()
-    maquinas_filtradas = [m for m in todas_maquinas if query in m['modelo_maquina'].lower() or query in m['equipamento'].lower()]
-    return render_template('pages/index.html', maquinas=maquinas_filtradas, search_query=query)
-
         
 @app.route('/api/maquinas', methods=['GET'])
 def list_maquinas():

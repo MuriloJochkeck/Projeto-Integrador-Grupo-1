@@ -89,8 +89,12 @@ class Banco:
             maquinas = []
             for maquina in res.data:
                 imagens = [img['imagem_url'].rstrip('?') for img in maquina.get('imagens_maquinas', [])]
-                primeira_imagem = imagens[0] if imagens else 'media/default.jpg'
-                
+
+                if imagens:
+                    primeira_imagem = imagens[0]  
+                else:
+                    primeira_imagem = '/static/media/default.jpg'  
+
                 maquinas.append({
                     'id': maquina['id'],
                     'modelo_maquina': maquina['modelo_maquina'],
@@ -106,7 +110,7 @@ class Banco:
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")
             return []
-        
+
 
     def obter_maquina_por_id(self, maquina_id):
         try:

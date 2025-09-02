@@ -38,7 +38,7 @@
         <a href="{{ url_for('cadastro_maquinas') }}">Cadastro de Máquinas</a>
         <a href="{{ url_for('endereço_user') }}">Endereço</a>
         </div>
-
+    
     <section class="carousel-section">
         <div class="section-header">
             <h2>Colheitadeiras</h2>
@@ -78,9 +78,8 @@
                         {% if loop.index <= 6 %}
                         <div class="card-inicial">
                             <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
-                                {% if maquina['imagens'] %}
-                                    <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" 
-                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% if maquina['imagem'] %}
+                                    <img src="{{ maquina['imagem'] }}" alt="{{ maquina['modelo_maquina'] }}">
                                 {% endif %}
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}
                                     <span>/{{ maquina['forma_aluguel'] }}</span></p>
@@ -106,9 +105,8 @@
                         {% if loop.index <= 6 %}
                         <div class="card-inicial">
                             <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
-                                {% if maquina['imagens'] %}
-                                    <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" 
-                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% if maquina['imagem'] %}
+                                    <img src="{{ maquina['imagem'] }}" alt="{{ maquina['modelo_maquina'] }}">
                                 {% endif %}
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina'] }}</p>
@@ -133,9 +131,8 @@
                         {% if loop.index <= 6 %}
                         <div class="card-inicial">
                             <a href="{{ url_for('ver_maquina', maquina_id=maquina['id']) }}" class="card-link">
-                                {% if maquina['imagens'] %}
-                                    <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" 
-                                        alt="{{ maquina['modelo_maquina'] }}">
+                                {% if maquina['imagem'] %}
+                                    <img src="{{ maquina['imagem'] }}" alt="{{ maquina['modelo_maquina'] }}">
                                 {% endif %}
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina'] }}</p>
