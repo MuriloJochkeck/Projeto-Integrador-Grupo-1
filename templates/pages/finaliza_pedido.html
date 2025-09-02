@@ -49,9 +49,14 @@
               <tbody>
                 {% for item in carrinho %}
                 <tr>
-                  <td>{{ item.produto }}</td>
-                  <td>{{ item.quantidade }}</td>
-                  <td>R$ {{ item.valor }}</td>
+                  <td>
+                    <div class="product-info">
+                      <img src="{{ url_for('static', filename=item['imagem']) }}" alt="{{ item['modelo_maquina'] }}" class="product-thumb">
+                      <span>{{ item['modelo_maquina'] }}</span>
+                    </div>
+                  </td>
+                  <td>{{ item['quantidade'] }} {{ item['forma_aluguel'] }}</td>
+                  <td>R$ {{ '%.2f'|format(item['preco'] * item['quantidade']) }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -59,10 +64,17 @@
           </div>
           <div class="summary-section">
             <h2>Resumo</h2>
-            <div class="summary-row">Subtotal <span>R$ 2.000,00</span></div>
-            <div class="summary-row total">Total <span>R$ 1.800,00</span></div>
-            <button class="coupon-btn">Cupom de desconto</button>
-            <div class="discount">Desconto: 10%</div>
+            <div class="summary-row">Subtotal <span>R$ {{ '%.2f'|format(total) }}</span></div>
+            <div class="summary-row" id="discount-row" style="display: none;">
+              <span>Desconto</span>
+              <span id="discount-value">R$ 0,00</span>
+            </div>
+            <div class="summary-row total">Total <span id="total-value">R$ {{ '%.2f'|format(total) }}</span></div>
+            <div class="coupon-section">
+              <input type="text" id="coupon-input" placeholder="Código do cupom" class="coupon-input">
+              <button class="coupon-btn" onclick="aplicarCupom()">Aplicar</button>
+            </div>
+            <div id="coupon-message" class="coupon-message"></div>
           </div>
         </div>
         <div class="payment-section">
@@ -81,27 +93,8 @@
               <label><input type="radio" name="payment" /> Cartão</label>
               <div class="card-options">
                 <div>NU PAGAMENTOS SA *1234</div>
-                <table class="installments-table">
-                  <tr>
-                    <td>1x R$ 1.800,00</td>
-                    <td><input type="radio" name="installment" /></td>
-                  </tr>
-                  <tr>
-                    <td>2x R$ 900,00</td>
-                    <td><input type="radio" name="installment" /></td>
-                  </tr>
-                  <tr>
-                    <td>3x R$ 600,00</td>
-                    <td><input type="radio" name="installment" /></td>
-                  </tr>
-                  <tr>
-                    <td>4x R$ 450,00</td>
-                    <td><input type="radio" name="installment" /></td>
-                  </tr>
-                  <tr>
-                    <td>5x R$ 360,00</td>
-                    <td><input type="radio" name="installment" /></td>
-                  </tr>
+                <table class="installments-table" id="installments-table">
+                  <!-- Parcelas serão geradas dinamicamente via JavaScript -->
                 </table>
               </div>
               <div class="add-card">
@@ -126,5 +119,7 @@
     {% block footer %}
     {% include 'pages/footer.html' %}
     {% endblock %}
+    
+    <script src="{{ url_for('static', filename='js/finaliza_pedido.js') }}"></script>
   </body>
 </html>

@@ -89,7 +89,24 @@ def carrinho():
     usuario_id = session['usuario_id']
     itens = banco.listar_itens_carrinho(usuario_id)
     total = sum(item['subtotal'] for item in itens)
-    return render_template('pages/carrinho.html', itens=itens, total=total)
+    
+    # Aplicar desconto se houver cupom
+    desconto = 0
+    cupom_aplicado = session.get('cupom_aplicado')
+    if cupom_aplicado:
+        if cupom_aplicado['dados']['tipo'] == 'percentual':
+            desconto = (total * cupom_aplicado['dados']['valor']) / 100
+        else:
+            desconto = min(cupom_aplicado['dados']['valor'], total)
+    
+    total_final = total - desconto
+    
+    return render_template('pages/carrinho.html', 
+                         itens=itens, 
+                         total=total_final,
+                         subtotal=total,
+                         desconto=desconto,
+                         cupom_aplicado=cupom_aplicado)
 
 @app.route('/aluguel')
 def aluguel():
@@ -125,8 +142,25 @@ def ver_mais_trator():
 def finaliza_pedido():
     usuario_id = session['usuario_id']
     carrinho = banco.listar_itens_carrinho(usuario_id)
-    total = sum(item['preco'] * item['quantidade'] for item in carrinho)
-    return render_template('pages/finaliza_pedido.html', total=total)
+    subtotal = sum(item['preco'] * item['quantidade'] for item in carrinho)
+    
+    # Aplicar desconto se houver cupom
+    desconto = 0
+    cupom_aplicado = session.get('cupom_aplicado')
+    if cupom_aplicado:
+        if cupom_aplicado['dados']['tipo'] == 'percentual':
+            desconto = (subtotal * cupom_aplicado['dados']['valor']) / 100
+        else:
+            desconto = min(cupom_aplicado['dados']['valor'], subtotal)
+    
+    total = subtotal - desconto
+    
+    return render_template('pages/finaliza_pedido.html', 
+                         carrinho=carrinho,
+                         total=total,
+                         subtotal=subtotal,
+                         desconto=desconto,
+                         cupom_aplicado=cupom_aplicado)
 
 @app.route('/sobrenos')
 def sobrenos():
@@ -638,6 +672,123 @@ def contador_carrinho():
     except Exception as e:
         print(f"Erro ao contar itens do carrinho: {e}")
         return jsonify({"success": False, "total_itens": 0})
+
+@app.route('/api/carrinho/cupom', methods=['POST'])
+@login_required
+def aplicar_cupom_carrinho():
+    try:
+        usuario_id = session['usuario_id']
+        data = request.get_json()
+        codigo = data.get('codigo')
+        
+        if not codigo:
+            return jsonify({"success": False, "message": "Código do cupom é obrigatório"}), 400
+        
+        # Cupons válidos (simulação - em produção, isso viria do banco de dados)
+        cupons_validos = {
+            'DESCONTO10': {'tipo': 'percentual', 'valor': 10},
+            'DESCONTO20': {'tipo': 'percentual', 'valor': 20},
+            'R$50': {'tipo': 'fixo', 'valor': 50},
+            'R$100': {'tipo': 'fixo', 'valor': 100}
+        }
+        
+        if codigo.upper() in cupons_validos:
+            # Salvar cupom na sessão
+            session['cupom_aplicado'] = {
+                'codigo': codigo.upper(),
+                'dados': cupons_validos[codigo.upper()]
+            }
+            return jsonify({"success": True, "message": "Cupom aplicado com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Cupom inválido ou expirado"}), 400
+            
+    except Exception as e:
+        print(f"Erro ao aplicar cupom: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/api/carrinho/cupom/remover', methods=['POST'])
+@login_required
+def remover_cupom_carrinho():
+    try:
+        # Remover cupom da sessão
+        session.pop('cupom_aplicado', None)
+        return jsonify({"success": True, "message": "Cupom removido com sucesso!"})
+        
+    except Exception as e:
+        print(f"Erro ao remover cupom: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
+
+@app.route('/api/pedido/finalizar', methods=['POST'])
+@login_required
+def finalizar_pedido():
+    try:
+        usuario_id = session['usuario_id']
+        data = request.get_json()
+        
+        # Obter itens do carrinho
+        itens = banco.listar_itens_carrinho(usuario_id)
+        if not itens:
+            return jsonify({"success": False, "message": "Carrinho vazio"}), 400
+        
+        # Calcular total
+        total = sum(item['subtotal'] for item in itens)
+        
+        # Aplicar desconto se houver cupom
+        desconto = 0
+        cupom_aplicado = session.get('cupom_aplicado')
+        if cupom_aplicado:
+            if cupom_aplicado['dados']['tipo'] == 'percentual':
+                desconto = (total * cupom_aplicado['dados']['valor']) / 100
+            else:
+                desconto = min(cupom_aplicado['dados']['valor'], total)
+        
+        total_final = total - desconto
+        
+        # Criar pedido
+        dados_pedido = {
+            'usuario_id': usuario_id,
+            'total': total_final,
+            'desconto': desconto,
+            'cupom_codigo': cupom_aplicado['codigo'] if cupom_aplicado else None,
+            'metodo_pagamento': data.get('metodo_pagamento', 'PIX'),
+            'parcelas': data.get('parcelas', 1),
+            'status': 'PENDENTE'
+        }
+        
+        # Inserir pedido no banco
+        res = supabase.table("pedidos").insert(dados_pedido).execute()
+        if not res.data:
+            return jsonify({"success": False, "message": "Erro ao criar pedido"}), 500
+        
+        pedido_id = res.data[0]['id']
+        
+        # Criar itens do pedido
+        for item in itens:
+            item_pedido = {
+                'pedido_id': pedido_id,
+                'maquina_id': item['id'],
+                'quantidade': item['quantidade'],
+                'preco_unitario': item['preco'],
+                'subtotal': item['subtotal'],
+                'forma_aluguel': item['forma_aluguel']
+            }
+            supabase.table("itens_pedido").insert(item_pedido).execute()
+        
+        # Limpar carrinho
+        banco.limpar_carrinho(usuario_id)
+        
+        # Limpar cupom da sessão
+        session.pop('cupom_aplicado', None)
+        
+        return jsonify({
+            "success": True, 
+            "message": "Pedido criado com sucesso!",
+            "pedido_id": pedido_id
+        })
+        
+    except Exception as e:
+        print(f"Erro ao finalizar pedido: {e}")
+        return jsonify({"success": False, "message": "Erro interno do servidor"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -7,6 +7,28 @@ document.addEventListener('DOMContentLoaded', function() {
   let finishButton = document.querySelector('.finish-button');
   if (finishButton) {
     finishButton.addEventListener('click', function() {
+      // Verificar se há itens no carrinho
+      const productList = document.querySelector('.product-list');
+      const emptyMessage = productList.querySelector('p');
+      
+      if (emptyMessage && emptyMessage.textContent.includes('vazio')) {
+        mostrarMensagem('Adicione itens ao carrinho antes de finalizar o pedido', 'error');
+        return;
+      }
+      
+      // Verificar se o total é válido
+      const totalElement = document.querySelector('.summary-row.bold span');
+      if (totalElement) {
+        const totalText = totalElement.textContent.replace('R$ ', '').replace(',', '.');
+        const total = parseFloat(totalText);
+        
+        if (isNaN(total) || total <= 0) {
+          mostrarMensagem('Erro no cálculo do total. Recarregue a página e tente novamente.', 'error');
+          return;
+        }
+      }
+      
+      // Redirecionar para finalização
       window.location.href = finishButton.getAttribute('data-url') || '/finaliza_pedido';
     });
   }
@@ -16,9 +38,28 @@ document.addEventListener('DOMContentLoaded', function() {
   if (couponInput) {
     couponInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        aplicarCupom(couponInput.value);
+        const codigo = couponInput.value.trim();
+        if (codigo) {
+          aplicarCupom(codigo);
+        } else {
+          mostrarMensagem('Digite um código de cupom', 'error');
+        }
       }
     });
+    
+    // Adicionar botão de aplicar cupom
+    const couponButton = document.createElement('button');
+    couponButton.textContent = 'Aplicar';
+    couponButton.className = 'coupon-button';
+    couponButton.addEventListener('click', function() {
+      const codigo = couponInput.value.trim();
+      if (codigo) {
+        aplicarCupom(codigo);
+      } else {
+        mostrarMensagem('Digite um código de cupom', 'error');
+      }
+    });
+    couponInput.parentNode.appendChild(couponButton);
   }
 
   // Função para carregar o carrinho da API
@@ -44,13 +85,104 @@ document.addEventListener('DOMContentLoaded', function() {
      // Não precisamos adicionar event listeners JavaScript para isso
    }
    
+   // Função para mostrar mensagens
+   function mostrarMensagem(mensagem, tipo = 'info') {
+     // Remover mensagem anterior se existir
+     const mensagemAnterior = document.querySelector('.carrinho-mensagem');
+     if (mensagemAnterior) {
+       mensagemAnterior.remove();
+     }
+     
+     // Criar nova mensagem
+     const mensagemDiv = document.createElement('div');
+     mensagemDiv.className = `carrinho-mensagem ${tipo}`;
+     mensagemDiv.textContent = mensagem;
+     
+     // Adicionar ao topo do carrinho
+     const cartContainer = document.querySelector('.cart-container');
+     if (cartContainer) {
+       cartContainer.insertBefore(mensagemDiv, cartContainer.firstChild);
+       
+       // Remover mensagem após 3 segundos
+       setTimeout(() => {
+         if (mensagemDiv.parentNode) {
+           mensagemDiv.remove();
+         }
+       }, 3000);
+     }
+   }
+   
    // Função para aplicar cupom de desconto
    function aplicarCupom(codigo) {
-     if (!codigo) return;
+     if (!codigo) {
+       mostrarMensagem('Digite um código de cupom', 'error');
+       return;
+     }
      
-     // Aqui você pode implementar a lógica para aplicar cupons de desconto
-     // Por exemplo, fazer uma requisição AJAX para verificar o cupom
-     alert('Funcionalidade de cupom em desenvolvimento!');
+     // Mostrar loading
+     mostrarMensagem('Aplicando cupom...', 'info');
+     
+     // Aplicar cupom via AJAX
+     fetch('/api/carrinho/cupom', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({ codigo: codigo.toUpperCase() })
+     })
+     .then(response => {
+       if (!response.ok) {
+         throw new Error(`HTTP error! status: ${response.status}`);
+       }
+       return response.json();
+     })
+     .then(data => {
+       if (data.success) {
+         mostrarMensagem('Cupom aplicado com sucesso!', 'success');
+         // Recarregar página para mostrar desconto aplicado
+         setTimeout(() => {
+           window.location.reload();
+         }, 1000);
+       } else {
+         mostrarMensagem(data.message || 'Cupom inválido ou expirado', 'error');
+       }
+     })
+     .catch(error => {
+       console.error('Erro ao aplicar cupom:', error);
+       mostrarMensagem('Erro ao aplicar cupom. Tente novamente.', 'error');
+     });
+   }
+   
+   // Função para remover cupom
+   function removerCupom() {
+     mostrarMensagem('Removendo cupom...', 'info');
+     
+     fetch('/api/carrinho/cupom/remover', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       }
+     })
+     .then(response => {
+       if (!response.ok) {
+         throw new Error(`HTTP error! status: ${response.status}`);
+       }
+       return response.json();
+     })
+     .then(data => {
+       if (data.success) {
+         mostrarMensagem('Cupom removido com sucesso!', 'success');
+         setTimeout(() => {
+           window.location.reload();
+         }, 1000);
+       } else {
+         mostrarMensagem(data.message || 'Erro ao remover cupom', 'error');
+       }
+     })
+     .catch(error => {
+       console.error('Erro ao remover cupom:', error);
+       mostrarMensagem('Erro ao remover cupom. Tente novamente.', 'error');
+     });
    }
   
     //Remover item do carrinho - Não é mais necessário, agora usamos a rota do servidor
