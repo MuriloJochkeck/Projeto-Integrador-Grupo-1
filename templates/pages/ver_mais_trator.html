@@ -36,7 +36,12 @@
                         <p class="price">R$4.900,00<span>/dia</span></p>
                         <p class="desc">VALTRA BC7500</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="VALTRA BC7500">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
@@ -44,7 +49,12 @@
                         <p class="price">R$6.300,00<span>/dia</span></p>
                         <p class="desc">CR5 NEW HOLLAND</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="CR5 NEW HOLLAND">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
@@ -52,7 +62,12 @@
                         <p class="price">R$3.500,00<span>/dia</span></p>
                         <p class="desc">SLC 6200</p>
                     </a>    
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="SLC 6200">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -82,7 +97,12 @@
                         <p class="price">R$4.900,00<span>/dia</span></p>
                         <p class="desc">VALTRA BC7500</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('VALTRA BC7500', '../static/media/trator/A2S.jpg', 4900.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="VALTRA BC7500">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
 
                 <div class="card-inicial">
@@ -91,7 +111,12 @@
                         <p class="price">R$6.300,00<span>/dia</span></p>
                         <p class="desc">CR5 NEW HOLLAND</p>
                     </a>
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('CR5 NEW HOLLAND', '../static/media/trator/Captura de tela 2025-06-20 235637.png', 6300.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="CR5 NEW HOLLAND">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
                 <div class="card-inicial">
                     <a href="{{ url_for('aluguel') }}" class="card-link">
@@ -99,7 +124,12 @@
                         <p class="price">R$3.500,00<span>/dia</span></p>
                         <p class="desc">SLC 6200</p>
                     </a>    
-                    <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('SLC 6200', '../static/media/trator/colheitadeira-massey-ferguson-9895-2.webp', 3500.00)">Adicionar ao Carrinho</button>
+                    <form class="add-to-cart-form" action="/carrinho/adicionar" method="POST">
+                        <input type="hidden" name="maquina_id" value="SLC 6200">
+                        <input type="hidden" name="quantidade" value="1">
+                        <input type="hidden" name="forma_aluguel" value="dia">
+                        <button type="submit" class="add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -128,42 +128,6 @@ carregarAvaliacoesSalvas();
 
 
 
-//mandar para carrinho
-const btnAdicionarCarrinho = document.querySelector('.botoes .carrinho');
-const btnAlugar = document.querySelector('.botoes .alugar');
-
-btnAdicionarCarrinho.addEventListener('click', () => {
-    const produto = {
-        nome: 'Colheitadeira John Deere S790',
-        imagem: '/static/media/trator/colheitadera2.jpg',
-        preco: 4490.90,
-        quantidade: 1
-    };
-
-    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    const indexExistente = carrinho.findIndex(item => item.nome === produto.nome);
-    if (indexExistente !== -1) {
-        carrinho[indexExistente].quantidade += 1;
-    } else {
-        carrinho.push(produto);
-    }
-
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    alert('Produto adicionado ao carrinho!');
-});
-
-// Funcionalidade para o botão "Alugar agora"
-btnAlugar.addEventListener('click', () => {
-    const produto = {
-        nome: 'Colheitadeira John Deere S790',
-        imagem: '/static/media/trator/colheitadera2.jpg',
-        preco: 4490.90,
-        quantidade: 1
-    };
-
-    // Salva o produto no localStorage para a página de finalização
-    localStorage.setItem('produtoAluguel', JSON.stringify(produto));
-    
-    // Redireciona para a página de finalização do pedido
-    window.location.href = '/finaliza_pedido';
-});
+// Nota: A funcionalidade de adicionar ao carrinho e alugar agora
+// foi movida para formulários HTML que enviam diretamente para o servidor
+// Não é mais necessário usar localStorage para isso

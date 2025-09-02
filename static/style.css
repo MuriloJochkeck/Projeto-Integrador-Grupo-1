@@ -1,5 +1,26 @@
 /* ====== CSS GLOBAL ====== */
 
+/* Estilo para botões de adicionar ao carrinho */
+.add-to-cart-form {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.add-to-cart-btn {
+  background-color: #77a56f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #5a8354;
+}
+
 .top-header {
   background-color: #77a56f;
   padding: 10px 20px;
