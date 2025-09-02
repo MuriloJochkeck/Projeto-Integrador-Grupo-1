@@ -35,14 +35,14 @@
               <!-- Miniaturas -->
               <div class="miniaturas">
                   {% for img in maquina['imagens'] %}
-                      <img src="{{ url_for('static', filename=img) }}" alt="Miniatura {{ loop.index }}">
+                      <img src="{{ img }}" alt="Miniatura {{ loop.index }}">
                   {% endfor %}
               </div>
 
               <!-- Imagem principal -->
               <div class="imagem-principal">
-                  {% if maquina['imagens'] %}
-                      <img src="{{ url_for('static', filename=maquina['imagens'][0]) }}" alt="Imagem principal">
+                  {% if maquina['imagem'] %}
+                      <img src="{{ maquina['imagem'] }}" alt="Imagem principal">
                   {% else %}
                       <p>Sem imagem</p>
                   {% endif %}

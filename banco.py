@@ -27,39 +27,39 @@ class Banco:
 
     # ----------------- Máquinas -----------------
 
-    def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia,
-                          modelo_maquina, equipamento, preco, forma_aluguel, descricao=None, usuario_id=None):
-        try:
-            # Converte preco para float se for string
-            if isinstance(preco, str):
-                preco = float(preco.replace("R$", "").replace(".", "").replace(",", ".").strip())
+    # def cadastrar_maquina(self, cep, uf, numero, cidade, rua, referencia,
+    #                       modelo_maquina, equipamento, preco, forma_aluguel, descricao=None, usuario_id=None):
+    #     try:
+    #         # Converte preco para float se for string
+    #         if isinstance(preco, str):
+    #             preco = float(preco.replace("R$", "").replace(".", "").replace(",", ".").strip())
             
-            data = {
-                "usuario_id": usuario_id,
-                "cep": cep,
-                "uf": uf,
-                "numero": numero,
-                "cidade": cidade,
-                "rua": rua,
-                "referencia": referencia,
-                "modelo_maquina": modelo_maquina,
-                "equipamento": equipamento,
-                "preco": preco,
-                "forma_aluguel": forma_aluguel,
-                "descricao": descricao
-            }
+    #         data = {
+    #             "usuario_id": usuario_id,
+    #             "cep": cep,
+    #             "uf": uf,
+    #             "numero": numero,
+    #             "cidade": cidade,
+    #             "rua": rua,
+    #             "referencia": referencia,
+    #             "modelo_maquina": modelo_maquina,
+    #             "equipamento": equipamento,
+    #             "preco": preco,
+    #             "forma_aluguel": forma_aluguel,
+    #             "descricao": descricao
+    #         }
             
-            # Remove campos None
-            data = {k: v for k, v in data.items() if v is not None}
+    #         # Remove campos None
+    #         data = {k: v for k, v in data.items() if v is not None}
             
-            res = self.supabase.table("maquinas").insert(data).execute()
-            if res.data:
-                print(f"Máquina cadastrada! ID: {res.data[0]['id']}")
-                return res.data[0]['id']
-            return None
-        except Exception as e:
-            print(f"Erro cadastrar_maquina: {e}")
-            return None
+    #         res = self.supabase.table("maquinas").insert(data).execute()
+    #         if res.data:
+    #             print(f"Máquina cadastrada! ID: {res.data[0]['id']}")
+    #             return res.data[0]['id']
+    #         return None
+    #     except Exception as e:
+    #         print(f"Erro cadastrar_maquina: {e}")
+    #         return None
 
     def cadastrar_imagens_maquina(self, maquina_id, imagens_public_urls):
         try:

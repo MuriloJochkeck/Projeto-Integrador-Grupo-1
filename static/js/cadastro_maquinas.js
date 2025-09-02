@@ -133,46 +133,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-document.getElementById("form-cadastro_maquinas").addEventListener("submit", async function(event) {
-  event.preventDefault();
-  const form = this;
+
+document.getElementById('form-cadastro_maquinas').addEventListener('submit', async (event) => {
+  const form = event.target;
   const formData = new FormData(form);
-  // Ler arquivos e converter para base64
-  const arquivos = document.getElementById("imagens").files;
-  const imagensBase64 = [];
-  for (let i = 0; i < arquivos.length; i++) {
-    const arquivo = arquivos[i];
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(arquivo);
-    });
-    imagensBase64.push(base64);
-  }
-  // Montar objeto com dados do formulário + imagens base64
-  const dados = {};
-  formData.forEach((value, key) => {
-    dados[key] = value;
-  });
-  dados.imagens_base64 = imagensBase64;
+
   try {
-    const response = await fetch(form.action, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(dados)
+    const response = await fetch('/api/cadastro_maquinas', {
+      method: 'POST',
+      body: formData  // Envia FormData diretamente, sem setar headers!
     });
+
     const result = await response.json();
+
     if (result.success) {
-      alert(result.message);
-      window.location.href = "/";
+      alert('Máquina cadastrada com sucesso!');
+      window.location.href = '/';
     } else {
-      alert("Erro: " + result.message);
+      alert('Erro: ' + result.message);
     }
   } catch (error) {
-    console.error("Erro ao enviar formulário:", error);
-    alert("Erro ao cadastrar máquina. Tente novamente.");
+    console.error('Erro ao enviar formulário:', error);
+    alert('Erro ao cadastrar máquina. Tente novamente.');
   }
 });
