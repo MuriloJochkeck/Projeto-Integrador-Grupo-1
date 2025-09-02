@@ -22,10 +22,11 @@
         <div class="icons">
             <a id="img_header" href="{{ url_for('carrinho') }}"><img src="../static/media/login/carrinho.png" alt="Carrinho"></a>
             <a href="{{ url_for('login') }}"><img src="../static/media/login/usuario.png" alt=""></a>
-            {% if session.get('usuario_id') %}
-                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
-            {% endif %}
         </div>
+
+        {% if session.get('usuario_id') %}
+            <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+        {% endif %}
     </header>
 
     <div class="home-links">

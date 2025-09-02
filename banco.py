@@ -63,6 +63,9 @@ class Banco:
 
     def cadastrar_imagens_maquina(self, maquina_id, imagens_public_urls):
         try:
+            print(f'=== CADASTRANDO IMAGENS PARA MÁQUINA {maquina_id} ===')
+            print(f'URLs recebidas: {imagens_public_urls}')
+            
             data = []
             for url in imagens_public_urls:
                 data.append({
@@ -70,11 +73,15 @@ class Banco:
                     "imagem_url": url
                 })
             
+            print(f'Dados para inserir: {data}')
             res = self.supabase.table("imagens_maquinas").insert(data).execute()
+            print(f'Resultado da inserção: {res.data}')
             print(f"URLs de imagens cadastradas para máquina ID: {maquina_id}")
             return True
         except Exception as e:
             print(f"Erro cadastrar_imagens_maquina: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def listar_maquinas(self):
@@ -95,6 +102,7 @@ class Banco:
                 else:
                     primeira_imagem = '/static/media/default.jpg'  
 
+        
                 maquinas.append({
                     'id': maquina['id'],
                     'modelo_maquina': maquina['modelo_maquina'],
@@ -103,9 +111,11 @@ class Banco:
                     'forma_aluguel': maquina['forma_aluguel'],
                     'descricao': maquina['descricao'],
                     'imagens': imagens,
-                    'imagem': primeira_imagem
+                    'imagem': primeira_imagem,
                 })
-            
+
+               
+
             return maquinas 
         except Exception as e:
             print(f"Erro listar_maquinas: {e}")

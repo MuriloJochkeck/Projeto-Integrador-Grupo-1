@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ////// Troca de página //////
 
   if (btnAvancar) {
-    btnAvancar.addEventListener("click", function () {
+    btnAvancar.addEventListener("click", function (e) {
+      e.preventDefault(); // Previne o comportamento padrão do botão
+      
       const inputsPagina1 = pagina1.querySelectorAll("input[required]");
       let preenchido = true;
 
@@ -32,7 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (btnVoltar) {
-    btnVoltar.addEventListener("click", function () {
+    btnVoltar.addEventListener("click", function (e) {
+      e.preventDefault(); // Previne o comportamento padrão do botão
       pagina2.style.display = "none";
       pagina1.style.display = "block";
     });
@@ -134,26 +137,83 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-document.getElementById('form-cadastro_maquinas').addEventListener('submit', async (event) => {
-  const form = event.target;
-  const formData = new FormData(form);
+  ////// Envio do formulário //////
+  
+  const form = document.getElementById('form-cadastro_maquinas');
+  if (form) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Previne o envio padrão do formulário
+      
+      // Prevenir múltiplos envios
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton.disabled) {
+        return; // Já está sendo processado
+      }
+      
+      // Desabilitar botão para evitar múltiplos cliques
+      submitButton.disabled = true;
+      submitButton.textContent = 'Enviando...';
+      
+      const formData = new FormData(form);
 
-  try {
-    const response = await fetch('/api/cadastro_maquinas', {
-      method: 'POST',
-      body: formData  // Envia FormData diretamente, sem setar headers!
+      // Validação dos campos obrigatórios da segunda etapa
+      const inputsPagina2 = document.querySelectorAll('.passar2 input[required]');
+      let preenchido = true;
+
+      inputsPagina2.forEach(input => {
+        if (!input.value.trim()) {
+          preenchido = false;
+          input.classList.add("input-erro");
+        } else {
+          input.classList.remove("input-erro");
+        }
+      });
+
+      // Verificar se a forma de aluguel foi selecionada
+      const formaAluguel = document.getElementById('forma_aluguel').value;
+      if (!formaAluguel) {
+        alert('Selecione a forma de aluguel (Dia ou Horas).');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Finalizar Cadastro';
+        return;
+      }
+
+      if (!preenchido) {
+        alert('Preencha todos os campos obrigatórios antes de finalizar.');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Finalizar Cadastro';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/cadastro_maquinas', {
+          method: 'POST',
+          body: formData  // Envia FormData diretamente, sem setar headers!
+        });
+
+        // Verificar se a resposta é um redirect (status 302)
+        if (response.redirected) {
+          alert('Máquina cadastrada com sucesso!');
+          window.location.href = response.url;
+          return;
+        }
+
+        // Se não for redirect, tentar ler como JSON
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Máquina cadastrada com sucesso!');
+          window.location.href = '/';
+        } else {
+          alert('Erro: ' + result.message);
+          submitButton.disabled = false;
+          submitButton.textContent = 'Finalizar Cadastro';
+        }
+      } catch (error) {
+        console.error('Erro ao enviar formulário:', error);
+        alert('Erro ao cadastrar máquina. Tente novamente.');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Finalizar Cadastro';
+      }
     });
-
-    const result = await response.json();
-
-    if (result.success) {
-      alert('Máquina cadastrada com sucesso!');
-      window.location.href = '/';
-    } else {
-      alert('Erro: ' + result.message);
-    }
-  } catch (error) {
-    console.error('Erro ao enviar formulário:', error);
-    alert('Erro ao cadastrar máquina. Tente novamente.');
   }
-});
