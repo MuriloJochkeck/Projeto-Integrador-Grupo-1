@@ -1645,8 +1645,11 @@ body {
 
 .botoes {
   display: flex;
+  flex-direction: row;
   gap: 20px;
   margin: 20px 0;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .botoes button {
@@ -1659,6 +1662,21 @@ body {
   font-size: 16px;
   min-width: 200px;
   text-align: center;
+}
+
+.botoes form {
+  margin: 0;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.botoes .add-to-cart-form {
+  margin: 0;
+}
+
+.botoes .alugar,
+.botoes .carrinho {
+  white-space: nowrap;
 }
 
 

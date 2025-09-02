@@ -19,6 +19,9 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'usuario_id' not in session:
+            # Verifica se é uma requisição AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.path.startswith('/api/'):
+                return jsonify({"success": False, "message": "Usuário não autenticado"}), 401
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -377,10 +380,20 @@ def list_maquinas():
 @login_required
 def adicionar_ao_carrinho():
     try:
+        print(f"=== DEBUG adicionar_ao_carrinho ===")
+        print(f"Session: {session}")
+        print(f"Request form: {request.form}")
+        print(f"Request headers: {request.headers}")
+        
         usuario_id = session['usuario_id']
         maquina_id = request.form.get('maquina_id')
         quantidade = int(request.form.get('quantidade', 1))
         forma_aluguel = request.form.get('forma_aluguel', 'DIA')
+        
+        print(f"usuario_id: {usuario_id}")
+        print(f"maquina_id: {maquina_id}")
+        print(f"quantidade: {quantidade}")
+        print(f"forma_aluguel: {forma_aluguel}")
         
         if not maquina_id:
             return jsonify({"success": False, "message": "ID da máquina é obrigatório"}), 400
@@ -395,7 +408,7 @@ def adicionar_ao_carrinho():
         sucesso = banco.adicionar_ao_carrinho(usuario_id, maquina_id, quantidade, forma_aluguel)
         
         if sucesso:
-            return redirect(url_for('index'))
+            return jsonify({"success": True, "message": "Item adicionado ao carrinho com sucesso!"})
         else:
             return jsonify({"success": False, "message": "Erro ao adicionar ao carrinho"}), 500
             
