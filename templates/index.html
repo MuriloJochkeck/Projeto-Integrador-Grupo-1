@@ -87,6 +87,12 @@
                                     <span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina']}}</p>
                             </a>
+                            <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
+                                <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
+                                <input type="hidden" name="quantidade" value="1">
+                                <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
+                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                            </form>
                         </div>
                         {% endif %}
                     {% endfor %}
@@ -113,6 +119,12 @@
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina'] }}</p>
                             </a>
+                            <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
+                                <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
+                                <input type="hidden" name="quantidade" value="1">
+                                <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
+                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                            </form>
                         </div>
                         {% endif %}
                     {% endfor %}
@@ -139,6 +151,12 @@
                                 <p class="price">R${{ '%.2f'|format(maquina['preco']) }}<span>/{{ maquina['forma_aluguel'] }}</span></p>
                                 <p class="desc">{{ maquina['modelo_maquina'] }}</p>
                             </a>
+                            <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
+                                <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
+                                <input type="hidden" name="quantidade" value="1">
+                                <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
+                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                            </form>
                         </div>
                         {% endif %}
                     {% endfor %}
