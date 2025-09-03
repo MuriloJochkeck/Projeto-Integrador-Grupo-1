@@ -55,10 +55,10 @@
               R$ {{ maquina['preco']|round(2) }} <span>Valor / {{ maquina['forma_aluguel'] }}</span><br />
             </p>
             <div class="botoes">
-              <form action="/finaliza_pedido" method="get">
+              <form action="/finaliza_pedido" method="get" style="margin: 0;">
                 <button type="submit" class="alugar">Alugar agora</button>
               </form>
-              <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form">
+              <form action="/api/carrinho/adicionar" method="post" class="add-to-cart-form" style="margin: 0;">
                 <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
                 <input type="hidden" name="quantidade" value="1">
                 <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">

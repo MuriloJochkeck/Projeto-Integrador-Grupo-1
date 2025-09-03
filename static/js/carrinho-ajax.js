@@ -22,10 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
             button.textContent = 'Adicionando...';
             
             try {
+                console.log('Enviando requisição para /api/carrinho/adicionar');
+                console.log('FormData:', formData);
+                
                 const response = await fetch('/api/carrinho/adicionar', {
                     method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
                     body: formData
                 });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
                 
                 const data = await response.json();
                 
