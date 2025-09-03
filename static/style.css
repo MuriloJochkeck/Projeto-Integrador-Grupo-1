@@ -1007,8 +1007,26 @@ button:hover,
 
 .botoes {
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+  gap: 20px;
+  margin: 20px 0;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.botoes button {
+  background: rgba(97, 110, 103, 0.2);
+  border: 2px solid black;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  min-width: 200px;
+  text-align: center;
+  transition: all 0.3s ease;
+  flex: 1;
+  max-width: 250px;
 }
 
 /* ====== RESPONSIVIDADE PARA CADASTRO DE MÁQUINAS ====== */
@@ -1646,6 +1664,12 @@ body {
 
 .botoes .carrinho {
   color: blue;
+  background: rgba(119, 165, 111, 0.8);
+}
+
+.botoes .alugar {
+  color: #305230;
+  background: rgba(97, 110, 103, 0.8);
 }
 
 /* Estilos para botão remover do carrinho */
@@ -1674,7 +1698,9 @@ body {
 }
 
 .botoes button:hover {
-  background: #bbb
+  background: rgba(97, 110, 103, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .locado {
@@ -1965,6 +1991,7 @@ s .filtros button {
     gap: 15px;
     margin: 15px 0;
     align-items: center;
+    justify-content: center;
   }
   
   .botoes button {
@@ -1972,6 +1999,8 @@ s .filtros button {
     padding: 15px 30px;
     font-size: 16px;
     min-height: 50px;
+    max-width: 100%;
+    width: 100%;
   }
   
   .locado {
@@ -3451,12 +3480,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .main-content-carrinho {
