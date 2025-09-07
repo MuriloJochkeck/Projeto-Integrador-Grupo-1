@@ -67,8 +67,8 @@
                   <!-- Remover item -->
                   <div class="remove-item">
                     <form method="POST" action="{{ url_for('remover_do_carrinho') }}">
-                      <input type="hidden" name="maquina_id" value="{{ item['item_id'] }}"> 
-                      <button class="remove-item-btn" data-item-id="{{ item['item_id'] }}">Remover</button>
+                      <input type="hidden" name="maquina_id" value="{{ item['id'] }}"> 
+                      <button class="remove-item-btn" data-item-id="{{ item['id'] }}">Remover</button>
                     </form>
                   </div>
                 </div>

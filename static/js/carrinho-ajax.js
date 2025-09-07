@@ -171,18 +171,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Adicionar event listeners aos botões de remover
+    // Interceptar formulários de remover do carrinho
+    const removeForms = document.querySelectorAll('.remove-item form');
+    console.log(`Encontrados ${removeForms.length} formulários de remover`);
+    
+    removeForms.forEach((form, index) => {
+        console.log(`Configurando formulário remover ${index + 1}:`, form);
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Previne o envio padrão do formulário
+            
+            const formData = new FormData(this);
+            const itemId = formData.get('maquina_id');
+            console.log(`Item ID para remover: ${itemId}`);
+            
+            if (confirm('Tem certeza que deseja remover este item do carrinho?')) {
+                removeFromCart(itemId);
+            }
+        });
+    });
+    
+    // Adicionar event listeners aos botões de remover (fallback)
     const removeButtons = document.querySelectorAll('.remove-item-btn');
     console.log(`Encontrados ${removeButtons.length} botões de remover`);
     
     removeButtons.forEach((button, index) => {
         console.log(`Configurando botão remover ${index + 1}:`, button);
-        button.addEventListener('click', function() {
-            const itemId = this.getAttribute('data-item-id');
-            console.log(`Item ID para remover: ${itemId}`);
-            
-            if (confirm('Tem certeza que deseja remover este item do carrinho?')) {
-                removeFromCart(itemId);
+        button.addEventListener('click', function(e) {
+            // Se o formulário não foi interceptado, previne o comportamento padrão
+            if (!this.closest('form').hasAttribute('data-ajax-handled')) {
+                e.preventDefault();
+                const itemId = this.getAttribute('data-item-id');
+                console.log(`Item ID para remover: ${itemId}`);
+                
+                if (confirm('Tem certeza que deseja remover este item do carrinho?')) {
+                    removeFromCart(itemId);
+                }
             }
         });
     });
