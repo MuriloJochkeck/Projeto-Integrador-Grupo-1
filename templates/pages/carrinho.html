@@ -97,8 +97,11 @@
           <span>Total</span>
           <span>R$ {{ '%.2f'|format(total) }}</span>
         </div>
-        {% if not cupom_aplicado %}
-        <input class="coupon-input" placeholder="Cupom de desconto" />
+        <h3 style="text-align: center;">Forma de Pagamento</h3>
+        {% if not cupom_aplicado %} 
+        <label><input type="radio" name="payment" checked /> Cartão de Crédito</label>
+        <label><input type="radio" name="payment" checked /> PIX</label>
+
         {% else %}
         <div class="applied-coupon">
           <span>Cupom aplicado: {{ cupom_aplicado.codigo }}</span>
