@@ -4725,3 +4725,12 @@ body {
   border-radius: 4px;
   font-size: 14px;
 }
+
+
+/* SOBRE NÓS */
+
+.fotos_geral, img {
+  max-width: 400px;
+  max-height: 400px;
+}
+
