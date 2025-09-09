@@ -171,7 +171,7 @@ body {
 
 .btn {
   width: 100%;
-  background: #7ca97c;
+  background: #5a8454;
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -183,10 +183,24 @@ body {
   transition: background 0.2s;
 }
 
+
 .btn:hover {
   background: #6b946b;
 }
 
+.btn-voltar-1 {
+    width: 100%;
+  background: #7ca97c;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
 
 .status-message {
   display: none;
@@ -353,7 +367,7 @@ body {
 
 .section-header a {
   text-decoration: none;
-  color: #000;
+  color: white;
   font-size: 20px;
   margin-right: 10%;
 }
@@ -544,12 +558,21 @@ body {
 .home-links a {
   display: inline-block;
   padding: 8px 14px;
-  background: #ffffff;
+  background: #5a8454;
   border: 1px solid #ccc;
-  border-radius: 20px;
-  color: #222;
+  border-radius: 7px;
+  color: white;
   text-decoration: none;
   font-size: 14px;
+}
+
+.btnvermais {
+  padding: 20px 14px;
+  background: #5a8454;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  color: white;
+  text-decoration: none;
 }
 
 @media (max-width: 600px) {
@@ -771,6 +794,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 1.1m;
 }
 
 .quantity-button {
@@ -930,14 +954,16 @@ button,
 .botoes button,
 .btn {
   width: 100%;
-  padding: 12px;
-  background-color: #719c67;
-  color: white;
-  font-size: 16px;
+  background: #5a8454;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
   cursor: pointer;
   margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
 }
 
 button:hover,
@@ -1015,18 +1041,17 @@ button:hover,
 }
 
 .botoes button {
-  background: rgba(97, 110, 103, 0.2);
-  border: 2px solid black;
+  width: 100%;
+  background: #5a8454;
   color: #fff;
-  padding: 12px 30px;
-  border-radius: 30px;
+  border: none;
+  border-radius: 2px;
+  padding: 12px 0;
+  font-size: 1.1em;
   cursor: pointer;
-  font-size: 16px;
-  min-width: 200px;
-  text-align: center;
-  transition: all 0.3s ease;
-  flex: 1;
-  max-width: 250px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
 }
 
 /* ====== RESPONSIVIDADE PARA CADASTRO DE MÁQUINAS ====== */
@@ -1235,15 +1260,17 @@ button:hover,
 
 button.voltar,
 button.avancar {
-  flex: 1;
-  padding: 10px;
-  background-color: #719c67;
-  color: black;
+  width: 100%;
+  background: #5a8454;
+  color: #fff;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
   cursor: pointer;
-  margin: 0 5px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
 }
 
 button.voltar:hover,
@@ -1333,19 +1360,22 @@ textarea {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  border-radius: 7px;
 }
 
 button.voltar,
 button.avancar {
-  flex: 1;
-  padding: 10px;
-  background-color: #719c67;
-  color: black;
+  width: 100%;
+  background: #5a8454;
+  color: #fff;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
   cursor: pointer;
-  margin: 0 5px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
 }
 
 
@@ -1486,26 +1516,22 @@ button.avancar {
   font-size: 0.98em;
 }
 
-.footer-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-end;
-}
 
 .footer-btn {
-  background: #6fa36f;
   color: #fff;
-  border: none;
-  border-radius: 18px;
-  padding: 8px 24px;
-  font-size: 1em;
   cursor: pointer;
   margin-bottom: 4px;
-  transition: background 0.2s;
-  min-width: 140px;
+  width: 200000px;
   text-align: center;
- text-decoration: none;
+  text-decoration: none;
+  width: 100%;
+  background: #7ca97c;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1m;
+  transition: background 0.5s;
 }
 
 .footer-btn:hover {
@@ -1540,10 +1566,19 @@ button.avancar {
   }
 
   .footer-buttons {
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
+  width: 100%;
+  background: #7ca97c;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.5s;
   }
+
 
   .footer-divider {
     margin: 12px 10px 0 10px;
@@ -1622,6 +1657,10 @@ body {
   max-width: 400px;
 }
 
+.detalhes btn {
+  background-color: white;
+}
+
 .detalhes h1 {
   margin: 0;
   font-size: 28px;
@@ -1686,8 +1725,18 @@ body {
 }
 
 .botoes .alugar {
-  color: #305230;
-  background: rgba(97, 110, 103, 0.8);
+    width: 100%;
+  background: #5a8454;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+
 }
 
 /* Estilos para botão remover do carrinho */
@@ -1709,10 +1758,6 @@ body {
 .remove-item-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-
-.botoes .alugar {
-  color: #305230;
 }
 
 .botoes button:hover {
@@ -1849,14 +1894,17 @@ s .filtros button {
 }
 
 .deixe-sua button {
+  width: 100%;
   background: white;
+  color: black;
   border: none;
-  padding: 12px 24px;
-  border-radius: 20px;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1em;
   cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
-  color: #000;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
 }
 
 .deixe-sua button:hover {
@@ -3482,12 +3530,6 @@ s .filtros button {
     padding: 16px 10px 0 10px;
   }
 
-  .footer-buttons {
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-  }
-
   .footer-divider {
     margin: 12px 10px 0 10px;
   }
@@ -4725,20 +4767,3 @@ body {
   border-radius: 4px;
   font-size: 14px;
 }
-
-
-/* SOBRE NÓS */
-
-.fotos_geral, img {
-  max-width: 200px;
-  max-height: 200px;
-}
-
-.card {
-  background-color:#77a56f ;
-}
-
-
-
-
-

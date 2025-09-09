@@ -42,7 +42,7 @@
     <section class="carousel-section">
         <div class="section-header">
             <h2>Colheitadeiras</h2>
-            <a href="{{ url_for('ver_mais_colheitadeira') }}" class="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_colheitadeira') }}" class="btnvermais">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
@@ -62,7 +62,7 @@
                                 <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
                                 <input type="hidden" name="quantidade" value="1">
                                 <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
-                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                                <button type="submit" class="btn">Adicionar ao carrinho</button>
                             </form>
                         </div>
                         {% endif %}
@@ -75,7 +75,7 @@
     <section class="carousel-section">
         <div class="section-header">
             <h2>Tratores</h2>
-            <a href="{{ url_for('ver_mais_trator') }}" class="#">ver mais</a>
+            <a href="{{ url_for('ver_mais_trator') }}" class="btnvermais">ver mais</a>
         </div>
         <div class="carousel">
             <button class="prev">&#10094;</button>
@@ -95,7 +95,7 @@
                                 <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
                                 <input type="hidden" name="quantidade" value="1">
                                 <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
-                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                                <button type="submit" class="btn">Adicionar ao carrinho</button>
                             </form>
                         </div>
                         {% endif %}
@@ -159,7 +159,7 @@
                                 <input type="hidden" name="maquina_id" value="{{ maquina['id'] }}">
                                 <input type="hidden" name="quantidade" value="1">
                                 <input type="hidden" name="forma_aluguel" value="{{ maquina['forma_aluguel'] }}">
-                                <button type="submit" class="add-to-cart-btn">Adicionar ao carrinho</button>
+                                <button type="submit" class="btn">Adicionar ao carrinho</button>
                             </form>
                         </div>
                         {% endif %}
