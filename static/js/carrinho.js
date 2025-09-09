@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
      }
    }
    
+   
    // Função para aplicar cupom de desconto
    function aplicarCupom(codigo) {
      if (!codigo) {
@@ -455,3 +456,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
      atualizarCarrinho();
  });
+
+
+function metodo_pagamento(pix-mthd, cartao-methd) {
+      const paymentMethods = document.querySelectorAll('input[name="payment"]');
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+            const pixMethod = document.querySelector('.pix-method');
+            const cardMethod = document.querySelector('.card-method');
+            
+            if (this.value === 'pix' || this.checked && this.parentElement.textContent.includes('PIX')) {
+                if (pixMethod) pixMethod.style.display = 'block';
+                if (cardMethod) cardMethod.style.display = 'none';
+            } else {
+                if (pixMethod) pixMethod.style.display = 'none';
+                if (cardMethod) cardMethod.style.display = 'block';
+            }
+        });
+    });
+}

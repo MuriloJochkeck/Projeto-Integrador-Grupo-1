@@ -351,6 +351,7 @@ class Banco:
                 print(f"Item processado: {item_data}")
                 itens.append(item_data)
             
+            
             print(f"Total de itens retornados: {len(itens)}")
             return itens
         except Exception as e:
@@ -358,6 +359,18 @@ class Banco:
             import traceback
             traceback.print_exc()
             return []
+
+    
+
+    def metodos_pagamento(pix-metodo, cartao-metodo):
+        """Retorna os métodos de pagamento disponíveis"""
+        return {
+            "pix": pix-metodo,
+            "cartao": cartao-metodo
+        }
+
+
+
 
     # ----------------- Pedidos -----------------
     
@@ -418,10 +431,6 @@ class Banco:
             print(f"Erro listar_pedidos_usuario: {e}")
             return []
         
-
-    def metodo_pagamento_disponivel(self, metodo):
-        pix = metodo.lower() == "pix-method"
-        cartao = metodo.lower() == "cartao-method"
 # ----------------- Instância global -----------------
 banco = Banco()
 
