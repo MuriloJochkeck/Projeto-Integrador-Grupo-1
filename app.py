@@ -461,7 +461,7 @@ def remover_do_carrinho():
         sucesso = banco.remover_do_carrinho(usuario_id, maquina_id)
         
         if sucesso:
-            return jsonify({"success": True, "message": "Item removido do carrinho com sucesso!"})
+            return render_template('pages/carrinho.html')
         else:
             return jsonify({"success": False, "message": "Erro ao remover do carrinho"}), 500
             

@@ -99,8 +99,12 @@
         </div>
         <h3 style="text-align: center;">Forma de Pagamento</h3>
         {% if not cupom_aplicado %} 
-        <label><input type="radio" name="payment" checked /> Cartão de Crédito</label>
-        <label><input type="radio" name="payment" checked /> PIX</label>
+        <div class="card-method">
+              <label><input type="radio" name="payment" /> Cartão</label>
+        </div>
+        <div class="pix-method">
+          <label><input type="radio" name="payment" checked /> PIX</label>
+        </div>
 
         {% else %}
         <div class="applied-coupon">
