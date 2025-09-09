@@ -4730,7 +4730,15 @@ body {
 /* SOBRE NÓS */
 
 .fotos_geral, img {
-  max-width: 400px;
-  max-height: 400px;
+  max-width: 200px;
+  max-height: 200px;
 }
+
+.card {
+  background-color:#77a56f ;
+}
+
+
+
+
 
