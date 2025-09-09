@@ -789,8 +789,5 @@ def api_adicionar_cartao():
 
 # ... (restante do código)
 
-def metodos_pagamento(pix_mthd, cartao_methd):
-    render_template('pages/carrinho.html', pix_mthd=pix_mthd, cartao_methd=cartao_methd)
-
 if __name__ == '__main__':
     app.run(debug=True)

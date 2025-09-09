@@ -360,15 +360,6 @@ class Banco:
             traceback.print_exc()
             return []
 
-    
-
-    def metodos_pagamento(pix-metodo, cartao-metodo):
-        """Retorna os métodos de pagamento disponíveis"""
-        return {
-            "pix": pix-metodo,
-            "cartao": cartao-metodo
-        }
-
 
 
 
