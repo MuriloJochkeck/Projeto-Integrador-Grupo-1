@@ -417,7 +417,11 @@ class Banco:
         except Exception as e:
             print(f"Erro listar_pedidos_usuario: {e}")
             return []
+        
 
+    def metodo_pagamento_disponivel(self, metodo):
+        pix = metodo.lower() == "pix-method"
+        cartao = metodo.lower() == "cartao-method"
 # ----------------- Instância global -----------------
 banco = Banco()
 

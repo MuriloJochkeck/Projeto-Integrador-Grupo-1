@@ -70,7 +70,6 @@
             {% endif %}
             <div class="summary-row total">Total <span>R$ {{ '%.2f'|format(total) }}</span></div>
             {% if not cupom_aplicado %}
-            <button class="coupon-btn">Cupom de desconto</button>
             {% else %}
             <div class="applied-coupon">
               <span>Cupom aplicado: {{ cupom_aplicado.codigo }}</span>
